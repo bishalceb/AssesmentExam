@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:async';
+import 'package:assesment/screens/capture_media.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_media_picker/multi_media_picker.dart';
-
 
 class Documents extends StatefulWidget {
   @override
@@ -19,33 +18,6 @@ class _DocumentsState extends State<Documents> {
     'Placements Documents',
     'Group Photo'
   ];
-  List<File> _images = [];
-
-  getImages(ImageSource source, bool singleImage) async {
-    var images = await MultiMediaPicker.pickImages(
-        source: source, singleImage: singleImage);
-    setState(() {
-      _images = images;
-    });
-  }
-
-  _buildImageList() {
-    return _images == null
-        ? SizedBox()
-        : ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(vertical: 10.0),
-            itemCount: _images.length,
-            itemBuilder: (context, int index) {
-              return Image.file(
-                _images[index],
-                height: 200.0,
-                width: 200.0,
-              );
-            },
-          );
-  }
 
   _buildDocumentsGridView() {
     return GridView.builder(
@@ -74,9 +46,11 @@ class _DocumentsState extends State<Documents> {
               ),
             ),
             onTap: () {
-              index == 2
-                  ? getImages(ImageSource.camera, true)
-                  : getImages(ImageSource.gallery, false);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CaptureMedia(index, _gridItems[index])));
             });
       },
     );
@@ -84,21 +58,16 @@ class _DocumentsState extends State<Documents> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Documents'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(height: 600.0, child: _buildDocumentsGridView()),
-            Container(
-              child: _buildImageList(),
-              height: 400.0,
-            )
-          ],
-        ),
-      ),
+    return WillPopScope(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('Documents'),
+          ),
+          body: _buildDocumentsGridView()),
+      onWillPop: () {
+        Navigator.of(context).pop(true);
+        return Future.value(false);
+      },
     );
   }
 }
