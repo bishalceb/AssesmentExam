@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:assesment/api/ApiUtils.dart';
 import 'package:assesment/utils/Constants.dart';
@@ -20,11 +21,7 @@ class UserDetailApi {
   static String responseMessage;
   static List<Response> response;
 
-  UserDetailApi(
-      {responseCode,
-        responseStatus,
-        responseMessage,
-        response});
+  UserDetailApi({responseCode, responseStatus, responseMessage, response});
 
   UserDetailApi.fromJson(String json1) {
     Map<String, dynamic> json = (jsonDecode(json1) as Map);
@@ -64,14 +61,14 @@ class Response {
 
   Response(
       {this.id,
-        this.username,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.userProfilePic,
-        this.deviceId,
-        this.selected_batch,
-        this.batcheData});
+      this.username,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.userProfilePic,
+      this.deviceId,
+      this.selected_batch,
+      this.batcheData});
 
   Response.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,7 +78,7 @@ class Response {
     email = json['email'];
     userProfilePic = json['user_profile_pic'];
     deviceId = json['device_id'];
-    selected_batch=0;
+    selected_batch = 0;
     if (json['batche_data'] != null) {
       batcheData = new List<BatcheData>();
       json['batche_data'].forEach((v) {

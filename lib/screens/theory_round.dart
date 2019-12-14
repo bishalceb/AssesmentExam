@@ -1,9 +1,9 @@
 import 'package:assesment/model/scopedModel.dart';
-import 'package:assesment/screens/practical_round.dart';
 import 'package:assesment/theory_tab_screens/round1.dart';
 import 'package:assesment/theory_tab_screens/round2.dart';
 import 'package:assesment/theory_tab_screens/round3.dart';
 import 'package:flutter/material.dart';
+import '../api/UserDetailApi.dart';
 
 class Theory extends StatefulWidget {
   final MainScopedModel model;
@@ -15,6 +15,7 @@ class Theory extends StatefulWidget {
 class _TheoryState extends State<Theory> {
   final MainScopedModel model;
   _TheoryState(this.model);
+  List<StudentData> student_data;
 
   @override
   void initState() {
@@ -57,10 +58,7 @@ class _TheoryState extends State<Theory> {
             children: <Widget>[Round1(model), Round2(model), Round3()],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Practical()));
-            },
+            onPressed: () {},
             child: Icon(Icons.videocam),
           ),
         ),
