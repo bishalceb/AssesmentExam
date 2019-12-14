@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:assesment/api/ApiUtils.dart';
 import 'package:assesment/utils/Constants.dart';
 
-  Future<UserDetailApi> userDetailApi(
+Future<UserDetailApi> userDetailApi(
     Map<String, String> params, Map<String, String> body) async {
-  print("body"+body.toString());
-  print("params"+params.toString());
+  print("body" + body.toString());
+  print("params" + params.toString());
   try {
     return UserDetailApi.fromJson(await request_POST_header(
         parameters: params, body: body, url: BASE_URL));
@@ -14,17 +15,14 @@ import 'package:assesment/utils/Constants.dart';
   }
   return null;
 }
+
 class UserDetailApi {
   static int responseCode;
   static bool responseStatus;
   static String responseMessage;
   static List<Response> response;
 
-  UserDetailApi(
-      {responseCode,
-        responseStatus,
-        responseMessage,
-        response});
+  UserDetailApi({responseCode, responseStatus, responseMessage, response});
 
   UserDetailApi.fromJson(String json1) {
     Map<String, dynamic> json = (jsonDecode(json1) as Map);
@@ -64,14 +62,14 @@ class Response {
 
   Response(
       {this.id,
-        this.username,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.userProfilePic,
-        this.deviceId,
-        this.selected_batch,
-        this.batcheData});
+      this.username,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.userProfilePic,
+      this.deviceId,
+      this.selected_batch,
+      this.batcheData});
 
   Response.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,7 +79,7 @@ class Response {
     email = json['email'];
     userProfilePic = json['user_profile_pic'];
     deviceId = json['device_id'];
-    selected_batch=0;
+    selected_batch = 0;
     if (json['batche_data'] != null) {
       batcheData = new List<BatcheData>();
       json['batche_data'].forEach((v) {
@@ -150,15 +148,15 @@ class StudentData {
 
   StudentData(
       {this.id,
-        this.name,
-        this.studentCode,
-        this.studentRollNo,
-        this.fatherName,
-        this.email,
-        this.password,
-        this.phone,
-        this.dob,
-        this.gender});
+      this.name,
+      this.studentCode,
+      this.studentRollNo,
+      this.fatherName,
+      this.email,
+      this.password,
+      this.phone,
+      this.dob,
+      this.gender});
 
   StudentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -16,6 +16,8 @@ dependencies:
   multi_media_picker:
   video_player:
   chewie:
+  image_picker:
+
 
 dev_dependencies:
   flutter_test:

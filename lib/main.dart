@@ -1,7 +1,5 @@
 import 'package:assesment/model/scopedModel.dart';
 import 'package:flutter/material.dart';
-import 'package:assesment/screens/documents.dart';
-import 'package:assesment/screens/theory_round.dart';
 import 'package:assesment/screens/login_page.dart';
 import 'package:scoped_model/scoped_model.dart';
 
