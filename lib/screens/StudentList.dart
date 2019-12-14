@@ -12,7 +12,6 @@ class _StudentListState extends State<StudentList> {
   double height;
   double actual_height;
   BuildContext _scaffoldContext;
-  List<bool> isSelected = [true, false];
   List<StudentData> student_data;
   @override
   void initState() {
@@ -68,6 +67,9 @@ class _StudentListState extends State<StudentList> {
                           ),
                         ),
                         onPressed: (){
+                          for(int i=0;i<student_data.length;i++){
+                            print("ispresent value=="+student_data[i].is_present.toString());
+                          }
                           //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
                         }
                     ),
@@ -104,7 +106,7 @@ class _StudentListState extends State<StudentList> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Container(
-            width: 200,
+            width: 150,
             child: Text(student_data[index].name,style: TextStyle(fontSize: 20,color: Colors.black),),
           ),
           Padding(padding: EdgeInsets.all(2),
@@ -131,18 +133,22 @@ class _StudentListState extends State<StudentList> {
                   ),
                 ),
               ],
-              onPressed: (int index) {
+              onPressed: (int toggle_index) {
                 setState(() {
-                  for (int i = 0; i < isSelected.length; i++) {
-                    if (i == index) {
-                      isSelected[i] = true;
+                  for (int i = 0; i < 2; i++) {
+                    if (i == toggle_index) {
+                      student_data[index].absent=false;
+                      student_data[index].present=true;
+                      student_data[index].is_present=true;
                     } else {
-                      isSelected[i] = false;
+                      student_data[index].absent=true;
+                      student_data[index].present=false;
+                      student_data[index].is_present=false;
                     }
                   }
                 });
               },
-              isSelected: isSelected,
+              isSelected: [student_data[index].absent,student_data[index].present],
             ),
           )
         ],

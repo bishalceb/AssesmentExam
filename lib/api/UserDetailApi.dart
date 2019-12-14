@@ -147,6 +147,9 @@ class StudentData {
   String phone;
   String dob;
   String gender;
+  bool is_present;
+  bool absent;
+  bool present;
 
   StudentData(
       {this.id,
@@ -158,7 +161,10 @@ class StudentData {
         this.password,
         this.phone,
         this.dob,
-        this.gender});
+        this.gender,
+        this.is_present,
+        this.absent,
+        this.present});
 
   StudentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -171,6 +177,9 @@ class StudentData {
     phone = json['phone'];
     dob = json['dob'];
     gender = json['gender'];
+    is_present=false;
+    absent=true;
+    present=false;
   }
 
   Map<String, dynamic> toJson() {
@@ -185,6 +194,9 @@ class StudentData {
     data['phone'] = this.phone;
     data['dob'] = this.dob;
     data['gender'] = this.gender;
+    data['is_present']=this.is_present;
+    data['absent']=this.is_present;
+    data['present']=this.is_present;
     return data;
   }
 }
