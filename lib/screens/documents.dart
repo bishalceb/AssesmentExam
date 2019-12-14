@@ -18,6 +18,9 @@ class _DocumentsState extends State<Documents> {
     'Placements Documents',
     'Group Photo'
   ];
+  static final card_color=Colors.white;
+  static final card_text_color=Colors.black;
+  static final card_border_color=Colors.black26;
 
   _buildDocumentsGridView() {
     return GridView.builder(
@@ -28,21 +31,19 @@ class _DocumentsState extends State<Documents> {
       itemCount: _gridItems.length,
       itemBuilder: (context, int index) {
         return GestureDetector(
-            child: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.all(10.0),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(10.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: new BorderSide(
+                    color: card_border_color, width: 2.0),
               ),
-              child: Text(
-                _gridItems[index],
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+              color: card_color,
+              elevation: 10,
+              child: Center(
+                child: Text(
+                    _gridItems[index], textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: card_text_color, fontSize: 25.0)),
               ),
             ),
             onTap: () {
