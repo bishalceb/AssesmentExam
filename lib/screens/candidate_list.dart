@@ -1,13 +1,17 @@
 import 'package:assesment/api/UserDetailApi.dart';
+import 'package:assesment/screens/capture_image.dart';
+import 'package:assesment/screens/capture_media.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart';
 
-class Practical extends StatefulWidget {
+class CandidateList extends StatefulWidget {
+  final int index;
+  CandidateList(this.index);
   @override
-  _PracticalState createState() => _PracticalState();
+  _CandidateListState createState() => _CandidateListState();
 }
 
-class _PracticalState extends State<Practical> {
+class _CandidateListState extends State<CandidateList> {
   List<StudentData> students = [];
   List<StudentData> student_data;
 
@@ -64,7 +68,10 @@ class _PracticalState extends State<Practical> {
                 print("ispresent value==" +
                     student_data[i].is_present.toString());
               }
-              //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CaptureImage(widget.index)));
             }),
       )),
     );
@@ -74,7 +81,7 @@ class _PracticalState extends State<Practical> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Practical Round'),
+        title: Text('Candidate List'),
       ),
       body: Column(
         children: <Widget>[
@@ -91,43 +98,12 @@ class _PracticalState extends State<Practical> {
                     itemBuilder: (context, int index) {
                       return Card(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      students[index].name,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      'Roll No. ' + students[index].studentRollNo,
-                                      style: TextStyle(fontSize: 16.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              FlatButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: Text('Practical'),
-                                onPressed: () {},
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              FlatButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: Text('Viva'),
-                                onPressed: () {},
-                              ),
-                            ],
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          child: Text(
+                            students[index].name,
+                            style: TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                         ),
                       );

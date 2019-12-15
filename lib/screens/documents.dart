@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:assesment/screens/candidate_list.dart';
+import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/screens/capture_media.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +20,9 @@ class _DocumentsState extends State<Documents> {
     'Placements Documents',
     'Group Photo'
   ];
-  static final card_color=Colors.white;
-  static final card_text_color=Colors.black;
-  static final card_border_color=Colors.black26;
+  static final card_color = Colors.white;
+  static final card_text_color = Colors.black;
+  static final card_border_color = Colors.black26;
 
   _buildDocumentsGridView() {
     return GridView.builder(
@@ -34,24 +36,24 @@ class _DocumentsState extends State<Documents> {
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                side: new BorderSide(
-                    color: card_border_color, width: 2.0),
+                side: new BorderSide(color: card_border_color, width: 2.0),
               ),
               color: card_color,
               elevation: 10,
               child: Center(
-                child: Text(
-                    _gridItems[index], textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: card_text_color, fontSize: 25.0)),
+                child: Text(_gridItems[index],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: card_text_color, fontSize: 25.0)),
               ),
             ),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CaptureMedia(index, _gridItems[index])));
+              index != 2
+                  ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CaptureImage(index)))
+                  : Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CandidateList(index)));
             });
       },
     );

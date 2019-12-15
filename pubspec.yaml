@@ -17,6 +17,8 @@ dependencies:
   video_player:
   chewie:
   image_picker:
+  path_provider:
+  path:
 
 
 dev_dependencies:
@@ -32,6 +34,7 @@ flutter:
 
   assets:
       - assets/login_logo.png
+      - assets/img/placeholder.png
 
   fonts:
     - family: WorkSansSemiBold
