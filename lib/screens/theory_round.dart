@@ -3,7 +3,6 @@ import 'package:assesment/theory_tab_screens/round1.dart';
 import 'package:assesment/theory_tab_screens/round2.dart';
 import 'package:assesment/theory_tab_screens/round3.dart';
 import 'package:flutter/material.dart';
-import '../api/UserDetailApi.dart';
 
 class Theory extends StatefulWidget {
   final MainScopedModel model;
@@ -15,11 +14,21 @@ class Theory extends StatefulWidget {
 class _TheoryState extends State<Theory> {
   final MainScopedModel model;
   _TheoryState(this.model);
-  List<StudentData> student_data;
+  //List<StudentData> students = List<StudentData>();
 
   @override
   void initState() {
-    model.addStudent();
+    /*    int selected_batch = UserDetailApi.response[0].selected_batch;
+    List<StudentData> student_data =
+        UserDetailApi.response[0].batcheData[selected_batch].studentData;
+    student_data.forEach((student) {
+      if (student.is_present) {
+        students.add(student);
+      }
+    }); */
+    //model.addFirstRoundStudent(students);
+    //students = model.firstRoundStudents;
+    model.addFirstRoundStudent();
     super.initState();
   }
 
@@ -55,7 +64,7 @@ class _TheoryState extends State<Theory> {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[Round1(model), Round2(model), Round3()],
+            children: <Widget>[Round1(), Round2(), Round3()],
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},

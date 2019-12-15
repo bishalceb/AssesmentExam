@@ -1,75 +1,94 @@
-import 'package:assesment/model/student.dart';
+import 'package:assesment/api/UserDetailApi.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class MainScopedModel extends Model {
-  List<Student> _firstRoundStudents = [];
-  Student _selectedStudent;
-  List<Student> _secRoundStudents = [];
-  List<Student> _thirdRoundStudents = [];
-  //bool _isAdded = false;
+  List<StudentData> _firstRoundStudents = [];
+  List<StudentData> _secRoundStudents = [];
+  List<StudentData> _thirdRoundStudents = [];
 
-  void addStudent() {
-    _firstRoundStudents = [
-      Student(name: 'Student 1', rollno: 1, isAdded: false),
-      Student(name: 'Student 2', rollno: 2, isAdded: false),
-      Student(name: 'Student 3', rollno: 3, isAdded: false),
-      Student(name: 'Student 4', rollno: 4, isAdded: false),
-      Student(name: 'Student 5', rollno: 5, isAdded: false),
-      Student(name: 'Student 6', rollno: 6, isAdded: false),
-      Student(name: 'Student 7', rollno: 7, isAdded: false),
-      Student(name: 'Student 8', rollno: 8, isAdded: false)
-    ];
+  void addFirstRoundStudent() {
+    List<StudentData> students = [];
+
+    int _selectedBatch = UserDetailApi.response[0].selected_batch;
+    List<StudentData> _studentData =
+        UserDetailApi.response[0].batcheData[_selectedBatch].studentData;
+    _studentData.forEach((student) {
+      if (student.is_present) {
+        students.add(student);
+      }
+    });
+    _firstRoundStudents.addAll(students);
   }
 
-  List<Student> get firstRoundStudent {
+  List<StudentData> get firstRoundStudents {
+    print('first round student length: ${_firstRoundStudents.length}');
     return List.from(_firstRoundStudents);
   }
 
-  selectStudent(Student s) {
-    _selectedStudent = s;
-  }
-
-  Student get selectedStudent {
-    return _selectedStudent;
-  }
-
-  void addStudentsToSecRound(Student s) {
+  void addStudentsToSecRound(StudentData s) {
     print('selected student: ${s.name} isAdded: ${s.isAdded}');
-
-    _firstRoundStudents[_firstRoundStudents.indexOf(s)].isAdded
-        ? _secRoundStudents.remove(s)
-        : _secRoundStudents.add(s);
-
-    s.isAdded = !s.isAdded;
     int index = _firstRoundStudents.indexOf(s);
-    _firstRoundStudents[index] =
-        Student(name: s.name, rollno: s.rollno, isAdded: s.isAdded);
+    print('selected student index: $index');
+    _firstRoundStudents[index].isAdded
+        ? _secRoundStudents.removeWhere((student) =>
+            student.studentRollNo == _firstRoundStudents[index].studentRollNo)
+        : _secRoundStudents.add(s);
+    _firstRoundStudents[index] = StudentData(
+        name: s.name,
+        studentRollNo: s.studentRollNo,
+        isAdded: !s.isAdded,
+        absent: s.absent,
+        dob: s.dob,
+        email: s.email,
+        fatherName: s.fatherName,
+        gender: s.gender,
+        id: s.id,
+        is_present: s.is_present,
+        password: s.password,
+        phone: s.phone,
+        present: s.present,
+        studentCode: s.studentCode);
 
-    /*   _firstRoundStudents[_firstRoundStudents.indexOf(s)].isAdded =
-        !_firstRoundStudents[_firstRoundStudents.indexOf(s)].isAdded; */
-
-    //_selectedStudent = null;
     notifyListeners();
   }
 
-  List<Student> get secRoundStudents {
+  List<StudentData> get secRoundStudents {
+/*     _firstRoundStudents.forEach((student) {
+      if (student.is_present && student.isAdded) {
+        _secRoundStudents.add(student);
+      }
+    }); */
     return List.from(_secRoundStudents);
   }
 
-  void addStudentsToThirdRound(Student s) {
-    _secRoundStudents[_secRoundStudents.indexOf(s)].isAdded
-        ? _thirdRoundStudents.remove(s)
+  void addStudentsToThirdRound(StudentData s) {
+    int index = _secRoundStudents.indexOf(s);
+    _secRoundStudents[index].isAdded
+        ? _thirdRoundStudents.removeWhere((student) =>
+            student.studentRollNo == _secRoundStudents[index].studentRollNo)
         : _thirdRoundStudents.add(s);
     s.isAdded = !s.isAdded;
-    int index = _secRoundStudents.indexOf(s);
-    _secRoundStudents[index] =
-        Student(name: s.name, rollno: s.rollno, isAdded: s.isAdded);
+    _secRoundStudents[index] = StudentData(
+        name: s.name,
+        studentRollNo: s.studentRollNo,
+        isAdded: s.isAdded,
+        absent: s.absent,
+        dob: s.dob,
+        email: s.email,
+        fatherName: s.fatherName,
+        gender: s.gender,
+        id: s.id,
+        is_present: s.is_present,
+        password: s.password,
+        phone: s.phone,
+        present: s.present,
+        studentCode: s.studentCode);
 
     //_selectedStudent = null;
     notifyListeners();
   }
 
-  List<Student> get thirdRoundStudents {
+  List<StudentData> get thirdRoundStudents {
     return List.from(_thirdRoundStudents);
   }
 }
