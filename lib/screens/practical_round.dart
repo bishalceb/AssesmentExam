@@ -106,13 +106,15 @@ class _PracticalState extends State<Practical> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      'Roll No. ' + students[index].studentRollNo,
+                                      'Roll No. ' +
+                                          students[index].studentRollNo,
                                       style: TextStyle(fontSize: 16.0),
                                     )
                                   ],
                                 ),
                               ),
                               FlatButton(
+                                color: Colors.blue,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: Text('Practical'),
@@ -122,6 +124,7 @@ class _PracticalState extends State<Practical> {
                                 width: 5.0,
                               ),
                               FlatButton(
+                                color: Colors.blue,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: Text('Viva'),
