@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/utils/bubble_indication_painter.dart';
-import 'package:assesment/screens/SelectBatch.dart';
+import 'package:assesment/screens/center_Infra_Structure_video.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/controller/UserDetailController.dart';
 
@@ -594,7 +594,7 @@ class _LoginPageState extends State<LoginPage>
   void onLoginSuccess({UserDetailApi model}) {
     // TODO: implement onLoginSuccess
     if (UserDetailApi.responseCode==200){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectBatch()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>CenterInfraStructureMedia()));
     }
   }
 }

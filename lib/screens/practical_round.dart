@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class Practical extends StatefulWidget {
+  final MainScopedModel model;
+  Practical(this.model);
   @override
-  _PracticalState createState() => _PracticalState();
+  _PracticalState createState() => _PracticalState(model);
 }
 
 class _PracticalState extends State<Practical> {
+  final MainScopedModel model;
+  _PracticalState(this.model);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -57,6 +57,7 @@ class Response {
   String userProfilePic;
   String deviceId;
   int selected_batch;
+  int selected_round_no;
   List<BatcheData> batcheData;
 
   Response(
@@ -68,7 +69,8 @@ class Response {
       this.userProfilePic,
       this.deviceId,
       this.selected_batch,
-      this.batcheData});
+      this.batcheData,
+      this.selected_round_no});
 
   Response.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -79,6 +81,7 @@ class Response {
     userProfilePic = json['user_profile_pic'];
     deviceId = json['device_id'];
     selected_batch = 0;
+    selected_round_no=1;
     if (json['batche_data'] != null) {
       batcheData = new List<BatcheData>();
       json['batche_data'].forEach((v) {
@@ -97,6 +100,7 @@ class Response {
     data['user_profile_pic'] = this.userProfilePic;
     data['device_id'] = this.deviceId;
     data['selected_batch'] = this.selected_batch;
+    data['selected_round_no'] = this.selected_round_no;
     if (this.batcheData != null) {
       data['batche_data'] = this.batcheData.map((v) => v.toJson()).toList();
     }

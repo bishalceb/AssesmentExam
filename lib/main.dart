@@ -1,6 +1,6 @@
 import 'package:assesment/model/scopedModel.dart';
 import 'package:flutter/material.dart';
-import 'package:assesment/screens/login_page.dart';
+import 'package:assesment/screens/SplashScreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 void main() => runApp(new MyApp());
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       model: model,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: new LoginPage(),
+        home: new SplashScreen(),
         /* theme: ThemeData(clear
             primaryColor: Colors.blue[300],
             accentColor: Colors.blue[200]), */
