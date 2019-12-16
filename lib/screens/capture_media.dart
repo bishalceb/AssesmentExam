@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:path/path.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart' as prefix0;
 import 'package:multi_media_picker/multi_media_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class CaptureMedia extends StatefulWidget {
@@ -96,6 +98,11 @@ class _CaptureMediaState extends State<CaptureMedia> {
   Future<void> getCamImage() async {
     var image =
         await prefix0.ImagePicker.pickImage(source: prefix0.ImageSource.camera);
+    if (image == null) return;
+    final String path = getApplicationDocumentsDirectory().toString();
+    print('image path: $path');
+    var fileName = basename(image.path);
+    final File localImage = await image.copy('$path/$fileName');
     setState(() {
       if (image != null) _images.add(image);
     });
