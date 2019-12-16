@@ -1,16 +1,36 @@
 class Student {
+  String id;
   String name;
-  int rollno;
+  String studentCode;
+  String studentRollNo;
+  String fatherName;
+  String email;
+  String password;
+  String phone;
+  String dob;
+  String gender;
+  bool is_present;
+  bool absent;
+  bool present;
   bool isAdded;
-  Student({this.name, this.rollno, this.isAdded});
+
+  Student(
+      {this.id,
+      this.name,
+      this.studentCode,
+      this.studentRollNo,
+      this.fatherName,
+      this.email,
+      this.password,
+      this.phone,
+      this.dob,
+      this.gender,
+      this.is_present,
+      this.absent,
+      this.present,
+      this.isAdded});
 
   set setName(String name) => this.name = name;
 
-  set setRollno(int roll) => this.rollno = roll;
-  set setIsAdded(bool add) => this.isAdded = add;
-
   get getName => name;
-
-  get getRollno => rollno;
-  get getIsAdded => isAdded;
 }

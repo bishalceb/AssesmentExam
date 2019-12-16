@@ -66,7 +66,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               }else if(index==1){
                 Navigator.push(context,MaterialPageRoute(builder: (context)=>SetTheoryRound()));
               }else if(index==2){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>Practical(model)));
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Practical()));
               }else if(index==3){
                 Navigator.push(context,MaterialPageRoute(builder: (context)=>CenterInfraStructureMedia()));
               }else if(index==4){

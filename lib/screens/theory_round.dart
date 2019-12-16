@@ -1,28 +1,30 @@
-import 'package:assesment/model/scopedModel.dart';
-import 'package:assesment/theory_tab_screens/round1.dart';
-import 'package:assesment/theory_tab_screens/round2.dart';
-import 'package:assesment/theory_tab_screens/round3.dart';
 import 'package:flutter/material.dart';
-import '../api/UserDetailApi.dart';
+import 'package:assesment/style/theme.dart' as Theme;
+import 'package:assesment/api/UserDetailApi.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 class Theory extends StatefulWidget {
-  final MainScopedModel model;
-  Theory(this.model);
   @override
-  _TheoryState createState() => _TheoryState(model);
+  _TheoryState createState() => _TheoryState();
 }
 
 class _TheoryState extends State<Theory> {
-  final MainScopedModel model;
-  _TheoryState(this.model);
+  double height;
+  double actual_height;
+  BuildContext _scaffoldContext;
   List<StudentData> student_data;
+  String visibleRound="";
+  int total_round;
 
+  TabController _tabController;
   @override
   void initState() {
-    model.addStudent();
+    // TODO: implement initState
     super.initState();
+    int selected_batch=UserDetailApi.response[0].selected_batch;
+    total_round=UserDetailApi.response[0].selected_round_no;
+    student_data=UserDetailApi.response[0].batcheData[selected_batch].studentData;
   }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,6 +39,13 @@ class _TheoryState extends State<Theory> {
               'Theory Round',
             ),
             bottom: TabBar(
+              onTap: (index){
+                print("index =="+index.toString());
+                int selectedtab=index+1;
+                setState(() {
+                  visibleRound="Round "+selectedtab.toString();
+                });
+              },
               labelPadding: EdgeInsets.symmetric(vertical: 10.0),
               tabs: <Widget>[
                 Text(
@@ -55,7 +64,9 @@ class _TheoryState extends State<Theory> {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[Round1(model), Round2(model), Round3()],
+            children: <Widget>[
+              get1stRoundList(context),get1stRoundList(context),get1stRoundList(context)
+            ],
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
@@ -66,4 +77,87 @@ class _TheoryState extends State<Theory> {
     );
   }
 
+  get1stRoundList(BuildContext context) {
+
+    height = MediaQuery.of(context).size.height;
+    double percentage_height=0.33*height;
+    actual_height=height-percentage_height;
+    return Container(
+      height: actual_height,
+      child:  ListView.builder(
+        itemCount: 10,
+        itemBuilder: _studentPageDesign,
+        padding: EdgeInsets.all(0.0),
+      ),
+    );
+  }
+
+  Widget _studentPageDesign(BuildContext context, int index) {
+    print("visible round=="+ visibleRound);
+    if (student_data[index].addedInRound == "" ||
+        student_data[index].addedInRound == visibleRound) {
+
+    return Card(
+      shape: RoundedRectangleBorder(
+
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Container(
+            width: 150,
+            child: Text(student_data[index].name,
+              style: TextStyle(fontSize: 20, color: Colors.black),),
+          ),
+          Padding(padding: EdgeInsets.all(2),
+            child: ToggleButtons(
+              borderColor: Colors.black26,
+              fillColor: Colors.pink,
+              borderWidth: 2,
+              selectedBorderColor: Colors.black26,
+              selectedColor: Colors.white,
+              borderRadius: BorderRadius.circular(0),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Remove',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Add',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+              onPressed: (int toggle_index) {
+                setState(() {
+                  for (int i = 0; i < 2; i++) {
+                    if (i == toggle_index) {
+                      student_data[index].isRemoved = false;
+                      student_data[index].isAdded = true;
+                      student_data[index].addedInRound = "Round 1";
+                    } else {
+                      student_data[index].isRemoved = true;
+                      student_data[index].isAdded = false;
+                      student_data[index].addedInRound = "Round 1";
+                    }
+                  }
+                });
+              },
+              isSelected: [
+                student_data[index].isRemoved,
+                student_data[index].isAdded
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  }
 }

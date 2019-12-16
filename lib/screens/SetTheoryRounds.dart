@@ -97,7 +97,7 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
                      ),
                    ),
                    onPressed: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Theory(model)));
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Theory()));
                    }
                ),
              )

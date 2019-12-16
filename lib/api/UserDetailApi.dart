@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:assesment/api/ApiUtils.dart';
 import 'package:assesment/utils/Constants.dart';
 
-  Future<UserDetailApi> userDetailApi(
+Future<UserDetailApi> userDetailApi(
     Map<String, String> params, Map<String, String> body) async {
-  print("body"+body.toString());
-  print("params"+params.toString());
+  print("body" + body.toString());
+  print("params" + params.toString());
   try {
     return UserDetailApi.fromJson(await request_POST_header(
         parameters: params, body: body, url: BASE_URL));
@@ -15,6 +15,7 @@ import 'package:assesment/utils/Constants.dart';
   }
   return null;
 }
+
 class UserDetailApi {
   static int responseCode;
   static bool responseStatus;
@@ -151,21 +152,27 @@ class StudentData {
   bool is_present;
   bool absent;
   bool present;
+  bool isAdded;
+  bool isRemoved;
+  String addedInRound;
 
   StudentData(
       {this.id,
-        this.name,
-        this.studentCode,
-        this.studentRollNo,
-        this.fatherName,
-        this.email,
-        this.password,
-        this.phone,
-        this.dob,
-        this.gender,
-        this.is_present,
-        this.absent,
-        this.present});
+      this.name,
+      this.studentCode,
+      this.studentRollNo,
+      this.fatherName,
+      this.email,
+      this.password,
+      this.phone,
+      this.dob,
+      this.gender,
+      this.is_present,
+      this.absent,
+      this.present,
+      this.isAdded,
+      this.isRemoved,
+      this.addedInRound});
 
   StudentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -178,9 +185,12 @@ class StudentData {
     phone = json['phone'];
     dob = json['dob'];
     gender = json['gender'];
-    is_present=false;
-    absent=true;
-    present=false;
+    is_present = false;
+    absent = true;
+    present = false;
+    isAdded = false;
+    isRemoved=true;
+    addedInRound="";
   }
 
   Map<String, dynamic> toJson() {
@@ -195,9 +205,12 @@ class StudentData {
     data['phone'] = this.phone;
     data['dob'] = this.dob;
     data['gender'] = this.gender;
-    data['is_present']=this.is_present;
-    data['absent']=this.is_present;
-    data['present']=this.is_present;
+    data['is_present'] = this.is_present;
+    data['absent'] = this.is_present;
+    data['present'] = this.is_present;
+    data['isAdded'] = this.isAdded;
+    data['isRemoved'] = this.isRemoved;
+    data['addedInRound'] = this.addedInRound;
     return data;
   }
 }
