@@ -5,7 +5,7 @@ import 'package:assesment/screens/SetTheoryRounds.dart';
 import 'package:assesment/screens/practical_round.dart';
 import 'package:assesment/screens/feedback_form.dart';
 import 'package:assesment/screens/documents.dart';
-import 'package:assesment/screens/center_Infra_Structure_video.dart';
+import 'package:assesment/screens/capture_media.dart';
 import 'package:assesment/model/scopedModel.dart';
 
 
@@ -24,8 +24,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     'Documentation Round',
     'End of Assesment',
   ];
-  static final card_color=Colors.white;
-  static final card_text_color=Colors.black;
+  static final card_color=Color(0xFF2f4050);
+  static final card_text_color=Colors.white;
   static final card_border_color=Colors.black26;
   final MainScopedModel model = MainScopedModel();
 
@@ -38,45 +38,45 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
 
   _buildAllSectionGridView() {
     return GridView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.all(10.0),
-      gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemCount: _gridItems.length,
-      itemBuilder: (context, int index) {
-        return GestureDetector(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                side: new BorderSide(
-                    color: card_border_color, width: 2.0),
+        shrinkWrap: true,
+        padding: EdgeInsets.all(10.0),
+        gridDelegate:
+        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemCount: _gridItems.length,
+        itemBuilder: (context, int index) {
+          return GestureDetector(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  side: new BorderSide(
+                      color: card_border_color, width: 2.0),
+                ),
+                color: card_color,
+                elevation: 10,
+                child: Center(
+                  child: Text(
+                      _gridItems[index], textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: card_text_color, fontSize: 20.0)),
+                ),
               ),
-              color: card_color,
-              elevation: 10,
-              child: Center(
-                child: Text(
-                    _gridItems[index], textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: card_text_color, fontSize: 25.0)),
-              ),
-            ),
-            onTap: () {
-              if(index==0){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => StudentList()));
-              }else if(index==1){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>SetTheoryRound()));
-              }else if(index==2){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>Practical()));
-              }else if(index==3){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>CenterInfraStructureMedia()));
-              }else if(index==4){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>Documents()));
-              }else if(index==5){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>FeedbackForm()));
-              }
-            });
-      },
-    );
+              onTap: () {
+                if(index==0){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StudentList()));
+                }else if(index==1){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>SetTheoryRound()));
+                }else if(index==2){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>Practical()));
+                }else if(index==3){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>CaptureMedia(1,"Center Infra Structure")));
+                }else if(index==4){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>Documents()));
+                }else if(index==5){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>FeedbackForm()));
+                }
+              });
+        },
+      );
   }
 
   @override
@@ -84,9 +84,19 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
-            title: Text('All Section Round'),
+            title: Text('Dashboard'),
           ),
-          body: _buildAllSectionGridView()),
+          body: Container(
+          color: Colors.black26,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _buildAllSectionGridView()
+            ],
+          )
+          ),
+          ),
       onWillPop: () {
         Navigator.of(context).pop(true);
         return Future.value(false);

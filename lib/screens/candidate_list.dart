@@ -3,6 +3,7 @@ import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/screens/capture_media.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 class CandidateList extends StatefulWidget {
   final int index;
@@ -40,38 +41,46 @@ class _CandidateListState extends State<CandidateList> {
           ? Center(
               child: Text('No any present student'),
             )
-          : ListView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(
-                  top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
-              itemCount: students.length,
-              itemBuilder: (context, int index) {
-                return Card(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          students[index].name,
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.camera_alt),
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CaptureImage(widget.index))),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+          : prefix0.Container(
+        color: Colors.black26,
+       child: Column(
+         mainAxisSize: MainAxisSize.max,
+         children: <Widget>[
+           ListView.builder(
+             shrinkWrap: true,
+             padding: EdgeInsets.only(
+                 top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
+             itemCount: students.length,
+             itemBuilder: (context, int index) {
+               return Card(
+                 child: Padding(
+                   padding:
+                   EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: <Widget>[
+                       Text(
+                         students[index].name,
+                         style: TextStyle(
+                             fontSize: 18.0, fontWeight: FontWeight.bold),
+                       ),
+                       IconButton(
+                         icon: Icon(Icons.camera_alt),
+                         onPressed: () => Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) =>
+                                     CaptureImage(widget.index))),
+                       )
+                     ],
+                   ),
+                 ),
+               );
+             },
+           ),
+         ],
+       )
+      )
     );
   }
 }

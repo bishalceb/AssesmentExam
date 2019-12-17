@@ -20,9 +20,9 @@ class _DocumentsState extends State<Documents> {
     'Placements Documents',
     'Group Photo'
   ];
-  static final card_color = Colors.white;
-  static final card_text_color = Colors.black;
-  static final card_border_color = Colors.black26;
+  static final card_color=Color(0xFF2f4050);
+  static final card_text_color=Colors.white;
+  static final card_border_color=Colors.black26;
 
   _buildDocumentsGridView() {
     return GridView.builder(
@@ -43,7 +43,7 @@ class _DocumentsState extends State<Documents> {
               child: Center(
                 child: Text(_gridItems[index],
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: card_text_color, fontSize: 25.0)),
+                    style: TextStyle(color: card_text_color, fontSize: 20.0)),
               ),
             ),
             onTap: () {
@@ -66,7 +66,10 @@ class _DocumentsState extends State<Documents> {
           appBar: AppBar(
             title: Text('Documents'),
           ),
-          body: _buildDocumentsGridView()),
+          body: Container(
+              color: Colors.black26,
+              child: _buildDocumentsGridView()
+          )),
       onWillPop: () {
         Navigator.of(context).pop(true);
         return Future.value(false);

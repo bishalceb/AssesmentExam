@@ -33,12 +33,24 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
     );
   }
   Widget rounddsign() {
-    return Column(
+    return Container(
+        color: Colors.black26,
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(30),
+          child: Center(
+            child: Text("Select No Of Rounds",style: TextStyle(fontSize: 30,color: Colors.white,fontFamily: "WorkSansBold"),),
+          ),
+        ),
     Padding(
-    padding: EdgeInsets.all(15.0),
+    padding: EdgeInsets.fromLTRB(15, 60, 15, 15),
+    child: Container(
+    decoration: BoxDecoration(
+    border: Border.all(color: Color(0xFF2f4050))
+    ),
     child: DropdownButton<String>(
     isExpanded: true,
     items:spinnerItems.map<DropdownMenuItem<String>>((String value) {
@@ -61,29 +73,20 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
     UserDetailApi.response[0].selected_round_no=position;
     });
     },
-    hint: Text('Select Batch'),
+    hint: Text('Select Rounds'),
     value: _value,
+    )
     ),
     ),
         Padding(padding: EdgeInsets.all(2.0),
          child: Center(
              child:Container(
-               margin: EdgeInsets.only(top: 140.0),
+               margin: EdgeInsets.only(top: 40.0),
                decoration: new BoxDecoration(
                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                 gradient: new LinearGradient(
-                     colors: [
-                       Theme.Colors.loginGradientEnd,
-                       Theme.Colors.loginGradientStart
-                     ],
-                     begin: const FractionalOffset(0.2, 0.2),
-                     end: const FractionalOffset(1.0, 1.0),
-                     stops: [0.0, 1.0],
-                     tileMode: TileMode.clamp),
                ),
                child: MaterialButton(
-                   highlightColor: Colors.transparent,
-                   splashColor: Theme.Colors.loginGradientEnd,
+                   color: Color(0xFF2f4050),
                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                    child: Padding(
                      padding: const EdgeInsets.symmetric(
@@ -104,6 +107,7 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
          ),
         )
       ],
+    )
     );
   }
 }

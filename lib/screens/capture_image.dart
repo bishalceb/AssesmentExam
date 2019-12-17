@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:assesment/style/theme.dart' as prefix1;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart' as prefix0;
 import 'package:multi_media_picker/multi_media_picker.dart';
@@ -137,6 +138,7 @@ class _CaptureImageState extends State<CaptureImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
         title: Text('Capture Image'),
       ),

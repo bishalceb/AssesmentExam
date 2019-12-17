@@ -120,6 +120,7 @@ class _CaptureMediaState extends State<CaptureMedia> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
+        backgroundColor: Colors.grey,
         appBar: AppBar(
           title: Text(appBartitle),
           actions: <Widget>[

@@ -28,56 +28,49 @@ class _StudentListState extends State<StudentList> {
           title: new Text(
               "Student List"),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            new Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                child: getStdListBody(context)),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Center(
-                  child:Container(
-                    margin: EdgeInsets.only(top: 20.0),
-                    decoration: new BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      gradient: new LinearGradient(
-                          colors: [
-                            Theme.Colors.loginGradientEnd,
-                            Theme.Colors.loginGradientStart
-                          ],
-                          begin: const FractionalOffset(0.2, 0.2),
-                          end: const FractionalOffset(1.0, 1.0),
-                          stops: [0.0, 1.0],
-                          tileMode: TileMode.clamp),
-                    ),
-                    child: MaterialButton(
-                        highlightColor: Colors.transparent,
-                        splashColor: Theme.Colors.loginGradientEnd,
-                        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 42.0),
-                          child: Text(
-                            "NEXT",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                                fontFamily: "WorkSansBold"),
+        body: Container(
+          color: prefix0.Colors.black26,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              new Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                  child: getStdListBody(context)),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                    child:Container(
+                      margin: EdgeInsets.only(top: 20.0),
+                      decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      child: MaterialButton(
+                          color: Color(0xFF2f4050),
+                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 42.0),
+                            child: Text(
+                              "NEXT",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25.0,
+                                  fontFamily: "WorkSansBold"),
+                            ),
                           ),
-                        ),
-                        onPressed: (){
-                          for(int i=0;i<student_data.length;i++){
-                            print("ispresent value=="+student_data[i].is_present.toString());
+                          onPressed: (){
+                            for(int i=0;i<student_data.length;i++){
+                              print("ispresent value=="+student_data[i].is_present.toString());
+                            }
+                            //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
                           }
-                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
-                        }
-                    ),
-                  )
+                      ),
+                    )
+                ),
               ),
-            ),
 
-          ],
+            ],
+          ),
         )
     );
   }
@@ -98,9 +91,6 @@ class _StudentListState extends State<StudentList> {
 
   Widget _studentPageDesign(BuildContext context, int index) {
     return Card(
-        shape:RoundedRectangleBorder(
-
-        ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -112,7 +102,7 @@ class _StudentListState extends State<StudentList> {
           Padding(padding: EdgeInsets.all(2),
             child:  ToggleButtons(
               borderColor: Colors.black26,
-              fillColor: Colors.pink,
+              fillColor: Colors.green,
               borderWidth: 2,
               selectedBorderColor: Colors.black26,
               selectedColor: Colors.white,

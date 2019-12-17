@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/utils/bubble_indication_painter.dart';
-import 'package:assesment/screens/center_Infra_Structure_video.dart';
+import 'package:assesment/screens/capture_image.dart';
+import 'package:assesment/screens/AccessAllSectionRound.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/controller/UserDetailController.dart';
 
@@ -55,11 +57,12 @@ class _LoginPageState extends State<LoginPage>
         },
         child: SingleChildScrollView(
               child: Container(
+                color: Colors.black26,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height >= 775.0
+                height: MediaQuery.of(context).size.height >= 605.0
                     ? MediaQuery.of(context).size.height
-                    : 775.0,
-                decoration: new BoxDecoration(
+                    : 605.0,
+                /*decoration: new BoxDecoration(
                   gradient: new LinearGradient(
                       colors: [
                         Theme.Colors.loginGradientStart,
@@ -69,17 +72,21 @@ class _LoginPageState extends State<LoginPage>
                       end: const FractionalOffset(1.0, 1.0),
                       stops: [0.0, 1.0],
                       tileMode: TileMode.clamp),
-                ),
+                ),*/
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(top: 75.0),
-                      child: new Image(
-                          width: 250.0,
-                          height: 191.0,
-                          fit: BoxFit.fill,
-                          image: new AssetImage('assets/img/login_logo.png')),
+                      padding: EdgeInsets.only(top: 190.0),
+                      child: Center(
+                        child: Text("LOGIN",style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 35.0,
+                            fontFamily: "WorkSansBold"),),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
                     ),
                     /*Padding(
                       padding: EdgeInsets.only(top: 20.0),
@@ -299,7 +306,7 @@ class _LoginPageState extends State<LoginPage>
                 margin: EdgeInsets.only(top: 170.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: <BoxShadow>[
+                  /*boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Theme.Colors.loginGradientStart,
                       offset: Offset(1.0, 6.0),
@@ -310,8 +317,8 @@ class _LoginPageState extends State<LoginPage>
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
-                  ],
-                  gradient: new LinearGradient(
+                  ],*/
+                  /*gradient: new LinearGradient(
                       colors: [
                         Theme.Colors.loginGradientEnd,
                         Theme.Colors.loginGradientStart
@@ -319,11 +326,10 @@ class _LoginPageState extends State<LoginPage>
                       begin: const FractionalOffset(0.2, 0.2),
                       end: const FractionalOffset(1.0, 1.0),
                       stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
+                      tileMode: TileMode.clamp),*/
                 ),
                 child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Theme.Colors.loginGradientEnd,
+                    color: Color(0xFF2f4050),
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -339,7 +345,7 @@ class _LoginPageState extends State<LoginPage>
                     onPressed: () =>
                         siginNavigat()
               ),
-              )
+              ),
             ]
           ),
         ],
@@ -594,7 +600,7 @@ class _LoginPageState extends State<LoginPage>
   void onLoginSuccess({UserDetailApi model}) {
     // TODO: implement onLoginSuccess
     if (UserDetailApi.responseCode==200){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>CenterInfraStructureMedia()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
     }
   }
 }

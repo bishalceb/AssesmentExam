@@ -1,6 +1,7 @@
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 class Practical extends StatefulWidget {
   @override
@@ -34,19 +35,9 @@ class _PracticalState extends State<Practical> {
         margin: EdgeInsets.only(top: 20.0),
         decoration: new BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          gradient: new LinearGradient(
-              colors: [
-                Theme.Colors.loginGradientEnd,
-                Theme.Colors.loginGradientStart
-              ],
-              begin: const FractionalOffset(0.2, 0.2),
-              end: const FractionalOffset(1.0, 1.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
         ),
         child: MaterialButton(
-            highlightColor: Colors.transparent,
-            splashColor: Theme.Colors.loginGradientEnd,
+            color: Color(0xFF2f4050),
             //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
             child: Padding(
               padding:
@@ -76,7 +67,9 @@ class _PracticalState extends State<Practical> {
       appBar: AppBar(
         title: Text('Practical Round'),
       ),
-      body: Column(
+      body: Container(
+        color: Colors.black26,
+        child: Column(
         children: <Widget>[
           students.length <= 0
               ? Center(
@@ -114,20 +107,18 @@ class _PracticalState extends State<Practical> {
                                 ),
                               ),
                               FlatButton(
-                                color: Colors.blue,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: Text('Practical'),
+                                color: Color(0xFF2f4050),
+                                child: Text('Practical',style: TextStyle(color: Colors.white)),
                                 onPressed: () {},
                               ),
                               SizedBox(
                                 width: 5.0,
                               ),
                               FlatButton(
-                                color: Colors.blue,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: Text('Viva'),
+                                color: Color(0xFF2f4050),
+                                /*shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0)),*/
+                                child: Text('Viva',style: TextStyle(color: Colors.white),),
                                 onPressed: () {},
                               ),
                             ],
@@ -140,6 +131,7 @@ class _PracticalState extends State<Practical> {
           _buildNextButton()
         ],
       ),
+    )
     );
   }
 }

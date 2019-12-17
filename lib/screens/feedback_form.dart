@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
+import 'package:flutter/material.dart' as prefix0;
 
 
 class FeedbackForm extends StatefulWidget {
@@ -12,6 +13,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: new AppBar(title: Text("FeedBack")),
       body: SingleChildScrollView(
         child: Form(
@@ -82,19 +84,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                           margin: EdgeInsets.only(top: 70.0),
                           decoration: new BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            gradient: new LinearGradient(
-                                colors: [
-                                  Theme.Colors.loginGradientEnd,
-                                  Theme.Colors.loginGradientStart
-                                ],
-                                begin: const FractionalOffset(0.2, 0.2),
-                                end: const FractionalOffset(1.0, 1.0),
-                                stops: [0.0, 1.0],
-                                tileMode: TileMode.clamp),
                           ),
                           child: MaterialButton(
-                              highlightColor: Colors.transparent,
-                              splashColor: Theme.Colors.loginGradientEnd,
+                              color: Color(0xFF2f4050),
                               //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(

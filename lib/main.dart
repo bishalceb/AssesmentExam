@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
     return ScopedModel(
       model: model,
       child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: Color(0xFF2f4050)
+        ),
         debugShowCheckedModeBanner: false,
         home: new SplashScreen(),
         /* theme: ThemeData(clear

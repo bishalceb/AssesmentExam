@@ -13,7 +13,7 @@ class _TheoryState extends State<Theory> {
   double actual_height;
   BuildContext _scaffoldContext;
   List<StudentData> student_data;
-  String visibleRound="";
+  int visibleRound=1;
   int total_round;
 
   TabController _tabController;
@@ -33,6 +33,7 @@ class _TheoryState extends State<Theory> {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
+          backgroundColor: Colors.grey,
           appBar: AppBar(
             centerTitle: true,
             title: Text(
@@ -43,7 +44,7 @@ class _TheoryState extends State<Theory> {
                 print("index =="+index.toString());
                 int selectedtab=index+1;
                 setState(() {
-                  visibleRound="Round "+selectedtab.toString();
+                  visibleRound=selectedtab;
                 });
               },
               labelPadding: EdgeInsets.symmetric(vertical: 10.0),
@@ -64,6 +65,7 @@ class _TheoryState extends State<Theory> {
             ),
           ),
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               get1stRoundList(context),get1stRoundList(context),get1stRoundList(context)
             ],
@@ -93,11 +95,11 @@ class _TheoryState extends State<Theory> {
   }
 
   Widget _studentPageDesign(BuildContext context, int index) {
-    print("visible round=="+ visibleRound);
-    if (student_data[index].addedInRound == "" ||
-        student_data[index].addedInRound == visibleRound) {
+    print("visible round=="+ visibleRound.toString());
+    print("condition check=="+student_data[index].isAdded.toString()+"  "+student_data[index].addedInRound.toString()+"  ");
 
-    return Card(
+    return !student_data[index].isAdded ||
+        student_data[index].addedInRound == visibleRound || student_data[index].addedInRound==0 ? Card(
       shape: RoundedRectangleBorder(
 
       ),
@@ -140,11 +142,11 @@ class _TheoryState extends State<Theory> {
                     if (i == toggle_index) {
                       student_data[index].isRemoved = false;
                       student_data[index].isAdded = true;
-                      student_data[index].addedInRound = "Round 1";
+                      student_data[index].addedInRound = visibleRound;
                     } else {
                       student_data[index].isRemoved = true;
                       student_data[index].isAdded = false;
-                      student_data[index].addedInRound = "Round 1";
+                      student_data[index].addedInRound = visibleRound;
                     }
                   }
                 });
@@ -157,7 +159,9 @@ class _TheoryState extends State<Theory> {
           )
         ],
       ),
+    ):Container(
+
     );
-  }
+
   }
 }

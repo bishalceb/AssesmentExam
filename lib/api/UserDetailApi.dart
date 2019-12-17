@@ -154,7 +154,7 @@ class StudentData {
   bool present;
   bool isAdded;
   bool isRemoved;
-  String addedInRound;
+  int addedInRound;
 
   StudentData(
       {this.id,
@@ -190,21 +190,21 @@ class StudentData {
     present = false;
     isAdded = false;
     isRemoved=true;
-    addedInRound="";
+    addedInRound=0;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['student_code'] = this.studentCode;
-    data['student_roll_no'] = this.studentRollNo;
-    data['father_name'] = this.fatherName;
-    data['email'] = this.email;
-    data['password'] = this.password;
-    data['phone'] = this.phone;
-    data['dob'] = this.dob;
-    data['gender'] = this.gender;
+    data['id'] = this.id ?? "";
+    data['name'] = this.name ?? "";
+    data['student_code'] = this.studentCode ?? "";
+    data['student_roll_no'] = this.studentRollNo ?? "";
+    data['father_name'] = this.fatherName ?? "";
+    data['email'] = this.email ?? "";
+    data['password'] = this.password ?? "";
+    data['phone'] = this.phone ?? "";
+    data['dob'] = this.dob ?? "";
+    data['gender'] = this.gender ?? "";
     data['is_present'] = this.is_present;
     data['absent'] = this.is_present;
     data['present'] = this.is_present;
