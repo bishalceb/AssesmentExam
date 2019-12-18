@@ -5,6 +5,16 @@ class MainScopedModel extends Model {
   List<StudentData> _firstRoundStudents = [];
   List<StudentData> _secRoundStudents = [];
   List<StudentData> _thirdRoundStudents = [];
+  bool _isLoading = false;
+
+  bool get getLoading {
+    return _isLoading;
+  }
+
+  void setisLoading(bool isLoading) {
+    this._isLoading = isLoading;
+    notifyListeners();
+  }
 
   void addFirstRoundStudent() {
     List<StudentData> students = [];

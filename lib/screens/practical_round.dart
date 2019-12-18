@@ -1,4 +1,5 @@
 import 'package:assesment/api/UserDetailApi.dart';
+import 'package:assesment/screens/capture_video.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
@@ -64,74 +65,87 @@ class _PracticalState extends State<Practical> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Practical Round'),
-      ),
-      body: Container(
-        color: Colors.black26,
-        child: Column(
-        children: <Widget>[
-          students.length <= 0
-              ? Center(
-                  child: Text('No any present student'),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(
-                        top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
-                    itemCount: students.length,
-                    itemBuilder: (context, int index) {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      students[index].name,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          title: Text('Practical Round'),
+        ),
+        body: Container(
+          color: Colors.black26,
+          child: Column(
+            children: <Widget>[
+              students.length <= 0
+                  ? Center(
+                      child: Text('No any present student'),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(
+                            top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
+                        itemCount: students.length,
+                        itemBuilder: (context, int index) {
+                          return Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          students[index].name,
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'Roll No. ' +
+                                              students[index].studentRollNo,
+                                          style: TextStyle(fontSize: 16.0),
+                                        )
+                                      ],
                                     ),
-                                    Text(
-                                      'Roll No. ' +
-                                          students[index].studentRollNo,
-                                      style: TextStyle(fontSize: 16.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              FlatButton(
-                                color: Color(0xFF2f4050),
-                                child: Text('Practical',style: TextStyle(color: Colors.white)),
-                                onPressed: () {},
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              FlatButton(
-                                color: Color(0xFF2f4050),
-                                /*shape: RoundedRectangleBorder(
+                                  ),
+                                  FlatButton(
+                                    color: Color(0xFF2f4050),
+                                    child: Text('Practical',
+                                        style: TextStyle(color: Colors.white)),
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CaptureVideo())),
+                                  ),
+                                  SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  FlatButton(
+                                    color: Color(0xFF2f4050),
+                                    /*shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0)),*/
-                                child: Text('Viva',style: TextStyle(color: Colors.white),),
-                                onPressed: () {},
+                                    child: Text(
+                                      'Viva',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CaptureVideo())),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-          _buildNextButton()
-        ],
-      ),
-    )
-    );
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+              _buildNextButton()
+            ],
+          ),
+        ));
   }
 }
