@@ -1,3 +1,5 @@
+import 'package:assesment/model/scopedModel.dart';
+import 'package:assesment/screens/single_pic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
@@ -8,6 +10,9 @@ import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/screens/SelectBatch.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/controller/UserDetailController.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import 'SelectBatch.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -17,8 +22,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin implements UserDetailListener{
-
+    with SingleTickerProviderStateMixin
+    implements UserDetailListener {
   UserDetailController userDetailController;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -35,6 +40,7 @@ class _LoginPageState extends State<LoginPage>
   bool _obscureTextLogin = true;
   bool _obscureTextSignup = true;
   bool _obscureTextSignupConfirm = true;
+  bool _isLoading = false;
 
   TextEditingController signupEmailController = new TextEditingController();
   TextEditingController signupNameController = new TextEditingController();
@@ -49,20 +55,20 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overscroll) {
           overscroll.disallowGlow();
         },
         child: SingleChildScrollView(
-              child: Container(
-                color: Colors.black26,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height >= 605.0
-                    ? MediaQuery.of(context).size.height
-                    : 605.0,
-                /*decoration: new BoxDecoration(
+          child: Container(
+            color: Colors.black26,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height >= 605.0
+                ? MediaQuery.of(context).size.height
+                : 605.0,
+            /*decoration: new BoxDecoration(
                   gradient: new LinearGradient(
                       colors: [
                         Theme.Colors.loginGradientStart,
@@ -73,58 +79,61 @@ class _LoginPageState extends State<LoginPage>
                       stops: [0.0, 1.0],
                       tileMode: TileMode.clamp),
                 ),*/
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 190.0),
-                      child: Center(
-                        child: Text("LOGIN",style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 35.0,
-                            fontFamily: "WorkSansBold"),),
-                      ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 190.0),
+                  child: Center(
+                    child: Text(
+                      "LOGIN",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35.0,
+                          fontFamily: "WorkSansBold"),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                    ),
-                    /*Padding(
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                ),
+                /*Padding(
                       padding: EdgeInsets.only(top: 20.0),
                       child: _buildMenuBar(context),
                     ),*/
-                    Expanded(
-                      flex: 2,
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (i) {
-                          if (i == 0) {
-                            setState(() {
-                              right = Colors.white;
-                              left = Colors.black;
-                            });
-                          } else if (i == 1) {
-                            setState(() {
-                              right = Colors.black;
-                              left = Colors.white;
-                            });
-                          }
-                        },
-                        children: <Widget>[
-                          new ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignIn(context),
-                          ),
-                          /*new ConstrainedBox(
+                Expanded(
+                  flex: 2,
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (i) {
+                      if (i == 0) {
+                        setState(() {
+                          right = Colors.white;
+                          left = Colors.black;
+                        });
+                      } else if (i == 1) {
+                        setState(() {
+                          right = Colors.black;
+                          left = Colors.white;
+                        });
+                      }
+                    },
+                    children: <Widget>[
+                      new ConstrainedBox(
+                        constraints: const BoxConstraints.expand(),
+                        child: _buildSignIn(context),
+                      ),
+                      /*new ConstrainedBox(
                             constraints: const BoxConstraints.expand(),
                             child: _buildSignUp(context),
                           ),*/
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
+          ),
+        ),
       ),
     );
   }
@@ -195,7 +204,7 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
             //Container(height: 33.0, width: 1.0, color: Colors.white),
-          /*  Expanded(
+            /*  Expanded(
               child: FlatButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -221,92 +230,94 @@ class _LoginPageState extends State<LoginPage>
       child: Column(
         children: <Widget>[
           Stack(
-            alignment: Alignment.topCenter,
-            overflow: Overflow.visible,
-            children: <Widget>[
-              Card(
-                elevation: 2.0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Container(
-                  width: 300.0,
-                  height: 190.0,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodeEmailLogin,
-                          controller: loginEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                              size: 22.0,
+              alignment: Alignment.topCenter,
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Card(
+                  elevation: 2.0,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Container(
+                    width: 300.0,
+                    height: 190.0,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                          child: TextField(
+                            focusNode: myFocusNodeEmailLogin,
+                            controller: loginEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            style: TextStyle(
+                                fontFamily: "WorkSansSemiBold",
+                                fontSize: 16.0,
+                                color: Colors.black),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: Icon(
+                                FontAwesomeIcons.envelope,
+                                color: Colors.black,
+                                size: 22.0,
+                              ),
+                              hintText: "Email Address",
+                              hintStyle: TextStyle(
+                                  fontFamily: "WorkSansSemiBold",
+                                  fontSize: 17.0),
                             ),
-                            hintText: "Email Address",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                           ),
                         ),
-                      ),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodePasswordLogin,
-                          controller: loginPasswordController,
-                          obscureText: _obscureTextLogin,
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.lock,
-                              size: 22.0,
-                              color: Colors.black,
-                            ),
-                            hintText: "Password",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleLogin,
-                              child: Icon(
-                                _obscureTextLogin
-                                    ? FontAwesomeIcons.eye
-                                    : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
+                        Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                          child: TextField(
+                            focusNode: myFocusNodePasswordLogin,
+                            controller: loginPasswordController,
+                            obscureText: _obscureTextLogin,
+                            style: TextStyle(
+                                fontFamily: "WorkSansSemiBold",
+                                fontSize: 16.0,
+                                color: Colors.black),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: Icon(
+                                FontAwesomeIcons.lock,
+                                size: 22.0,
                                 color: Colors.black,
+                              ),
+                              hintText: "Password",
+                              hintStyle: TextStyle(
+                                  fontFamily: "WorkSansSemiBold",
+                                  fontSize: 17.0),
+                              suffixIcon: GestureDetector(
+                                onTap: _toggleLogin,
+                                child: Icon(
+                                  _obscureTextLogin
+                                      ? FontAwesomeIcons.eye
+                                      : FontAwesomeIcons.eyeSlash,
+                                  size: 15.0,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 170.0),
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  /*boxShadow: <BoxShadow>[
+                Container(
+                  margin: EdgeInsets.only(top: 170.0),
+                  decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    /*boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Theme.Colors.loginGradientStart,
                       offset: Offset(1.0, 6.0),
@@ -318,7 +329,7 @@ class _LoginPageState extends State<LoginPage>
                       blurRadius: 20.0,
                     ),
                   ],*/
-                  /*gradient: new LinearGradient(
+                    /*gradient: new LinearGradient(
                       colors: [
                         Theme.Colors.loginGradientEnd,
                         Theme.Colors.loginGradientStart
@@ -327,27 +338,31 @@ class _LoginPageState extends State<LoginPage>
                       end: const FractionalOffset(1.0, 1.0),
                       stops: [0.0, 1.0],
                       tileMode: TileMode.clamp),*/
+                  ),
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                      : MaterialButton(
+                          color: Color(0xFF2f4050),
+                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 42.0),
+                            child: Text(
+                              "LOGIN",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25.0,
+                                  fontFamily: "WorkSansBold"),
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isLoading = true;
+                              siginNavigat();
+                            });
+                          }),
                 ),
-                child: MaterialButton(
-                    color: Color(0xFF2f4050),
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "LOGIN",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
-                      ),
-                    ),
-                    onPressed: () =>
-                        siginNavigat()
-              ),
-              ),
-            ]
-          ),
+              ]),
         ],
       ),
     );
@@ -545,8 +560,7 @@ class _LoginPageState extends State<LoginPage>
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar("SignUp button pressed")),
+                    onPressed: () => showInSnackBar("SignUp button pressed")),
               ),
             ],
           ),
@@ -566,10 +580,8 @@ class _LoginPageState extends State<LoginPage>
   }
 
   void _toggleLogin() {
-
     setState(() {
       _obscureTextLogin = !_obscureTextLogin;
-
     });
   }
 
@@ -587,8 +599,7 @@ class _LoginPageState extends State<LoginPage>
 
   siginNavigat() {
     userDetailController = UserDetailController(listener: this);
-    userDetailController.callAPI("sumit","India@0987");
-
+    userDetailController.callAPI("sumit", "India@0987");
   }
 
   @override
@@ -598,9 +609,12 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   void onLoginSuccess({UserDetailApi model}) {
-    // TODO: implement onLoginSuccess
-    if (UserDetailApi.responseCode==200){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectBatch()));
+    if (UserDetailApi.responseCode == 200) {
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => SinglePic()));
     }
   }
 }

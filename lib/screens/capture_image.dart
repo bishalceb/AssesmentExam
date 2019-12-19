@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:assesment/style/theme.dart' as prefix1;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart' as prefix0;
-import 'package:multi_media_picker/multi_media_picker.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CaptureImage extends StatefulWidget {
   final int index;

@@ -19,6 +19,8 @@ dependencies:
   image_picker:
   path_provider:
   path:
+  location:
+  intl:
 
 
 dev_dependencies:
@@ -35,6 +37,7 @@ flutter:
   assets:
       - assets/login_logo.png
       - assets/img/placeholder.png
+      - assets/img/video_player.png
 
   fonts:
     - family: WorkSansSemiBold

@@ -1,3 +1,4 @@
+import 'package:assesment/screens/studnt_round_pic.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/api/UserDetailApi.dart';
@@ -17,16 +18,17 @@ class _StudentListState extends State<StudentList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    int selected_batch=UserDetailApi.response[0].selected_batch;
-    student_data=UserDetailApi.response[0].batcheData[selected_batch].studentData;
+    int selected_batch = UserDetailApi.response[0].selected_batch;
+    student_data =
+        UserDetailApi.response[0].batcheData[selected_batch].studentData;
   }
+
   @override
   Widget build(BuildContext context) {
     _scaffoldContext = context;
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text(
-              "Student List"),
+          title: new Text("Student List"),
         ),
         body: Container(
           color: prefix0.Colors.black26,
@@ -39,49 +41,46 @@ class _StudentListState extends State<StudentList> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: Center(
-                    child:Container(
-                      margin: EdgeInsets.only(top: 20.0),
-                      decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    child: Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                  child: MaterialButton(
+                      color: Color(0xFF2f4050),
+                      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 42.0),
+                        child: Text(
+                          "NEXT",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.0,
+                              fontFamily: "WorkSansBold"),
+                        ),
                       ),
-                      child: MaterialButton(
-                          color: Color(0xFF2f4050),
-                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 42.0),
-                            child: Text(
-                              "NEXT",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25.0,
-                                  fontFamily: "WorkSansBold"),
-                            ),
-                          ),
-                          onPressed: (){
-                            for(int i=0;i<student_data.length;i++){
-                              print("ispresent value=="+student_data[i].is_present.toString());
-                            }
-                            //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
-                          }
-                      ),
-                    )
-                ),
+                      onPressed: () {
+                        for (int i = 0; i < student_data.length; i++) {
+                          print("ispresent value==" +
+                              student_data[i].is_present.toString());
+                        }
+                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
+                      }),
+                )),
               ),
-
             ],
           ),
-        )
-    );
+        ));
   }
 
   getStdListBody(BuildContext context) {
     height = MediaQuery.of(context).size.height;
-    double percentage_height=0.33*height;
-    actual_height=height-percentage_height;
+    double percentage_height = 0.33 * height;
+    actual_height = height - percentage_height;
     return Container(
       height: actual_height,
-      child:  ListView.builder(
+      child: ListView.builder(
         itemCount: 10,
         itemBuilder: _studentPageDesign,
         padding: EdgeInsets.all(0.0),
@@ -97,10 +96,14 @@ class _StudentListState extends State<StudentList> {
         children: <Widget>[
           Container(
             width: 150,
-            child: Text(student_data[index].name,style: TextStyle(fontSize: 20,color: Colors.black),),
+            child: Text(
+              student_data[index].name,
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
           ),
-          Padding(padding: EdgeInsets.all(2),
-            child:  ToggleButtons(
+          Padding(
+            padding: EdgeInsets.all(2),
+            child: ToggleButtons(
               borderColor: Colors.black26,
               fillColor: Colors.green,
               borderWidth: 2,
@@ -127,18 +130,26 @@ class _StudentListState extends State<StudentList> {
                 setState(() {
                   for (int i = 0; i < 2; i++) {
                     if (i == toggle_index) {
-                      student_data[index].absent=false;
-                      student_data[index].present=true;
-                      student_data[index].is_present=true;
+                      student_data[index].absent = false;
+                      student_data[index].present = true;
+                      student_data[index].is_present = true;
                     } else {
-                      student_data[index].absent=true;
-                      student_data[index].present=false;
-                      student_data[index].is_present=false;
+                      student_data[index].absent = true;
+                      student_data[index].present = false;
+                      student_data[index].is_present = false;
                     }
+                    if (student_data[index].present)
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StudentRoundPic()));
                   }
                 });
               },
-              isSelected: [student_data[index].absent,student_data[index].present],
+              isSelected: [
+                student_data[index].absent,
+                student_data[index].present
+              ],
             ),
           )
         ],
