@@ -29,32 +29,46 @@ class _CaptureImageState extends State<CaptureImage> {
     });
     if (_image != null || _images != null) {
       if (widget.mode == 'candidate')
-        _image.copy('candidate_${widget.student.studentCode}.png');
+        await _image.copy(
+            '${widget.batchFolder.path}/candidate_${widget.student.studentCode}.png');
       else if (widget.mode == 'Exam Attendance') {
         for (int i = 0; i < _images.length; i++) {
-          _images[i]
-              .copy('${widget.batchFolder}/exam_attendance_pic_${i + 1}.png');
+          await _images[i].copy(
+              '${widget.batchFolder.path}/exam_attendance_pic_${i + 1}.png');
+        }
+      } else if (widget.mode == 'Assessor Feedback') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i]
+              .copy('${widget.batchFolder.path}/assessor_feedback${i + 1}.png');
+        }
+      } else if (widget.mode == 'Training Attendance') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i].copy(
+              '${widget.batchFolder.path}/training_attendance_pic_${i + 1}.png');
+        }
+      } else if (widget.mode == 'VTP Feedback') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i]
+              .copy('${widget.batchFolder.path}/vtp_feedback_pic_${i + 1}.png');
+        }
+      } else if (widget.mode == 'Code of Conduct') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i]
+              .copy('${widget.batchFolder.path}/code_of_conduct_${i + 1}.png');
+        }
+      } else if (widget.mode == 'Placements Documents') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i]
+              .copy('${widget.batchFolder.path}/placement_doc_${i + 1}.png');
+        }
+      } else if (widget.mode == 'Group Photo') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i]
+              .copy('${widget.batchFolder.path}/group_photo_${i + 1}.png');
         }
       }
     }
   }
-
-/*   Future<void> getCamImages() async { //taking pic with multimediapicker not working
-    try {
-      List<File> images = await MultiMediaPicker.pickImages(
-        maxHeight: 100.0,
-        maxWidth: 100.0,
-        source: ImageSource.camera,
-      );
-      setState(() {
-        if (images != null) {
-          _images.addAll(images);
-        }
-      });
-    } on Exception catch (e) {
-      print('exception: ' + e.toString());
-    }
-  } */
 
   Widget _buildSingleImage() {
     return Column(

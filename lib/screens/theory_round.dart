@@ -96,8 +96,13 @@ class _TheoryState extends State<Theory> {
               physics: NeverScrollableScrollPhysics(),
               children: _tabBarViews.map((tabView) => tabView).toList()),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CaptureVideo())),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CaptureVideo(
+                          batchFolder: widget.batchFolder,
+                          mode: 'theory round',
+                        ))),
             child: Icon(Icons.videocam),
           ),
         ),

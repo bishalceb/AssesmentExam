@@ -23,7 +23,7 @@ class _SinglePicState extends State<SinglePic> {
   File proctor_profile;
 
   Future<void> getCamImage() async {
-    var permissionNames = Permission.requestPermissions(
+    await Permission.requestPermissions(
         [PermissionName.Camera, PermissionName.Storage]);
 
     directory = await getExternalStorageDirectory();
@@ -110,7 +110,7 @@ class _SinglePicState extends State<SinglePic> {
                                     style: TextStyle(
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.bold),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -136,12 +136,13 @@ class _SinglePicState extends State<SinglePic> {
               padding: const EdgeInsets.all(10.0),
               child: RaisedButton(
                 child: Text(
-                  'Finish',
+                  'Next',
                   style: TextStyle(fontSize: 20.0),
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SelectBatch()));
+                  if (_image != null)
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SelectBatch()));
                 },
               ),
             )

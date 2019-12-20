@@ -10,7 +10,9 @@ class CaptureVideo extends StatefulWidget {
   final Directory batchFolder;
   final String mode;
   final String studentCode;
-  CaptureVideo({this.batchFolder, this.mode, this.studentCode});
+  final int visibleTheoryRound; //to shoot theory round video
+  CaptureVideo(
+      {this.batchFolder, this.mode, this.studentCode, this.visibleTheoryRound});
   @override
   _CaptureVideoState createState() => _CaptureVideoState();
 }
@@ -28,6 +30,8 @@ class _CaptureVideoState extends State<CaptureVideo> {
         return 'practical_${widget.studentCode}.mp4';
       else if (widget.mode == 'center infrastructure')
         return 'center_infra.mp4';
+      else if (widget.mode == 'theory round')
+        return 'theory_round_video_${widget.visibleTheoryRound}.mp4';
       else
         return '';
     }
