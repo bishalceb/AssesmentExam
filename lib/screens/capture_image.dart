@@ -32,7 +32,7 @@ class _CaptureImageState extends State<CaptureImage> {
         _image.copy('candidate_${widget.student.studentCode}.png');
       else if (widget.mode == 'Exam Attendance') {
         for (int i = 0; i < _images.length; i++) {
-          await _images[i]
+          _images[i]
               .copy('${widget.batchFolder}/exam_attendance_pic_${i + 1}.png');
         }
       }
