@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:assesment/screens/studnt_round_pic.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
@@ -5,6 +7,8 @@ import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart' as prefix0;
 
 class StudentList extends StatefulWidget {
+  final Directory batchFolder;
+  StudentList(this.batchFolder);
   @override
   _StudentListState createState() => _StudentListState();
 }
@@ -16,7 +20,6 @@ class _StudentListState extends State<StudentList> {
   List<StudentData> student_data;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     int selected_batch = UserDetailApi.response[0].selected_batch;
     student_data =
@@ -142,7 +145,9 @@ class _StudentListState extends State<StudentList> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StudentRoundPic()));
+                              builder: (context) => StudentRoundPic(
+                                  student_data[index].studentCode,
+                                  widget.batchFolder)));
                   }
                 });
               },

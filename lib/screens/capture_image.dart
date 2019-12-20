@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart' as prefix0;
+import 'package:image_picker/image_picker.dart';
 
 class CaptureImage extends StatefulWidget {
   final int index;
-  CaptureImage(this.index);
+  final String mode;
+  final StudentData student;
+  final Directory batchFolder;
+  CaptureImage({this.index, this.mode, this.student, this.batchFolder});
   @override
   _CaptureImageState createState() => _CaptureImageState();
 }
@@ -13,19 +17,26 @@ class CaptureImage extends StatefulWidget {
 class _CaptureImageState extends State<CaptureImage> {
   File _image;
   List<File> _images = [];
+  String imageName;
 
   Future<void> getCamImage() async {
-    var image =
-        await prefix0.ImagePicker.pickImage(source: prefix0.ImageSource.camera);
+    File image = await ImagePicker.pickImage(source: ImageSource.camera);
+
     if (image == null) return;
-    /*final String path = getApplicationDocumentsDirectory().toString();
-    print('image path: $path');
-    var fileName = basename(image.path);
-    final File localImage = await image.copy('$path/$fileName'); */
     setState(() {
       if (image != null)
         widget.index == 2 ? _image = image : _images.add(image);
     });
+    if (_image != null || _images != null) {
+      if (widget.mode == 'candidate')
+        _image.copy('candidate_${widget.student.studentCode}.png');
+      else if (widget.mode == 'Exam Attendance') {
+        for (int i = 0; i < _images.length; i++) {
+          await _images[i]
+              .copy('${widget.batchFolder}/exam_attendance_pic_${i + 1}.png');
+        }
+      }
+    }
   }
 
 /*   Future<void> getCamImages() async { //taking pic with multimediapicker not working

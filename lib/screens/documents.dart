@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:assesment/screens/candidate_list.dart';
 import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/screens/capture_media.dart';
 import 'package:flutter/material.dart';
 
 class Documents extends StatefulWidget {
+  final Directory bathFolder;
+  Documents(this.bathFolder);
   @override
   _DocumentsState createState() => _DocumentsState();
 }
@@ -20,9 +23,9 @@ class _DocumentsState extends State<Documents> {
     'Placements Documents',
     'Group Photo'
   ];
-  static final card_color=Color(0xFF2f4050);
-  static final card_text_color=Colors.white;
-  static final card_border_color=Colors.black26;
+  static final card_color = Color(0xFF2f4050);
+  static final card_text_color = Colors.white;
+  static final card_border_color = Colors.black26;
 
   _buildDocumentsGridView() {
     return GridView.builder(
@@ -51,9 +54,15 @@ class _DocumentsState extends State<Documents> {
                   ? Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CaptureImage(index)))
-                  : Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => CandidateList(index)));
+                          builder: (context) => CaptureImage(
+                                mode: _gridItems[index],
+                                batchFolder: widget.bathFolder,
+                              )))
+                  : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CandidateList(index, widget.bathFolder)));
             });
       },
     );
@@ -67,9 +76,7 @@ class _DocumentsState extends State<Documents> {
             title: Text('Documents'),
           ),
           body: Container(
-              color: Colors.black26,
-              child: _buildDocumentsGridView()
-          )),
+              color: Colors.black26, child: _buildDocumentsGridView())),
       onWillPop: () {
         Navigator.of(context).pop(true);
         return Future.value(false);

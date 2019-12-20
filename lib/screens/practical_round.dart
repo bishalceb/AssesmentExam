@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/capture_video.dart';
 import 'package:assesment/style/theme.dart' as Theme;
@@ -5,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 
 class Practical extends StatefulWidget {
+  final Directory batchFolder;
+  Practical(this.batchFolder);
   @override
   _PracticalState createState() => _PracticalState();
 }
@@ -116,8 +120,11 @@ class _PracticalState extends State<Practical> {
                                     onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                CaptureVideo())),
+                                            builder: (context) => CaptureVideo(
+                                                batchFolder: widget.batchFolder,
+                                                mode: 'practical',
+                                                studentCode: student_data[index]
+                                                    .studentCode))),
                                   ),
                                   SizedBox(
                                     width: 5.0,
@@ -133,8 +140,11 @@ class _PracticalState extends State<Practical> {
                                     onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                CaptureVideo())),
+                                            builder: (context) => CaptureVideo(
+                                                batchFolder: widget.batchFolder,
+                                                mode: 'viva',
+                                                studentCode: student_data[index]
+                                                    .studentCode))),
                                   ),
                                 ],
                               ),

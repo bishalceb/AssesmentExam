@@ -21,6 +21,7 @@ dependencies:
   path:
   location:
   intl:
+  permission:
 
 
 dev_dependencies:

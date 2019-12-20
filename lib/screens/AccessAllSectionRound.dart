@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:assesment/screens/capture_video.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/screens/StudentList.dart';
@@ -8,10 +8,11 @@ import 'package:assesment/screens/SetTheoryRounds.dart';
 import 'package:assesment/screens/practical_round.dart';
 import 'package:assesment/screens/feedback_form.dart';
 import 'package:assesment/screens/documents.dart';
-import 'package:assesment/screens/capture_media.dart';
 import 'package:assesment/model/scopedModel.dart';
 
 class AccessAllSectionRound extends StatefulWidget {
+  final Directory batchFolder;
+  AccessAllSectionRound(this.batchFolder);
   @override
   _AccessAllSectionRoundState createState() => _AccessAllSectionRoundState();
 }
@@ -62,20 +63,34 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
             ),
             onTap: () {
               if (index == 0) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => StudentList()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StudentList(widget.batchFolder)));
               } else if (index == 1) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SetTheoryRound()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SetTheoryRound(widget.batchFolder)));
               } else if (index == 2) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Practical()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Practical(widget.batchFolder)));
               } else if (index == 3) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CaptureVideo()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CaptureVideo(
+                              mode: 'center infrastructure',
+                              batchFolder: widget.batchFolder,
+                            )));
               } else if (index == 4) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Documents()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Documents(widget.batchFolder)));
               } else if (index == 5) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FeedbackForm()));

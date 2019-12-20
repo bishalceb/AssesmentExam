@@ -1,9 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission/permission.dart';
 
 class StudentRoundPic extends StatefulWidget {
+  final String studentCode;
+  final Directory batchFolder;
+  StudentRoundPic(this.studentCode, this.batchFolder);
   @override
   _StudentRoundPicState createState() => _StudentRoundPicState();
 }
@@ -14,10 +20,10 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
 
   Future<void> getCamImage(String mode) async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    /*final String path = getApplicationDocumentsDirectory().toString();
-    print('image path: $path');
-    var fileName = basename(image.path);
-    final File localImage = await image.copy('$path/$fileName'); */
+
+    image.copy(
+        '${widget.batchFolder.path}/${mode == 'adhar' ? 'aadhar_' + '${widget.studentCode}.png' : 'profile_' + '${widget.studentCode}.png'}');
+
     setState(() {
       if (image != null) {
         mode == 'adhar' ? _adharPic = image : _profilePic = image;
@@ -33,7 +39,7 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
         bottom: true,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20.0),
-          child: Column(           
+          child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -47,7 +53,6 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                           _profilePic,
                           height: 200.0,
                           width: 200.0,
-
                         ),
                   Expanded(
                     child: FlatButton.icon(
@@ -58,7 +63,9 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                   ),
                 ],
               ),
-              SizedBox(height: 5.0,),
+              SizedBox(
+                height: 5.0,
+              ),
               Row(
                 children: <Widget>[
                   _adharPic == null

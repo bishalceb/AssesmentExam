@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:assesment/screens/capture_video.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:video_player/video_player.dart';
 
 class Theory extends StatefulWidget {
+  final Directory batchFolder;
+  Theory(this.batchFolder);
   @override
   _TheoryState createState() => _TheoryState();
 }
@@ -15,11 +21,12 @@ class _TheoryState extends State<Theory> {
   List<StudentData> student_data;
   int visibleRound = 1;
   int total_round;
+  List<Widget> _tabBarViews = [];
+  List<Widget> _tabs = [];
 
   TabController _tabController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     int selected_batch = UserDetailApi.response[0].selected_batch;
     total_round = UserDetailApi.response[0].selected_round_no;
@@ -28,12 +35,43 @@ class _TheoryState extends State<Theory> {
   }
 
   @override
+  void didChangeDependencies() {
+    setState(() {
+      for (int i = 1; i <= total_round; i++) {
+        _tabBarViews.add(get1stRoundList());
+      }
+      for (int i = 1; i <= total_round; i++) {
+        _tabs.add(Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text(
+            'Round $i',
+            style: TextStyle(fontSize: 20.0, letterSpacing: 0.9),
+          ),
+        ));
+      }
+    });
+    super.didChangeDependencies();
+  }
+
+/*   List<Widget> tabBarView() {
+    for (int i = 1; i <= total_round; i++) {
+      _tabBarViews.add(get1stRoundList());
+    }
+  }
+
+  List<Widget> tabs() {
+    for (int i = 1; i <= total_round; i++) {
+      _tabs.add(Text('Round $i'));
+    }
+  } */
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: true,
       top: true,
       child: DefaultTabController(
-        length: 3,
+        length: total_round,
         child: Scaffold(
           backgroundColor: Colors.grey,
           appBar: AppBar(
@@ -42,6 +80,7 @@ class _TheoryState extends State<Theory> {
               'Theory Round',
             ),
             bottom: TabBar(
+              isScrollable: true,
               onTap: (index) {
                 print("index ==" + index.toString());
                 int selectedtab = index + 1;
@@ -50,32 +89,15 @@ class _TheoryState extends State<Theory> {
                 });
               },
               labelPadding: EdgeInsets.symmetric(vertical: 10.0),
-              tabs: <Widget>[
-                Text(
-                  'Round 1',
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                Text(
-                  'Round 2',
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                Text(
-                  'Round 3',
-                  style: TextStyle(fontSize: 18.0),
-                )
-              ],
+              tabs: _tabs.map((tabs) => tabs).toList(),
             ),
           ),
           body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: <Widget>[
-              get1stRoundList(context),
-              get1stRoundList(context),
-              get1stRoundList(context)
-            ],
-          ),
+              physics: NeverScrollableScrollPhysics(),
+              children: _tabBarViews.map((tabView) => tabView).toList()),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CaptureVideo())),
             child: Icon(Icons.videocam),
           ),
         ),
@@ -83,7 +105,7 @@ class _TheoryState extends State<Theory> {
     );
   }
 
-  get1stRoundList(BuildContext context) {
+  get1stRoundList() {
     height = MediaQuery.of(context).size.height;
     double percentage_height = 0.33 * height;
     actual_height = height - percentage_height;
