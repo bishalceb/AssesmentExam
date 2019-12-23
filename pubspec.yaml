@@ -22,6 +22,8 @@ dependencies:
   location:
   intl:
   permission:
+  flutter_image_compress:
+  flutter_luban:
 
 
 dev_dependencies:

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:assesment/screens/SelectBatch.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_luban/flutter_luban.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,27 +17,57 @@ class SinglePic extends StatefulWidget {
 
 class _SinglePicState extends State<SinglePic> {
   var directory;
+  Directory createPath;
   File _image;
   Location location = Location();
   var latitude;
   var longitude;
   String _currentTime;
   File proctor_profile;
+/* 
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
+    File result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path, targetPath,
+        quality: 88, rotate: 0, format: CompressFormat.png);
+
+    //print(file.lengthSync());
+    //print(result.lengthSync());
+
+    return result;
+  } */
 
   Future<void> getCamImage() async {
     await Permission.requestPermissions(
         [PermissionName.Camera, PermissionName.Storage]);
 
     directory = await getExternalStorageDirectory();
-    var createPath =
+    createPath =
         await Directory('${directory.path}/Assesment').create(recursive: true);
+
     print(createPath.path.toString());
 
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    /*    File compressedImage = await FlutterImageCompress.compressAndGetFile(
+        image.path, createPath.path,
+        quality: 88); */
     if (image == null) return;
-
+    CompressObject compressObject = CompressObject(
+        imageFile: image,
+        path: createPath.path,
+        mode: CompressMode.LARGE2SMALL,
+        quality: 20,
+        step: 4);
+    File compressedImage = compressObject.imageFile;
     proctor_profile =
-        await image.copy('${createPath.path}/proctor_profile.png');
+        await compressedImage.copy('${createPath.path}/proctor_profile.png');
+    Luban.compressImage(compressObject).then((_path) {
+      setState(() {
+        print(_path);
+      });
+    });
+    //if (compressedImage != null)
+    //proctor_profile =
+    //  await compressedImage.copy('${createPath.path}/proctor_profile.png');
     //image.copy('${createPath.path}/')
     /*final String path = getApplicationDocumentsDirectory().toString();
     print('image path: $path');
@@ -141,8 +173,10 @@ class _SinglePicState extends State<SinglePic> {
                 ),
                 onPressed: () {
                   if (_image != null)
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SelectBatch()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectBatch(createPath)));
                 },
               ),
             )

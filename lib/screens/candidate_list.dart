@@ -5,7 +5,6 @@ import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/screens/capture_media.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 
 class CandidateList extends StatefulWidget {
   final int index;
@@ -44,7 +43,7 @@ class _CandidateListState extends State<CandidateList> {
             ? Center(
                 child: Text('No any present student'),
               )
-            : prefix0.Container(
+            : Container(
                 color: Colors.black26,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,

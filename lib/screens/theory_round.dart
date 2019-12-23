@@ -85,7 +85,7 @@ class _TheoryState extends State<Theory> {
                 print("index ==" + index.toString());
                 int selectedtab = index + 1;
                 setState(() {
-                  visibleRound = selectedtab;
+                  visibleRound = index;
                 });
               },
               labelPadding: EdgeInsets.symmetric(vertical: 10.0),

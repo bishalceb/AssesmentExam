@@ -9,6 +9,8 @@ import 'package:flutter/material.dart' as prefix0;
 import 'package:path_provider/path_provider.dart';
 
 class SelectBatch extends StatefulWidget {
+  final Directory createPath;
+  SelectBatch(this.createPath);
   @override
   _SelectBatchState createState() => _SelectBatchState();
 }
@@ -129,10 +131,9 @@ class _SelectBatchState extends State<SelectBatch> {
                     ),
                   ),
                   onPressed: () async {
-                    Directory batchFolder = await getExternalStorageDirectory()
-                        .then((directory) => Directory(
-                                '${directory.path}/batch_${UserDetailApi.response[0].id}_$_value')
-                            .create(recursive: true));
+                    Directory batchFolder = await Directory(
+                            '${widget.createPath.path}/batch_${UserDetailApi.response[0].id}_$_value')
+                        .create(recursive: true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
