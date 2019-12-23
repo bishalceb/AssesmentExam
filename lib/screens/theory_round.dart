@@ -174,24 +174,33 @@ class _TheoryState extends State<Theory> {
                       ),
                     ],
                     onPressed: (int toggle_index) {
+                      print("toggle_index=="+toggle_index.toString());
                       setState(() {
-                        for (int i = 0; i < 2; i++) {
-                          if (i == toggle_index) {
-                            student_data[index].isRemoved = false;
-                            student_data[index].isAdded = true;
-                            student_data[index].addedInRound = visibleRound;
+                        //for (int j = 0; j < 2; j++) {
+                          if (toggle_index==0) {
+                            setState(() {
+                              student_data[index].isRemoved = true;
+                              student_data[index].isAdded = false;
+                              student_data[index].addedInRound = visibleRound;
+                              print("is added in 0=="+student_data[index].isAdded.toString());
+                            });
+
                           } else {
-                            student_data[index].isRemoved = true;
-                            student_data[index].isAdded = false;
-                            student_data[index].addedInRound = visibleRound;
+                           setState(() {
+                             student_data[index].isRemoved = false;
+                             student_data[index].isAdded = true;
+                             student_data[index].addedInRound = visibleRound;
+                             print("is added=="+student_data[index].isAdded.toString());
+                           });
                           }
-                        }
+                        //}
                       });
                     },
                     isSelected: [
                       student_data[index].isRemoved,
                       student_data[index].isAdded
                     ],
+
                   ),
                 )
               ],
