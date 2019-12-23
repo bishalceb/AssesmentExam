@@ -107,7 +107,7 @@ class _CaptureImageState extends State<CaptureImage> {
               style: TextStyle(fontSize: 20.0),
             ),
             onPressed: () {
-              getCamImage();
+              Navigator.of(context).pop();
             },
           ),
         )
