@@ -22,8 +22,12 @@ dependencies:
   location:
   intl:
   permission:
-  flutter_image_compress:
-  flutter_luban:
+  sqflite:
+  firebase_core:
+  firebase_storage:
+  firebase_analytics:
+  background_fetch:
+
 
 
 dev_dependencies:
@@ -41,6 +45,7 @@ flutter:
       - assets/login_logo.png
       - assets/img/placeholder.png
       - assets/img/video_player.png
+      - assets/img/loading.gif
 
   fonts:
     - family: WorkSansSemiBold

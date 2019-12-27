@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:assesment/api/UserDetailApi.dart';
+import 'package:assesment/database/assessmentdb.dart';
+import 'package:assesment/database/databasehelper.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class MainScopedModel extends Model {
@@ -100,5 +104,10 @@ class MainScopedModel extends Model {
 
   List<StudentData> get thirdRoundStudents {
     return List.from(_thirdRoundStudents);
+  }
+
+  Future<List<AssessmentDb>> fetchData() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    return await databaseHelper.fetchData();
   }
 }

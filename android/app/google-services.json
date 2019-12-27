@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "595089474474",
+    "firebase_url": "https://assessment-exam.firebaseio.com",
+    "project_id": "assessment-exam",
+    "storage_bucket": "assessment-exam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595089474474:android:d676871a704448cafbe1d3",
+        "android_client_info": {
+          "package_name": "com.release.assesment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595089474474-qhqio7l7gu3g9dc4lncokpfm7ufm58oe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDC3OjSteCzEk1rd4X1m4tjfYeOXmB_X6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595089474474-qhqio7l7gu3g9dc4lncokpfm7ufm58oe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

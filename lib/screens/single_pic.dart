@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:assesment/database/assessmentdb.dart';
+import 'package:assesment/database/databasehelper.dart';
 import 'package:assesment/screens/SelectBatch.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_luban/flutter_luban.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission/permission.dart';
+import 'package:sqflite/sqflite.dart';
 
 class SinglePic extends StatefulWidget {
   @override
@@ -18,22 +21,20 @@ class SinglePic extends StatefulWidget {
 class _SinglePicState extends State<SinglePic> {
   var directory;
   Directory createPath;
-  File _image;
   Location location = Location();
   var latitude;
   var longitude;
   String _currentTime;
   File proctor_profile;
-/* 
-  Future<File> testCompressAndGetFile(File file, String targetPath) async {
-    File result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path, targetPath,
-        quality: 88, rotate: 0, format: CompressFormat.png);
+  String networkImageUrl;
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  AssessmentDb assessmentDb;
+  StorageReference _storageReference;
+  List<AssessmentDb> assessmentdb = List<AssessmentDb>();
 
-    //print(file.lengthSync());
-    //print(result.lengthSync());
-
-    return result;
+/*   void fetchData() async {
+    Database initDb = await databaseHelper.initDatabase();
+    if (initDb != null) assessmentdb = await databaseHelper.fetchData();
   } */
 
   Future<void> getCamImage() async {
@@ -46,37 +47,58 @@ class _SinglePicState extends State<SinglePic> {
 
     print(createPath.path.toString());
 
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    /*    File compressedImage = await FlutterImageCompress.compressAndGetFile(
-        image.path, createPath.path,
-        quality: 88); */
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 50);
+    File copiedImage =
+        await image.copy('${createPath.path}/proctor_profile.png');
+
+/*     FirebaseStorage _storage =
+        FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
+
+    String firebaseStoragePath = 'AssessmentExam/proctor_profile.png';
+
+    StorageUploadTask uploadTask =
+        _storage.ref().child(firebaseStoragePath).putFile(image);
+
+    if (uploadTask.isComplete) {
+      databaseHelper.updateData(AssessmentDb(
+          fileName: basename(copiedImage.path),
+          batchId: '',
+          priority: 2,
+          syncstatus: 1,
+          type: 'proctor profile'));
+    } */
     if (image == null) return;
-    CompressObject compressObject = CompressObject(
-        imageFile: image,
-        path: createPath.path,
-        mode: CompressMode.LARGE2SMALL,
-        quality: 20,
-        step: 4);
-    File compressedImage = compressObject.imageFile;
-    proctor_profile =
-        await compressedImage.copy('${createPath.path}/proctor_profile.png');
-    Luban.compressImage(compressObject).then((_path) {
-      setState(() {
-        print(_path);
-      });
-    });
-    //if (compressedImage != null)
-    //proctor_profile =
-    //  await compressedImage.copy('${createPath.path}/proctor_profile.png');
-    //image.copy('${createPath.path}/')
-    /*final String path = getApplicationDocumentsDirectory().toString();
-    print('image path: $path');
-    var fileName = basename(image.path);
-    final File localImage = await image.copy('$path/$fileName'); */
+
     setState(() {
-      if (image != null) _image = image;
-      _currentTime = DateFormat.jms().format(DateTime.now()).toString();
+      if (image != null) {
+        proctor_profile = image;
+        _currentTime = DateFormat.jms().format(DateTime.now()).toString();
+        databaseHelper.insertData(AssessmentDb(
+            fileName: copiedImage.path,
+            priority: 2,
+            batchId: '',
+            syncstatus: 0,
+            type: 'proctor profile',
+            studentCode: ''));
+      }
     });
+  }
+
+//load image from firebase
+  loadImage() async {
+    try {
+      _storageReference =
+          FirebaseStorage.instance.ref().child('AssessmentExam/proctor_image');
+
+      if (_storageReference != null)
+        await _storageReference.getDownloadURL().then((url) {
+          networkImageUrl = url;
+        });
+      print('firebase url: $networkImageUrl');
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<LocationData> getLocation() async {
@@ -96,6 +118,7 @@ class _SinglePicState extends State<SinglePic> {
 
   @override
   Widget build(BuildContext context) {
+    //fetchData();
     return Scaffold(
       body: SafeArea(
         top: true,
@@ -105,52 +128,54 @@ class _SinglePicState extends State<SinglePic> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: proctor_profile == null
-                  ? Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Image.asset(
-                        'assets/img/placeholder.png',
-                        fit: BoxFit.scaleDown,
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Stack(
-                        children: <Widget>[
-                          Image.file(proctor_profile),
-                          Positioned(
-                            bottom: 0.0,
-                            child: Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    _currentTime,
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
+                child: networkImageUrl == null
+                    ? proctor_profile == null
+                        ? Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Image.asset('assets/img/placeholder.png'),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              children: <Widget>[
+                                Image.file(proctor_profile),
+                                Positioned(
+                                  bottom: 0.0,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'current Time: $_currentTime',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'latitude: $latitude',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'longitude: $longitude',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    'latitude: $latitude',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    'longitude: $longitude',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           )
-                        ],
-                      ),
-                    ),
-            ),
+                    : FadeInImage(
+                        image: NetworkImage(networkImageUrl),
+                        placeholder: AssetImage('assets/img/loading.gif'),
+                      )),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: IconButton(
@@ -172,11 +197,12 @@ class _SinglePicState extends State<SinglePic> {
                   style: TextStyle(fontSize: 20.0),
                 ),
                 onPressed: () {
-                  if (_image != null)
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SelectBatch(createPath)));
+                  //if (proctor_profile != null)
+                  //print('filename: ${assessmentdb[0].fileName}');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectBatch(createPath)));
                 },
               ),
             )

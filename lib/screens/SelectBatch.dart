@@ -132,7 +132,7 @@ class _SelectBatchState extends State<SelectBatch> {
                   ),
                   onPressed: () async {
                     Directory batchFolder = await Directory(
-                            '${widget.createPath.path}/batch_${UserDetailApi.response[0].id}_$_value')
+                            '${widget.createPath. path}/batch_${UserDetailApi.response[0].id}_$_value')
                         .create(recursive: true);
                     Navigator.push(
                         context,
