@@ -89,7 +89,7 @@ class _SinglePicState extends State<SinglePic> {
   loadImage() async {
     try {
       _storageReference =
-          FirebaseStorage.instance.ref().child('AssessmentExam/proctor_image');
+          FirebaseStorage.instance.ref().child('Assessment/proctor_image');
 
       if (_storageReference != null)
         await _storageReference.getDownloadURL().then((url) {

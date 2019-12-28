@@ -115,12 +115,12 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     );
   }
 
-  void upload() async {
+  void uploadProctorProfile() async {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'proctor profile' &&
           assessmentdb[i].syncstatus == 0) {
         //print(assessmentdb[i].fileName);
-        String firebaseStoragePath = 'AssessmentExam/proctor_profile.png';
+        String firebaseStoragePath = 'Assessment/proctor_profile.png';
         StorageUploadTask uploadTask = _storage
             .ref()
             .child(firebaseStoragePath)
@@ -133,14 +133,20 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               syncstatus: 1,
               type: 'proctor profile',
               studentCode: ''));
-      } else if (assessmentdb[i].type == 'candidate' &&
+      }
+    }
+  }
+
+  void uploadCandidatePic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'candidate' &&
           assessmentdb[i].syncstatus == 0) {
         //print(assessmentdb[i].fileName);
 
         StorageUploadTask uploadTask = _storage
             .ref()
             .child(
-                'AssessmentExam/${basename(widget.batchFolder.path)}/candidate_${assessmentdb[i].studentCode}.png')
+                'Assessment/${basename(widget.batchFolder.path)}/candidate_${assessmentdb[i].studentCode}.png')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
           databaseHelper.updateData(AssessmentDb(
@@ -150,33 +156,18 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               syncstatus: 1,
               type: 'candidate',
               studentCode: assessmentdb[i].studentCode));
-      } else if (assessmentdb[i].type == 'vtp_feedback_pic_' ||
-          assessmentdb[i].type == 'exam_attendance_pic_' ||
-          assessmentdb[i].type == 'assessor_feedback_pic_' ||
-          assessmentdb[i].type == 'training_attendance_pic_' ||
-          assessmentdb[i].type == 'code_of_conduct_pic_' ||
-          assessmentdb[i].type == 'placement_doc_pic_' ||
-          assessmentdb[i].type == 'group_photo_' &&
-              assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
-            .ref()
-            .child(
-                'AssessmentExam/${basename(widget.batchFolder.path)}/${assessmentdb[i].type}${i + 1}.png')
-            .putFile(File(assessmentdb[i].fileName));
-        if (uploadTask.isComplete)
-          databaseHelper.updateData(AssessmentDb(
-              fileName: assessmentdb[i].fileName,
-              batchId: assessmentdb[i].batchId,
-              priority: assessmentdb[i].priority,
-              syncstatus: 1,
-              type: assessmentdb[i].type,
-              studentCode: assessmentdb[i].studentCode));
-      } else if (assessmentdb[i].type == 'student round' &&
+      }
+    }
+  }
+
+  void uploadVtpFeedbackPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'vtp_feedback_pic_' &&
           assessmentdb[i].syncstatus == 0) {
         StorageUploadTask uploadTask = _storage
             .ref()
             .child(
-                'AssessmentExam/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
           databaseHelper.updateData(AssessmentDb(
@@ -186,22 +177,217 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               syncstatus: 1,
               type: assessmentdb[i].type,
               studentCode: assessmentdb[i].studentCode));
-      } else {
-        if (assessmentdb[i].syncstatus == 0) {
-          StorageUploadTask uploadTask = _storage
-              .ref()
-              .child(
-                  'AssessmentExam/${basename(widget.batchFolder.path)}/${assessmentdb[i].type}${i + 1}.mp4')
-              .putFile(File(assessmentdb[i].fileName));
-          if (uploadTask.isComplete)
-            databaseHelper.updateData(AssessmentDb(
-                fileName: assessmentdb[i].fileName,
-                batchId: assessmentdb[i].batchId,
-                priority: assessmentdb[i].priority,
-                syncstatus: 1,
-                type: assessmentdb[i].type,
-                studentCode: assessmentdb[i].studentCode));
-        }
+      }
+    }
+  }
+
+  void uploadExamAttendancePic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'exam_attendance_pic_' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadAssessorFeddbbackPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'assessor_feedback_pic_' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadTrainingFeedbackPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'training_attendance_pic_' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadCodeOfConductPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'code_of_conduct_pic_' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadPlacementDocPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'placement_doc_pic_' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadGroupPhoto() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'group_photo_' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadStudentRoundPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'student round' &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadPracticalRoundPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type.contains('viva') ||
+          assessmentdb[i].type.contains('practical') &&
+              assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${assessmentdb[i].type}.mp4')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadTheoryRoundPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type.contains('theory_round_video_') &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadCenterInfraPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type.contains('center_infra') &&
+          assessmentdb[i].syncstatus == 0) {
+        StorageUploadTask uploadTask = _storage
+            .ref()
+            .child(
+                'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
       }
     }
   }
@@ -222,7 +408,19 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                   )
                 ];
               }, onSelected: (_) {
-                upload();
+                uploadProctorProfile();
+                uploadAssessorFeddbbackPic();
+                uploadCandidatePic();
+                uploadCenterInfraPic();
+                uploadCodeOfConductPic();
+                uploadExamAttendancePic();
+                uploadGroupPhoto();
+                uploadPlacementDocPic();
+                uploadPracticalRoundPic();
+                uploadStudentRoundPic();
+                uploadTheoryRoundPic();
+                uploadTrainingFeedbackPic();
+                uploadVtpFeedbackPic();
                 print('popup menu pressed');
               })
             ],
