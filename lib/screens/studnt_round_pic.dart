@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:assesment/api/UserDetailApi.dart';
+import 'package:assesment/database/assessmentdb.dart';
+import 'package:assesment/database/databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission/permission.dart';
+import 'package:sqflite/sqflite.dart';
 
 class StudentRoundPic extends StatefulWidget {
   final String studentCode;
@@ -17,16 +21,29 @@ class StudentRoundPic extends StatefulWidget {
 class _StudentRoundPicState extends State<StudentRoundPic> {
   File _profilePic;
   File _adharPic;
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  @override
+  initState() {
+    super.initState();
+    databaseHelper.initDatabase();
+  }
 
   Future<void> getCamImage(String mode) async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera,imageQuality: 10);
 
-    image.copy(
+    File copiedImage = await image.copy(
         '${widget.batchFolder.path}/${mode == 'adhar' ? 'aadhar_' + '${widget.studentCode}.png' : 'profile_' + '${widget.studentCode}.png'}');
 
     setState(() {
       if (image != null) {
         mode == 'adhar' ? _adharPic = image : _profilePic = image;
+        databaseHelper.insertData(AssessmentDb(
+            fileName: copiedImage.path,
+            batchId: basename(widget.batchFolder.path),
+            priority: 3,
+            studentCode: '',
+            syncstatus: 0,
+            type: 'student round'));
       }
     });
   }
