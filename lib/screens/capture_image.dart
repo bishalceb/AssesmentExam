@@ -20,7 +20,7 @@ class _CaptureImageState extends State<CaptureImage> {
   String imageName;
 
   Future<void> getCamImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.camera);
+    File image = await ImagePicker.pickImage(source: ImageSource.camera,imageQuality: 10);
 
     if (image == null) return;
     setState(() {

@@ -97,7 +97,7 @@ class _CaptureMediaState extends State<CaptureMedia> {
 
   Future<void> getCamImage() async {
     var image =
-        await prefix0.ImagePicker.pickImage(source: prefix0.ImageSource.camera);
+        await prefix0.ImagePicker.pickImage(source: prefix0.ImageSource.camera,imageQuality: 10);
     if (image == null) return;
     final String path = getApplicationDocumentsDirectory().toString();
     print('image path: $path');

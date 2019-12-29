@@ -19,7 +19,7 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
   File _adharPic;
 
   Future<void> getCamImage(String mode) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(source: ImageSource.camera,imageQuality: 10);
 
     image.copy(
         '${widget.batchFolder.path}/${mode == 'adhar' ? 'aadhar_' + '${widget.studentCode}.png' : 'profile_' + '${widget.studentCode}.png'}');
@@ -89,8 +89,8 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                 ],
               ),
               RaisedButton(
-                child: Text('NEXT'),
-                onPressed: () => Navigator.pop(context),
+                child: Text('FINISH'),
+                  onPressed: ()=>Navigator.pop(context),
               )
             ],
           ),

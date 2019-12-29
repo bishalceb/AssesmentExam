@@ -24,6 +24,7 @@ dependencies:
   permission:
   flutter_image_compress:
   flutter_luban:
+  android_alarm_manager:
 
 
 dev_dependencies:

@@ -19,59 +19,25 @@ class _TheoryState extends State<Theory> {
   double actual_height;
   BuildContext _scaffoldContext;
   List<StudentData> student_data;
-  int visibleRound = 1;
+  int visibleRound=1;
   int total_round;
-  List<Widget> _tabBarViews = [];
-  List<Widget> _tabs = [];
 
   TabController _tabController;
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    int selected_batch = UserDetailApi.response[0].selected_batch;
-    total_round = UserDetailApi.response[0].selected_round_no;
-    student_data =
-        UserDetailApi.response[0].batcheData[selected_batch].studentData;
+    int selected_batch=UserDetailApi.response[0].selected_batch;
+    total_round=UserDetailApi.response[0].selected_round_no;
+    student_data=UserDetailApi.response[0].batcheData[selected_batch].studentData;
   }
-
-  @override
-  void didChangeDependencies() {
-    setState(() {
-      for (int i = 1; i <= total_round; i++) {
-        _tabBarViews.add(get1stRoundList());
-      }
-      for (int i = 1; i <= total_round; i++) {
-        _tabs.add(Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Text(
-            'Round $i',
-            style: TextStyle(fontSize: 20.0, letterSpacing: 0.9),
-          ),
-        ));
-      }
-    });
-    super.didChangeDependencies();
-  }
-
-/*   List<Widget> tabBarView() {
-    for (int i = 1; i <= total_round; i++) {
-      _tabBarViews.add(get1stRoundList());
-    }
-  }
-
-  List<Widget> tabs() {
-    for (int i = 1; i <= total_round; i++) {
-      _tabs.add(Text('Round $i'));
-    }
-  } */
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: true,
       top: true,
       child: DefaultTabController(
-        length: total_round,
+        length: 3,
         child: Scaffold(
           backgroundColor: Colors.grey,
           appBar: AppBar(
@@ -80,29 +46,45 @@ class _TheoryState extends State<Theory> {
               'Theory Round',
             ),
             bottom: TabBar(
-              isScrollable: true,
-              onTap: (index) {
-                print("index ==" + index.toString());
-                int selectedtab = index + 1;
+              onTap: (index){
+                print("index =="+index.toString());
+                int selectedtab=index+1;
                 setState(() {
-                  visibleRound = index;
+                  visibleRound=selectedtab;
                 });
               },
               labelPadding: EdgeInsets.symmetric(vertical: 10.0),
-              tabs: _tabs.map((tabs) => tabs).toList(),
+              tabs: <Widget>[
+                Text(
+                  'Round 1',
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                Text(
+                  'Round 2',
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                Text(
+                  'Round 3',
+                  style: TextStyle(fontSize: 18.0),
+                )
+              ],
             ),
           ),
           body: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              children: _tabBarViews.map((tabView) => tabView).toList()),
+            physics: NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              get1stRoundList(context),get1stRoundList(context),get1stRoundList(context)
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CaptureVideo(
-                          batchFolder: widget.batchFolder,
-                          mode: 'theory round',
-                        ))),
+                      batchFolder: widget.batchFolder,
+                      mode: 'theory round',
+                      visibleTheoryRound: visibleRound,
+                    ))),
             child: Icon(Icons.videocam),
           ),
         ),
@@ -110,13 +92,14 @@ class _TheoryState extends State<Theory> {
     );
   }
 
-  get1stRoundList() {
+  get1stRoundList(BuildContext context) {
+
     height = MediaQuery.of(context).size.height;
-    double percentage_height = 0.33 * height;
-    actual_height = height - percentage_height;
+    double percentage_height=0.33*height;
+    actual_height=height-percentage_height;
     return Container(
       height: actual_height,
-      child: ListView.builder(
+      child:  ListView.builder(
         itemCount: 10,
         itemBuilder: _studentPageDesign,
         padding: EdgeInsets.all(0.0),
@@ -125,87 +108,73 @@ class _TheoryState extends State<Theory> {
   }
 
   Widget _studentPageDesign(BuildContext context, int index) {
-    print("visible round==" + visibleRound.toString());
-    print("condition check==" +
-        student_data[index].isAdded.toString() +
-        "  " +
-        student_data[index].addedInRound.toString() +
-        "  ");
+    print("visible round=="+ visibleRound.toString());
+    print("condition check=="+student_data[index].isAdded.toString()+"  "+student_data[index].addedInRound.toString()+"  ");
 
     return !student_data[index].isAdded ||
-            student_data[index].addedInRound == visibleRound ||
-            student_data[index].addedInRound == 0
-        ? Card(
-            shape: RoundedRectangleBorder(),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+        student_data[index].addedInRound == visibleRound || student_data[index].addedInRound==0 ? Card(
+      shape: RoundedRectangleBorder(
+
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Container(
+            width: 150,
+            child: Text(student_data[index].name,
+              style: TextStyle(fontSize: 20, color: Colors.black),),
+          ),
+          Padding(padding: EdgeInsets.all(2),
+            child: ToggleButtons(
+              borderColor: Colors.black26,
+              fillColor: Colors.pink,
+              borderWidth: 2,
+              selectedBorderColor: Colors.black26,
+              selectedColor: Colors.white,
+              borderRadius: BorderRadius.circular(0),
               children: <Widget>[
-                Container(
-                  width: 150,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    student_data[index].name,
-                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    'Remove',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(2),
-                  child: ToggleButtons(
-                    borderColor: Colors.black26,
-                    fillColor: Colors.pink,
-                    borderWidth: 2,
-                    selectedBorderColor: Colors.black26,
-                    selectedColor: Colors.white,
-                    borderRadius: BorderRadius.circular(0),
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Remove',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Add',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
-                    onPressed: (int toggle_index) {
-                      print("toggle_index=="+toggle_index.toString());
-                      setState(() {
-                        //for (int j = 0; j < 2; j++) {
-                          if (toggle_index==0) {
-                            setState(() {
-                              student_data[index].isRemoved = true;
-                              student_data[index].isAdded = false;
-                              student_data[index].addedInRound = visibleRound;
-                              print("is added in 0=="+student_data[index].isAdded.toString());
-                            });
-
-                          } else {
-                           setState(() {
-                             student_data[index].isRemoved = false;
-                             student_data[index].isAdded = true;
-                             student_data[index].addedInRound = visibleRound;
-                             print("is added=="+student_data[index].isAdded.toString());
-                           });
-                          }
-                        //}
-                      });
-                    },
-                    isSelected: [
-                      student_data[index].isRemoved,
-                      student_data[index].isAdded
-                    ],
-
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Add',
+                    style: TextStyle(fontSize: 16),
                   ),
-                )
+                ),
+              ],
+              onPressed: (int toggle_index) {
+                setState(() {
+                  for (int i = 0; i < 2; i++) {
+                    if (i == toggle_index) {
+                      student_data[index].isRemoved = false;
+                      student_data[index].isAdded = true;
+                      student_data[index].addedInRound = visibleRound;
+                    } else {
+                      student_data[index].isRemoved = true;
+                      student_data[index].isAdded = false;
+                      student_data[index].addedInRound = visibleRound;
+                    }
+                  }
+                });
+              },
+              isSelected: [
+                student_data[index].isRemoved,
+                student_data[index].isAdded
               ],
             ),
           )
-        : Container();
+        ],
+      ),
+    ):Container(
+
+    );
+
   }
 }

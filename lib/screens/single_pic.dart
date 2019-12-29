@@ -46,12 +46,15 @@ class _SinglePicState extends State<SinglePic> {
 
     print(createPath.path.toString());
 
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(source: ImageSource.camera,imageQuality:10);
     /*    File compressedImage = await FlutterImageCompress.compressAndGetFile(
         image.path, createPath.path,
         quality: 88); */
     if (image == null) return;
-    CompressObject compressObject = CompressObject(
+    proctor_profile =
+    await image.copy('${createPath.path}/proctor_profile.png');
+
+    /*CompressObject compressObject = CompressObject(
         imageFile: image,
         path: createPath.path,
         mode: CompressMode.LARGE2SMALL,
@@ -64,7 +67,7 @@ class _SinglePicState extends State<SinglePic> {
       setState(() {
         print(_path);
       });
-    });
+    });*/
     //if (compressedImage != null)
     //proctor_profile =
     //  await compressedImage.copy('${createPath.path}/proctor_profile.png');
