@@ -61,8 +61,8 @@ class _DocumentsState extends State<Documents> {
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              CandidateList(index, widget.bathFolder)));
+                          builder: (context) => CandidateList(
+                              index, _gridItems[index], widget.bathFolder)));
             });
       },
     );

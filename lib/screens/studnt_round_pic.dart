@@ -22,14 +22,18 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
   File _profilePic;
   File _adharPic;
   DatabaseHelper databaseHelper = DatabaseHelper();
+  List<AssessmentDb> assessmentdb = List<AssessmentDb>();
+  String _aadharDbImage;
+  String _profileDbImage;
+  Database db;
   @override
   initState() {
     super.initState();
-    databaseHelper.initDatabase();
+    fetchImage();
   }
 
   Future<void> getCamImage(String mode) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera,imageQuality: 10);
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     File copiedImage = await image.copy(
         '${widget.batchFolder.path}/${mode == 'adhar' ? 'aadhar_' + '${widget.studentCode}.png' : 'profile_' + '${widget.studentCode}.png'}');
@@ -48,6 +52,24 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
     });
   }
 
+  fetchImage() async {
+    db = await databaseHelper.initDatabase();
+    if (db != null) assessmentdb = await databaseHelper.fetchData();
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'student round' &&
+          assessmentdb[i].fileName.contains('adhar_'))
+        setState(() {
+          _aadharDbImage = assessmentdb[i].fileName;
+        });
+
+      if (assessmentdb[i].type == 'student round' &&
+          assessmentdb[i].fileName.contains('profile_'))
+        setState(() {
+          _profileDbImage = assessmentdb[i].fileName;
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,17 +82,23 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  _profilePic == null
+                  _profilePic == null && _profileDbImage == null
                       ? Image.asset(
                           'assets/img/placeholder.png',
                           height: 200.0,
                           width: 200.0,
                         )
-                      : Image.file(
-                          _profilePic,
-                          height: 200.0,
-                          width: 200.0,
-                        ),
+                      : _profilePic != null && _profileDbImage == null
+                          ? Image.file(
+                              _profilePic,
+                              height: 200.0,
+                              width: 200.0,
+                            )
+                          : Image.file(
+                              File(_profileDbImage),
+                              height: 200.0,
+                              width: 200.0,
+                            ),
                   Expanded(
                     child: FlatButton.icon(
                       icon: Icon(Icons.camera_alt),
@@ -85,17 +113,23 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
               ),
               Row(
                 children: <Widget>[
-                  _adharPic == null
+                  _adharPic == null && _aadharDbImage == null
                       ? Image.asset(
                           'assets/img/placeholder.png',
                           height: 200.0,
                           width: 200.0,
                         )
-                      : Image.file(
-                          _adharPic,
-                          height: 200.0,
-                          width: 200.0,
-                        ),
+                      : _aadharDbImage != null && _adharPic == null
+                          ? Image.file(
+                              File(_aadharDbImage),
+                              height: 200.0,
+                              width: 200.0,
+                            )
+                          : Image.file(
+                              _adharPic,
+                              height: 200.0,
+                              width: 200.0,
+                            ),
                   Expanded(
                     child: FlatButton.icon(
                       icon: Icon(Icons.camera_alt),
@@ -106,8 +140,8 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                 ],
               ),
               RaisedButton(
-                child: Text('FINISH'),
-                  onPressed: ()=>Navigator.pop(context),
+                child: Text('NEXT'),
+                onPressed: () => Navigator.pop(context),
               )
             ],
           ),

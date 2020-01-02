@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 
 class CandidateList extends StatefulWidget {
   final int index;
+  final String mode;
   final Directory batchFolder;
-  CandidateList(this.index, this.batchFolder);
+  CandidateList(this.index, this.mode, this.batchFolder);
   @override
   _CandidateListState createState() => _CandidateListState();
 }
@@ -74,7 +75,7 @@ class _CandidateListState extends State<CandidateList> {
                                       MaterialPageRoute(
                                           builder: (context) => CaptureImage(
                                                 index: widget.index,
-                                                mode: 'candidate',
+                                                mode: widget.mode,
                                                 batchFolder: widget.batchFolder,
                                                 student: students[index],
                                               ))),

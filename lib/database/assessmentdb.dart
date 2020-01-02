@@ -6,13 +6,14 @@ class AssessmentDb {
   String type;
   String studentCode;
 
-  AssessmentDb(
-      {this.fileName,
-      this.batchId,
-      this.priority,
-      this.syncstatus,
-      this.type,
-      this.studentCode});
+  AssessmentDb({
+    this.fileName,
+    this.batchId,
+    this.priority,
+    this.syncstatus,
+    this.type,
+    this.studentCode,
+  });
 
   set setfilename(String filename) => this.fileName = filename;
   set setbatchid(String batchid) => this.batchId = batchid;

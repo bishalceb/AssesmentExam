@@ -37,6 +37,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   final MainScopedModel model = MainScopedModel();
   List<AssessmentDb> assessmentdb = List<AssessmentDb>();
   DatabaseHelper databaseHelper = DatabaseHelper();
+  StorageUploadTask uploadTask;
 
   FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
@@ -164,7 +165,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'vtp_feedback_pic_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -185,7 +186,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'exam_attendance_pic_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -206,7 +207,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'assessor_feedback_pic_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -227,7 +228,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'training_attendance_pic_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -248,7 +249,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'code_of_conduct_pic_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -269,7 +270,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'placement_doc_pic_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -290,7 +291,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'group_photo_' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -311,7 +312,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'student round' &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -333,7 +334,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
       if (assessmentdb[i].type.contains('viva') ||
           assessmentdb[i].type.contains('practical') &&
               assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${assessmentdb[i].type}.mp4')
@@ -354,7 +355,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('theory_round_video_') &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -375,7 +376,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('center_infra') &&
           assessmentdb[i].syncstatus == 0) {
-        StorageUploadTask uploadTask = _storage
+        uploadTask = _storage
             .ref()
             .child(
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
@@ -390,6 +391,34 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+  }
+
+  _uploadProgressIndicator(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: AlertDialog(
+              title: StreamBuilder<StorageTaskEvent>(
+                stream: uploadTask.events,
+                builder: (context, snapshot) {
+                  var event = snapshot?.data?.snapshot;
+                  double progressPercentage = event != null
+                      ? event.bytesTransferred / event.totalByteCount
+                      : 0;
+                  return Column(
+                    children: <Widget>[
+                      LinearProgressIndicator(
+                        value: progressPercentage,
+                      ),
+                      Text('${(progressPercentage * 100).toStringAsFixed(2)}'),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -421,7 +450,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 uploadTheoryRoundPic();
                 uploadTrainingFeedbackPic();
                 uploadVtpFeedbackPic();
-                print('popup menu pressed');
+                _uploadProgressIndicator(context);
               })
             ],
           ),

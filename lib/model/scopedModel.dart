@@ -110,4 +110,20 @@ class MainScopedModel extends Model {
     DatabaseHelper databaseHelper = DatabaseHelper();
     return await databaseHelper.fetchData();
   }
+
+  int eaCounter = 0;
+  int afCounter;
+  int cfCounter;
+  int taCounter;
+  int vtpCounter;
+  int cocCounter;
+  int pdCounter;
+  int gpCounter;
+  updateEACounter() {
+    eaCounter++;
+  }
+
+  int get getEACounter {
+    return eaCounter;
+  }
 }

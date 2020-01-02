@@ -35,36 +35,40 @@ class DatabaseHelper {
   Future<Database> initDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String dbPath = directory.path + '/imageDb.db';
+    print('dbpath : $dbPath');
     return await openDatabase(dbPath, version: 1, onCreate: _onCreate);
   }
 
-  Future<void> _onCreate(Database db, int verion) {
-    return db.execute(
-        'create table $tableName($fileName text,$batchId text,$priority integer,$syncstatus integer,$type text,$studentCode text)');
+  Future _onCreate(Database db, int verion) {
+    Future result = db.execute(
+        'CREATE TABLE $tableName ($fileName TEXT,$batchId TEXT,$priority INTEGER,$syncstatus INTEGER,$type TEXT,$studentCode TEXT)');
+    return result;
   }
 
   Future<int> insertData(AssessmentDb assmntdb) async {
     Database db = await this.database;
-    return db.insert('$tableName', assmntdb.toMap());
+    Future<int> result = db.insert('$tableName', assmntdb.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+    return result;
   }
 
   Future<int> updateData(AssessmentDb assessmentDb) async {
     Database db = await this.database;
-    return db.update('$tableName', assessmentDb.toMap(),
+    return await db.update('$tableName', assessmentDb.toMap(),
         where: '$batchId=?,$fileName=?',
         whereArgs: [assessmentDb.batchId, assessmentDb.fileName]);
   }
 
   Future<List<Map<String, dynamic>>> getDb() async {
     Database db = await this.database;
-    return db.rawQuery('select * from $tableName order by $priority asc');
+    return await db.rawQuery('SELECT * FROM $tableName');
   }
 
   Future<int> getCount() async {
     Database db = await this.database;
 
     List<Map<String, dynamic>> result =
-        await db.rawQuery('select count(*) from $tableName');
+        await db.rawQuery('SELECT COUNT(*) FROM $tableName');
     int count = Sqflite.firstIntValue(result);
     return count;
   }

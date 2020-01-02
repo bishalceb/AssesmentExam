@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assesment/screens/AccessAllSectionRound.dart';
 import 'package:assesment/screens/studnt_round_pic.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
@@ -68,7 +69,7 @@ class _StudentListState extends State<StudentList> {
                           print("ispresent value==" +
                               student_data[i].is_present.toString());
                         }
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
+                        Navigator.of(context).pop();
                       }),
                 )),
               ),

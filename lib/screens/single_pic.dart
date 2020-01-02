@@ -28,29 +28,32 @@ class _SinglePicState extends State<SinglePic> {
   File proctor_profile;
   String networkImageUrl;
   DatabaseHelper databaseHelper = DatabaseHelper();
-  AssessmentDb assessmentDb;
   StorageReference _storageReference;
   List<AssessmentDb> assessmentdb = List<AssessmentDb>();
+  Database db;
+  String dbProctorProfile;
 
 /*   void fetchData() async {
     Database initDb = await databaseHelper.initDatabase();
     if (initDb != null) assessmentdb = await databaseHelper.fetchData();
   } */
+  @override
+  initState() {
+    super.initState();
+    fetchImage();
+  }
 
   Future<void> getCamImage() async {
     await Permission.requestPermissions(
         [PermissionName.Camera, PermissionName.Storage]);
 
-    directory = await getExternalStorageDirectory();
-    createPath =
-        await Directory('${directory.path}/Assesment').create(recursive: true);
-
     print(createPath.path.toString());
 
     var image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 10);
-    File copiedImage =
-        await image.copy('${createPath.path}/proctor_profile.png');
+        source: ImageSource.camera, imageQuality: 50);
+    File copiedImage;
+    if (image != null)
+      copiedImage = await image.copy('${createPath.path}/proctor_profile.png');
 
 /*     FirebaseStorage _storage =
         FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
@@ -75,12 +78,13 @@ class _SinglePicState extends State<SinglePic> {
         proctor_profile = image;
         _currentTime = DateFormat.jms().format(DateTime.now()).toString();
         databaseHelper.insertData(AssessmentDb(
-            fileName: copiedImage.path,
-            priority: 2,
-            batchId: '',
-            syncstatus: 0,
-            type: 'proctor profile',
-            studentCode: ''));
+          fileName: copiedImage.path,
+          priority: 2,
+          batchId: '',
+          syncstatus: 0,
+          type: 'proctor profile',
+          studentCode: '',
+        ));
       }
     });
   }
@@ -89,7 +93,7 @@ class _SinglePicState extends State<SinglePic> {
   loadImage() async {
     try {
       _storageReference =
-          FirebaseStorage.instance.ref().child('Assessment/proctor_image');
+          FirebaseStorage.instance.ref().child('Assessment/proctor_profile');
 
       if (_storageReference != null)
         await _storageReference.getDownloadURL().then((url) {
@@ -99,6 +103,21 @@ class _SinglePicState extends State<SinglePic> {
     } catch (e) {
       print(e);
     }
+  }
+
+  fetchImage() async {
+    db = await databaseHelper.initDatabase();
+    if (db != null) assessmentdb = await databaseHelper.fetchData();
+
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type == 'proctor profile')
+        setState(() {
+          dbProctorProfile = assessmentdb[i].fileName;
+        });
+    }
+    directory = await getExternalStorageDirectory();
+    createPath =
+        await Directory('${directory.path}/Assesment').create(recursive: true);
   }
 
   Future<LocationData> getLocation() async {
@@ -118,93 +137,85 @@ class _SinglePicState extends State<SinglePic> {
 
   @override
   Widget build(BuildContext context) {
-    //fetchData();
+    //fetchImage();
     return Scaffold(
       body: SafeArea(
         top: true,
         bottom: true,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-                child: networkImageUrl == null
-                    ? proctor_profile == null
-                        ? Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Image.asset('assets/img/placeholder.png'),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Stack(
-                              children: <Widget>[
-                                Image.file(proctor_profile),
-                                Positioned(
-                                  bottom: 0.0,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          'current Time: $_currentTime',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          'latitude: $latitude',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          'longitude: $longitude',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                    : FadeInImage(
-                        image: NetworkImage(networkImageUrl),
-                        placeholder: AssetImage('assets/img/loading.gif'),
-                      )),
-            Padding(
+                child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.camera_alt,
-                  size: 50.0,
-                ),
-                onPressed: () {
-                  getLocation();
-                  getCamImage();
-                },
+              child: Stack(
+                children: <Widget>[
+                  dbProctorProfile == null && proctor_profile == null
+                      ? Image.asset('assets/img/placeholder.png')
+                      : dbProctorProfile != null && proctor_profile == null
+                          ? Image.file(File(dbProctorProfile))
+                          : Image.file(proctor_profile),
+                  Positioned(
+                    bottom: 50.0,
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'current Time: $_currentTime',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'latitude: $latitude',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'longitude: $longitude',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: RaisedButton(
-                child: Text(
-                  'Next',
-                  style: TextStyle(fontSize: 20.0),
+            )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.camera_alt,
+                    ),
+                    onPressed: () {
+                      getLocation();
+                      getCamImage();
+                    },
+                  ),
                 ),
-                onPressed: () {
-                  //if (proctor_profile != null)
-                  //print('filename: ${assessmentdb[0].fileName}');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectBatch(createPath)));
-                },
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: FlatButton(
+                    child: Text(
+                      'Next',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    onPressed: () {
+                      //if (proctor_profile != null)
+                      //print('filename: ${assessmentdb[0].fileName}');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SelectBatch(createPath)));
+                    },
+                  ),
+                ),
+              ],
             )
           ],
         ),
