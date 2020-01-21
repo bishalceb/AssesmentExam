@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:assesment/model/scopedModel.dart';
 import 'package:assesment/screens/AccessAllSectionRound.dart';
 import 'package:assesment/screens/studnt_round_pic.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:scoped_model/scoped_model.dart';
 
 class StudentList extends StatefulWidget {
   final Directory batchFolder;
@@ -19,6 +21,7 @@ class _StudentListState extends State<StudentList> {
   double actual_height;
   BuildContext _scaffoldContext;
   List<StudentData> student_data;
+  bool _isPresent = false;
   @override
   void initState() {
     super.initState();
@@ -98,12 +101,22 @@ class _StudentListState extends State<StudentList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Container(
-            width: 150,
-            child: Text(
-              student_data[index].name,
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
+          Column(
+            children: <Widget>[
+              Container(
+                width: 150,
+                child: Text(
+                  student_data[index].name,
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('RollNo.: ' + student_data[index].studentRollNo),
+                ],
+              )
+            ],
           ),
           Padding(
             padding: EdgeInsets.all(2),
@@ -143,12 +156,13 @@ class _StudentListState extends State<StudentList> {
                       student_data[index].is_present = false;
                     }
                     if (student_data[index].present)
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StudentRoundPic(
-                                  student_data[index].studentCode,
-                                  widget.batchFolder)));
+                      setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StudentRoundPic(
+                                    student_data[index], widget.batchFolder)));
+                      });
                   }
                 });
               },

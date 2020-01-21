@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:assesment/screens/StudentList.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/SetTheoryRounds.dart';
-import 'package:assesment/screens/practical_round.dart';
+import 'package:assesment/screens/viva_round.dart';
 import 'package:assesment/screens/feedback_form.dart';
 import 'package:assesment/screens/documents.dart';
 import 'package:assesment/model/scopedModel.dart';
@@ -26,10 +26,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   List<String> _gridItems = [
     'Student Round',
     'Theory Round',
-    'Practical Round',
+    'Viva Round',
     'Center Infrastructure Round',
     'Documentation Round',
     'End of Assesment',
+    'Practical Round',
   ];
   static final card_color = Color(0xFF2f4050);
   static final card_text_color = Colors.white;
@@ -93,7 +94,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Practical(widget.batchFolder)));
+                        builder: (context) => Viva(widget.batchFolder)));
               } else if (index == 3) {
                 Navigator.push(
                     context,
@@ -110,6 +111,12 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               } else if (index == 5) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FeedbackForm()));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SetTheoryRound(widget.batchFolder)));
               }
             });
       },

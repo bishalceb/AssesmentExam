@@ -41,8 +41,12 @@ class _CaptureVideoState extends State<CaptureVideo> {
     fetchVideo();
   }
 
-  Future<void> getCamVideo() async {
-    var video = await ImagePicker.pickVideo(source: ImageSource.camera);
+  Future<void> getCamVideo(String camMode) async {
+    var video;
+    if (camMode == 'camera')
+      video = await ImagePicker.pickVideo(source: ImageSource.camera);
+    else
+      video = await ImagePicker.pickVideo(source: ImageSource.gallery);
     String getMode() {
       if (widget.mode == 'viva')
         return 'viva_${widget.studentCode}';
@@ -145,7 +149,12 @@ class _CaptureVideoState extends State<CaptureVideo> {
                 FlatButton.icon(
                   icon: Icon(Icons.videocam),
                   label: Text('Capture Video'),
-                  onPressed: getCamVideo,
+                  onPressed: () => getCamVideo('camera'),
+                ),
+                FlatButton.icon(
+                  icon: Icon(Icons.video_library),
+                  label: Text('Capture Video'),
+                  onPressed: () => getCamVideo('gallery'),
                 ),
                 FlatButton(
                   child: Text('NEXT'),

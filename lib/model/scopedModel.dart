@@ -126,4 +126,15 @@ class MainScopedModel extends Model {
   int get getEACounter {
     return eaCounter;
   }
+
+  bool _isPresent = false;
+
+  bool get isPresent {
+    return _isPresent;
+  }
+
+  void setIsPresent(bool isPresent) {
+    _isPresent = isPresent;
+    notifyListeners();
+  }
 }

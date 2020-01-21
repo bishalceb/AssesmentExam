@@ -3,17 +3,20 @@ import 'dart:io';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/database/assessmentdb.dart';
 import 'package:assesment/database/databasehelper.dart';
+import 'package:assesment/model/scopedModel.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission/permission.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class StudentRoundPic extends StatefulWidget {
-  final String studentCode;
+  //final String studentCode;
+  StudentData studentData;
   final Directory batchFolder;
-  StudentRoundPic(this.studentCode, this.batchFolder);
+  StudentRoundPic(this.studentData, this.batchFolder);
   @override
   _StudentRoundPicState createState() => _StudentRoundPicState();
 }
@@ -26,6 +29,7 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
   String _aadharDbImage;
   String _profileDbImage;
   Database db;
+  final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
   @override
   initState() {
     super.initState();
@@ -36,7 +40,7 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     File copiedImage = await image.copy(
-        '${widget.batchFolder.path}/${mode == 'adhar' ? 'aadhar_' + '${widget.studentCode}.png' : 'profile_' + '${widget.studentCode}.png'}');
+        '${widget.batchFolder.path}/${mode == 'adhar' ? 'aadhar_' + '${widget.studentData.studentCode}.png' : 'profile_' + '${widget.studentData.studentCode}.png'}');
 
     setState(() {
       if (image != null) {
@@ -57,13 +61,17 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
     if (db != null) assessmentdb = await databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'student round' &&
-          assessmentdb[i].fileName.contains('adhar_'))
+          assessmentdb[i]
+              .fileName
+              .contains('adhar_${widget.studentData.studentCode}'))
         setState(() {
           _aadharDbImage = assessmentdb[i].fileName;
         });
 
       if (assessmentdb[i].type == 'student round' &&
-          assessmentdb[i].fileName.contains('profile_'))
+          assessmentdb[i]
+              .fileName
+              .contains('profile_${widget.studentData.studentCode}'))
         setState(() {
           _profileDbImage = assessmentdb[i].fileName;
         });
@@ -73,6 +81,7 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldState,
       body: SafeArea(
         top: true,
         bottom: true,
@@ -80,6 +89,16 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.studentData.name,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  Text(widget.studentData.studentRollNo),
+                ],
+              ),
               Row(
                 children: <Widget>[
                   _profilePic == null && _profileDbImage == null
@@ -141,7 +160,31 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
               ),
               RaisedButton(
                 child: Text('NEXT'),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  if (_aadharDbImage == null ||
+                      _profileDbImage == null ||
+                      _adharPic == null ||
+                      _profilePic == null) {
+                    _scaffoldState.currentState.showSnackBar(SnackBar(
+                      content: Text('Please take picture first'),
+                    ));
+
+                    /*  widget.studentData.absent = true;
+                    widget.studentData.present = false;
+                    widget.studentData.is_present = false; */
+
+                    //Navigator.pop(context);
+                  }
+                  if (_aadharDbImage != null ||
+                      _profileDbImage != null ||
+                      _adharPic != null ||
+                      _profilePic != null) {
+                    widget.studentData.absent = false;
+                    widget.studentData.present = true;
+                    widget.studentData.is_present = true;
+                    Navigator.pop(context);
+                  }
+                },
               )
             ],
           ),

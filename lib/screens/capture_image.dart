@@ -22,7 +22,6 @@ class _CaptureImageState extends State<CaptureImage> {
   DatabaseHelper _databaseHelper = DatabaseHelper();
   File _image;
   List<File> _images = [];
-  String imageName;
   Database db;
   List<AssessmentDb> assessmentdb = List<AssessmentDb>();
   List<String> _dbImages = List<String>();
@@ -66,49 +65,27 @@ class _CaptureImageState extends State<CaptureImage> {
     }
   }
 
-  Future<void> getCamImage() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50);
+  Future<void> getCamImage(String camMode) async {
+    File image;
+    if (camMode == 'camera')
+      image = await ImagePicker.pickImage(
+          source: ImageSource.camera, imageQuality: 50);
+    else
+      image = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
 
     if (image == null) return;
     setState(() {
       if (image != null)
         mode == 'Candidate Feedback' ? _image = image : _images.add(image);
     });
-
-    switch (widget.mode) {
-      case 'Assessor Feedback':
-        saveAssessorImage();
-        break;
-      case 'Exam Attendance':
-        saveExamAttendanceImage();
-        break;
-      case 'Candidate Feedback':
-        saveCandidateImage();
-        break;
-      case 'Training Attendance':
-        saveTrainingImage();
-        break;
-      case 'VTP Feedback':
-        saveVtpImage();
-        break;
-      case 'Code of Conduct':
-        saveCocImage();
-        break;
-      case 'Placements Documents':
-        savePlacementImage();
-        break;
-      case 'Group Photo':
-        saveGroupImage();
-        break;
-    }
   }
 
   saveExamAttendanceImage() async {
     for (int i = 0; i < _images.length; i++) {
       File copiedImagePath = await _images[i]
           .copy('${widget.batchFolder.path}/exam_attendance_pic_${i + 1}.png');
-
+      print('exam pic: ${Path.basenameWithoutExtension(copiedImagePath.path)}');
       AssessmentDb a = AssessmentDb(
         fileName: copiedImagePath.path,
         batchId: Path.basename(widget.batchFolder.path),
@@ -119,6 +96,7 @@ class _CaptureImageState extends State<CaptureImage> {
       );
       await _databaseHelper.insertData(a);
     }
+    _images = null;
   }
 
   saveAssessorImage() async {
@@ -136,6 +114,7 @@ class _CaptureImageState extends State<CaptureImage> {
       );
       await _databaseHelper.insertData(a);
     }
+    _images = null;
   }
 
   saveCandidateImage() async {
@@ -243,7 +222,10 @@ class _CaptureImageState extends State<CaptureImage> {
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
 
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (widget.mode == 'Candidate Feedback' &&
+      if (assessmentdb[i]
+              .fileName
+              .contains('candidate_${widget.student.studentCode}') &&
+          widget.mode == 'Candidate Feedback' &&
           assessmentdb[i].type == 'candidate')
         setState(() {
           _dbImage = assessmentdb[i].fileName;
@@ -254,21 +236,13 @@ class _CaptureImageState extends State<CaptureImage> {
   fetchExamAttendanceImage() async {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
+    print('assessmenntdb lenth: ${assessmentdb.length}');
 
-/*     int i = 0;
-    while (i < assessmentdb.length) {
-      print('exam attendance pic:${assessmentdb[i].fileName}');
-      if (assessmentdb[i].fileName.contains('exam_attendance_pic_${i + 1}')) {
-        print('exam pic:${assessmentdb[i].fileName}');
-        setState(() {
-          _dbImages.add(assessmentdb[i].fileName);
-        });
-        i++;
-      }
-    } */
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (mode == 'Exam Attendance' &&
-          assessmentdb[i].type == 'exam_attendance_pic_') {
+      print('exam pic: ${assessmentdb[i].fileName}');
+      if (assessmentdb[i].fileName.contains('exam_attendance_pic_${i + 1}') &&
+          assessmentdb[i].type == 'exam_attendance_pic_' &&
+          mode == 'Exam Attendance') {
         print('exam attendance pic:${assessmentdb[i].fileName}');
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
@@ -290,7 +264,8 @@ class _CaptureImageState extends State<CaptureImage> {
     }); */
 
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (mode == 'Assessor Feedback' &&
+      if (assessmentdb[i].fileName.contains('assessor_feedback_pic_${i + 1}') &&
+          mode == 'Assessor Feedback' &&
           assessmentdb[i].type == 'assessor_feedback_pic_')
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
@@ -302,7 +277,10 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (mode == 'Training Attendance' &&
+      if (assessmentdb[i]
+              .fileName
+              .contains('training_attendance_pic_${i + 1}') &&
+          mode == 'Training Attendance' &&
           assessmentdb[i].type == 'training_attendance_pic_') {
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
@@ -315,7 +293,7 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('vtp_feedback_pic_$i') &&
+      if (assessmentdb[i].fileName.contains('vtp_feedback_pic_${i + 1}') &&
           mode == 'VTP Feedback' &&
           assessmentdb[i].type == 'vtp_feedback_pic_')
         setState(() {
@@ -328,7 +306,8 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (mode == 'Code of Conduct' &&
+      if (assessmentdb[i].fileName.contains('code_of_conduct_pic_${i + 1}') &&
+          mode == 'Code of Conduct' &&
           assessmentdb[i].type == 'code_of_conduct_pic_')
         print('coc name: ${Path.basename(assessmentdb[i].fileName)}');
       setState(() {
@@ -342,7 +321,7 @@ class _CaptureImageState extends State<CaptureImage> {
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
 
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('placement_doc_pic_$i') &&
+      if (assessmentdb[i].fileName.contains('placement_doc_pic_${i + 1}') &&
           mode == 'Placements Documents' &&
           assessmentdb[i].type == 'placement_doc_pic_') {
         setState(() {
@@ -356,7 +335,9 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (mode == 'Group Photo' && assessmentdb[i].type == 'group_photo_') {
+      if (assessmentdb[i].fileName.contains('group_photo_${i + 1}') &&
+          mode == 'Group Photo' &&
+          assessmentdb[i].type == 'group_photo_') {
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
         });
@@ -395,7 +376,16 @@ class _CaptureImageState extends State<CaptureImage> {
                 icon: Icon(
                   Icons.camera_alt,
                 ),
-                onPressed: () => getCamImage(),
+                onPressed: () => getCamImage('camera'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.photo_library,
+                ),
+                onPressed: () => getCamImage('gallery'),
               ),
             ),
             Padding(
@@ -447,11 +437,43 @@ class _CaptureImageState extends State<CaptureImage> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.camera_alt),
-              onPressed: () => getCamImage(),
+              onPressed: () => getCamImage('camera'),
+            ),
+            IconButton(
+              icon: Icon(Icons.photo_library),
+              onPressed: () => getCamImage('gallery'),
             ),
             FlatButton(
               child: Text('Finish'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                switch (widget.mode) {
+                  case 'Assessor Feedback':
+                    saveAssessorImage();
+                    break;
+                  case 'Exam Attendance':
+                    saveExamAttendanceImage();
+                    break;
+                  case 'Candidate Feedback':
+                    saveCandidateImage();
+                    break;
+                  case 'Training Attendance':
+                    saveTrainingImage();
+                    break;
+                  case 'VTP Feedback':
+                    saveVtpImage();
+                    break;
+                  case 'Code of Conduct':
+                    saveCocImage();
+                    break;
+                  case 'Placements Documents':
+                    savePlacementImage();
+                    break;
+                  case 'Group Photo':
+                    saveGroupImage();
+                    break;
+                }
+                Navigator.of(context).pop();
+              },
             )
           ],
         )
