@@ -51,7 +51,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   @override
   void initState() {
     super.initState();
-
+    fetchData();
     print("selected batch==" +
         UserDetailApi.response[0].selected_batch.toString());
   }
@@ -430,7 +430,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
 
   @override
   Widget build(BuildContext context) {
-    fetchData();
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(

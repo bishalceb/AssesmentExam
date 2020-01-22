@@ -96,7 +96,6 @@ class _CaptureImageState extends State<CaptureImage> {
       );
       await _databaseHelper.insertData(a);
     }
-    _images = null;
   }
 
   saveAssessorImage() async {
@@ -114,7 +113,6 @@ class _CaptureImageState extends State<CaptureImage> {
       );
       await _databaseHelper.insertData(a);
     }
-    _images = null;
   }
 
   saveCandidateImage() async {
@@ -203,7 +201,7 @@ class _CaptureImageState extends State<CaptureImage> {
   saveGroupImage() async {
     for (int i = 0; i < _images.length; i++) {
       File copiedImagePath = await _images[i]
-          .copy('${widget.batchFolder.path}/group_photo_${i + 1}.png');
+          .copy('${widget.batchFolder.path}/group_photo_.png');
 
       AssessmentDb a = AssessmentDb(
         fileName: copiedImagePath.path,
@@ -226,7 +224,8 @@ class _CaptureImageState extends State<CaptureImage> {
               .fileName
               .contains('candidate_${widget.student.studentCode}') &&
           widget.mode == 'Candidate Feedback' &&
-          assessmentdb[i].type == 'candidate')
+          assessmentdb[i].type == 'candidate' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _dbImage = assessmentdb[i].fileName;
         });
@@ -240,9 +239,10 @@ class _CaptureImageState extends State<CaptureImage> {
 
     for (int i = 0; i < assessmentdb.length; i++) {
       print('exam pic: ${assessmentdb[i].fileName}');
-      if (assessmentdb[i].fileName.contains('exam_attendance_pic_${i + 1}') &&
+      if (assessmentdb[i].fileName.contains('exam_attendance_pic_') &&
           assessmentdb[i].type == 'exam_attendance_pic_' &&
-          mode == 'Exam Attendance') {
+          mode == 'Exam Attendance' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
         print('exam attendance pic:${assessmentdb[i].fileName}');
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
@@ -254,19 +254,11 @@ class _CaptureImageState extends State<CaptureImage> {
   fetchAssessorImage() async {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
-
-    /*  assessmentdb.forEach((f) {
-      if (mode == 'Assessor Feedback' &&
-          f.fileName == assessmentdb[assessmentdb.indexOf(f)].fileName)
-        setState(() {
-          _dbImages.add(f.fileName);
-        });
-    }); */
-
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('assessor_feedback_pic_${i + 1}') &&
+      if (assessmentdb[i].fileName.contains('assessor_feedback_pic_') &&
           mode == 'Assessor Feedback' &&
-          assessmentdb[i].type == 'assessor_feedback_pic_')
+          assessmentdb[i].type == 'assessor_feedback_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
         });
@@ -276,12 +268,13 @@ class _CaptureImageState extends State<CaptureImage> {
   fetchTrainingImage() async {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
+    print('fetch training attendance images');
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i]
-              .fileName
-              .contains('training_attendance_pic_${i + 1}') &&
+      print(assessmentdb[i].fileName);
+      if (assessmentdb[i].fileName.contains('training_attendance_pic_') &&
           mode == 'Training Attendance' &&
-          assessmentdb[i].type == 'training_attendance_pic_') {
+          assessmentdb[i].type == 'training_attendance_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
         });
@@ -293,9 +286,10 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('vtp_feedback_pic_${i + 1}') &&
+      if (assessmentdb[i].fileName.contains('vtp_feedback_pic_') &&
           mode == 'VTP Feedback' &&
-          assessmentdb[i].type == 'vtp_feedback_pic_')
+          assessmentdb[i].type == 'vtp_feedback_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
         });
@@ -306,9 +300,10 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('code_of_conduct_pic_${i + 1}') &&
+      if (assessmentdb[i].fileName.contains('code_of_conduct_pic_') &&
           mode == 'Code of Conduct' &&
-          assessmentdb[i].type == 'code_of_conduct_pic_')
+          assessmentdb[i].type == 'code_of_conduct_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         print('coc name: ${Path.basename(assessmentdb[i].fileName)}');
       setState(() {
         _dbImages.add(assessmentdb[i].fileName);
@@ -321,9 +316,10 @@ class _CaptureImageState extends State<CaptureImage> {
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
 
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('placement_doc_pic_${i + 1}') &&
+      if (assessmentdb[i].fileName.contains('placement_doc_pic_') &&
           mode == 'Placements Documents' &&
-          assessmentdb[i].type == 'placement_doc_pic_') {
+          assessmentdb[i].type == 'placement_doc_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
         });
@@ -335,9 +331,10 @@ class _CaptureImageState extends State<CaptureImage> {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].fileName.contains('group_photo_${i + 1}') &&
+      if (assessmentdb[i].fileName.contains('group_photo_') &&
           mode == 'Group Photo' &&
-          assessmentdb[i].type == 'group_photo_') {
+          assessmentdb[i].type == 'group_photo_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
         });
