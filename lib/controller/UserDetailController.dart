@@ -11,7 +11,7 @@ class UserDetailController {
     try{
       UserDetailApi userDetail = await userDetailApi(
           {'Client-Service': 'frontend-client', 'Auth-Key' : 'simplerestapi', 'Content-Type':'application/x-www-form-urlencoded'},
-          {'module' : 'users', 'service' : 'login','device_id':'123456','username' : "sumit",'password' : "India@0987"});
+          {'module' : 'users', 'service' : 'login','device_id':'123456','username' : userid,'password' : password});
       listener.onLoginSuccess(model: userDetail);
 
     }catch(e){

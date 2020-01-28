@@ -41,6 +41,8 @@ class _LoginPageState extends State<LoginPage>
   bool _obscureTextSignup = true;
   bool _obscureTextSignupConfirm = true;
   bool _isLoading = false;
+  String userid;
+  String password;
 
   TextEditingController signupEmailController = new TextEditingController();
   TextEditingController signupNameController = new TextEditingController();
@@ -267,6 +269,7 @@ class _LoginPageState extends State<LoginPage>
                                   fontFamily: "WorkSansSemiBold",
                                   fontSize: 17.0),
                             ),
+                            
                           ),
                         ),
                         Container(
@@ -307,6 +310,7 @@ class _LoginPageState extends State<LoginPage>
                                 ),
                               ),
                             ),
+                            
                           ),
                         ),
                       ],
@@ -358,7 +362,8 @@ class _LoginPageState extends State<LoginPage>
                           onPressed: () {
                             setState(() {
                               _isLoading = true;
-                              siginNavigat();
+                              print("userid: ${loginEmailController.text} and password: ${loginPasswordController.text}");
+                              siginNavigat(loginEmailController.text, loginPasswordController.text);
                             });
                           }),
                 ),
@@ -597,9 +602,10 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 
-  siginNavigat() {
+  siginNavigat(String userid, String password) {
     userDetailController = UserDetailController(listener: this);
-    userDetailController.callAPI("sumit", "India@0987");
+    //userDetailController.callAPI("sumit", "India@0987");
+    userDetailController.callAPI(userid, password);
   }
 
   @override
