@@ -1,6 +1,6 @@
 
 
-const String BASE_URL = "http://proctoring.tk/rest";
+const String BASE_URL = "https://www.onlineexamportal.in/proctoring/rest";
 //const String BASE_URL = "http://assessmentportal.ml/rest";
 //const String BASE_URL = "http://onlineexamportal.in/rest";
 //const String BASE_URL = "https://www.a2pl.net/next/rest";

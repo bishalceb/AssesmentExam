@@ -27,7 +27,7 @@ class _StudentListState extends State<StudentList> {
     super.initState();
     int selected_batch = UserDetailApi.response[0].selected_batch;
     student_data =
-        UserDetailApi.response[0].batcheData[selected_batch].studentData;
+        UserDetailApi.response[0].batchData[selected_batch].studentData;
   }
 
   @override

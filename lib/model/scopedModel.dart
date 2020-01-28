@@ -25,7 +25,7 @@ class MainScopedModel extends Model {
 
     int _selectedBatch = UserDetailApi.response[0].selected_batch;
     List<StudentData> _studentData =
-        UserDetailApi.response[0].batcheData[_selectedBatch].studentData;
+        UserDetailApi.response[0].batchData[_selectedBatch].studentData;
     _studentData.forEach((student) {
       if (student.is_present) {
         students.add(student);

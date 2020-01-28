@@ -17,7 +17,7 @@ class SelectBatch extends StatefulWidget {
 
 class _SelectBatchState extends State<SelectBatch> {
   UserDetailApi userDetailApi;
-  List<BatcheData> batcheData = UserDetailApi.response[0].batcheData;
+  List<BatchData> batchData = UserDetailApi.response[0].batchData;
   String _value;
   int _selected_postion = 0;
   List<String> spinnerItems = [];
@@ -26,8 +26,8 @@ class _SelectBatchState extends State<SelectBatch> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    for (int i = 0; i < batcheData.length; i++) {
-      spinnerItems.add(batcheData[i].batchNo.toString());
+    for (int i = 0; i < batchData.length; i++) {
+      spinnerItems.add(batchData[i].batchNo.toString());
     }
     print("batch==" + spinnerItems.toString());
   }
@@ -81,8 +81,8 @@ class _SelectBatchState extends State<SelectBatch> {
                 }).toList(),
                 onChanged: (String value) {
                   int position = 0;
-                  for (int j = 0; j < batcheData.length; j++) {
-                    if (batcheData[j].batchNo == value) {
+                  for (int j = 0; j < batchData.length; j++) {
+                    if (batchData[j].batchNo == value) {
                       position = j;
                       UserDetailApi.response[0].selected_batch = position;
                     }

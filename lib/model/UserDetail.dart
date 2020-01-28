@@ -42,7 +42,7 @@ class Response {
   String email;
   String userProfilePic;
   String deviceId;
-  List<BatcheData> batcheData;
+  List<BatchData> batchData;
 
   Response(
       {this.id,
@@ -52,7 +52,7 @@ class Response {
         this.email,
         this.userProfilePic,
         this.deviceId,
-        this.batcheData});
+        this.batchData});
 
   Response.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,10 +62,10 @@ class Response {
     email = json['email'];
     userProfilePic = json['user_profile_pic'];
     deviceId = json['device_id'];
-    if (json['batche_data'] != null) {
-      batcheData = new List<BatcheData>();
-      json['batche_data'].forEach((v) {
-        batcheData.add(new BatcheData.fromJson(v));
+    if (json['batch_data'] != null) {
+      batchData = new List<BatchData>();
+      json['batch_data'].forEach((v) {
+        batchData.add(new BatchData.fromJson(v));
       });
     }
   }
@@ -79,21 +79,21 @@ class Response {
     data['email'] = this.email;
     data['user_profile_pic'] = this.userProfilePic;
     data['device_id'] = this.deviceId;
-    if (this.batcheData != null) {
-      data['batche_data'] = this.batcheData.map((v) => v.toJson()).toList();
+    if (this.batchData != null) {
+      data['batch_data'] = this.batchData.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class BatcheData {
+class BatchData {
   String id;
   String batchNo;
   List<StudentData> studentData;
 
-  BatcheData({this.id, this.batchNo, this.studentData});
+  BatchData({this.id, this.batchNo, this.studentData});
 
-  BatcheData.fromJson(Map<String, dynamic> json) {
+  BatchData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     batchNo = json['batch_no'];
     if (json['student_data'] != null) {

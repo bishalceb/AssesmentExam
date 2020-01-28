@@ -11,6 +11,8 @@ import 'package:assesment/screens/SelectBatch.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/controller/UserDetailController.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 import 'SelectBatch.dart';
 
@@ -260,11 +262,11 @@ class _LoginPageState extends State<LoginPage>
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               icon: Icon(
-                                FontAwesomeIcons.envelope,
+                                FontAwesomeIcons.user,
                                 color: Colors.black,
                                 size: 22.0,
                               ),
-                              hintText: "Email Address",
+                              hintText: "Username",
                               hintStyle: TextStyle(
                                   fontFamily: "WorkSansSemiBold",
                                   fontSize: 17.0),
@@ -605,12 +607,41 @@ class _LoginPageState extends State<LoginPage>
   siginNavigat(String userid, String password) {
     userDetailController = UserDetailController(listener: this);
     //userDetailController.callAPI("sumit", "India@0987");
-    userDetailController.callAPI(userid, password);
+    if(userid==""){
+      print("Please Enter Username");
+      /*Fluttertoast.showToast(
+          msg: 'Please Enter Username',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white
+      );*/
+
+    } else if(password==""){
+      print("Please Enter Password");
+      /*Fluttertoast.showToast(
+          msg: 'Please Enter Password',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white
+      );*/
+    } else {
+      userDetailController.callAPI(userid, password);
+    }
+
+
+
   }
 
   @override
   void onLoginFailure({String message}) {
     // TODO: implement onLoginFailure
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override

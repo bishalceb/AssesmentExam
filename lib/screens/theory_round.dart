@@ -30,7 +30,7 @@ class _TheoryState extends State<Theory> {
     int selected_batch = UserDetailApi.response[0].selected_batch;
     total_round = UserDetailApi.response[0].selected_round_no;
     student_data =
-        UserDetailApi.response[0].batcheData[selected_batch].studentData;
+        UserDetailApi.response[0].batchData[selected_batch].studentData;
   }
 
   @override

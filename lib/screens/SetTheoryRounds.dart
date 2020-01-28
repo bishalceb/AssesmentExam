@@ -16,7 +16,7 @@ class SetTheoryRound extends StatefulWidget {
 
 class _SetTheoryRoundState extends State<SetTheoryRound> {
   UserDetailApi userDetailApi;
-  List<BatcheData> batcheData = UserDetailApi.response[0].batcheData;
+  List<BatchData> batchData = UserDetailApi.response[0].batchData;
   String _value;
   int _selected_postion = 0;
   List<String> spinnerItems = [
