@@ -15,6 +15,8 @@ import 'package:assesment/model/scopedModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqlite_api.dart';
 
+import 'login_page.dart';
+
 class AccessAllSectionRound extends StatefulWidget {
   final Directory batchFolder;
   AccessAllSectionRound(this.batchFolder);
@@ -27,10 +29,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     'Student Round',
     'Theory Round',
     'Viva Round',
+    'Practical Round',
     'Center Infrastructure Round',
     'Documentation Round',
     'End of Assesment',
-    'Practical Round',
+
   ];
   static final card_color = Color(0xFF2f4050);
   static final card_text_color = Colors.white;
@@ -89,13 +92,20 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            SetTheoryRound(widget.batchFolder)));
+                            SetTheoryRound(widget.batchFolder,"Theory Round")));
               } else if (index == 2) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Viva(widget.batchFolder)));
-              } else if (index == 3) {
+              } else if (index == 3){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SetTheoryRound(widget.batchFolder,"Practical Round")));
+              }
+              else if (index == 4) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -103,20 +113,14 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                               mode: 'center infrastructure',
                               batchFolder: widget.batchFolder,
                             )));
-              } else if (index == 4) {
+              } else if (index == 5) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Documents(widget.batchFolder)));
-              } else if (index == 5) {
+              } else if (index == 6) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FeedbackForm()));
-              } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SetTheoryRound(widget.batchFolder)));
               }
             });
       },
@@ -440,23 +444,34 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                   PopupMenuItem(
                     child: Text('Sync'),
                     value: 1,
+                  ),
+                  PopupMenuItem(
+                    child: Text('LogOut'),
+                    value: 2,
                   )
                 ];
-              }, onSelected: (_) {
-                uploadProctorProfile();
-                uploadAssessorFeddbbackPic();
-                uploadCandidatePic();
-                uploadCenterInfraPic();
-                uploadCodeOfConductPic();
-                uploadExamAttendancePic();
-                uploadGroupPhoto();
-                uploadPlacementDocPic();
-                uploadPracticalRoundPic();
-                uploadStudentRoundPic();
-                uploadTheoryRoundPic();
-                uploadTrainingFeedbackPic();
-                uploadVtpFeedbackPic();
-                _uploadProgressIndicator(context);
+              }, onSelected: (index) {
+                print("pop up index=="+index.toString());
+                if(index==1){
+                  uploadProctorProfile();
+                  uploadAssessorFeddbbackPic();
+                  uploadCandidatePic();
+                  uploadCenterInfraPic();
+                  uploadCodeOfConductPic();
+                  uploadExamAttendancePic();
+                  uploadGroupPhoto();
+                  uploadPlacementDocPic();
+                  uploadPracticalRoundPic();
+                  uploadStudentRoundPic();
+                  uploadTheoryRoundPic();
+                  uploadTrainingFeedbackPic();
+                  uploadVtpFeedbackPic();
+                  _uploadProgressIndicator(context);
+                }else{
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      LoginPage()), (Route<dynamic> route) => false);
+                }
+
               })
             ],
           ),

@@ -48,7 +48,7 @@ class _VivaState extends State<Viva> {
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
               child: Text(
-                "NEXT",
+                "FINISH",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 25.0,
@@ -60,6 +60,7 @@ class _VivaState extends State<Viva> {
                 print("ispresent value==" +
                     student_data[i].is_present.toString());
               }
+              Navigator.of(context).pop();
               //Navigator.push(context, MaterialPageRoute(builder: (context)=>AccessAllSectionRound()));
             }),
       )),
@@ -70,7 +71,19 @@ class _VivaState extends State<Viva> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Practical Round'),
+          title: Text('Viva Round'),
+          actions: <Widget>[
+            PopupMenuButton<int>(itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: Text('Go To Dashboard'),
+                  value: 1,
+                ),
+              ];
+            }, onSelected: (index) {
+              Navigator.of(context).pop(true);
+            })
+          ],
         ),
         body: Container(
           color: Colors.black26,
@@ -113,7 +126,7 @@ class _VivaState extends State<Viva> {
                                       ],
                                     ),
                                   ),
-                                  FlatButton(
+                                 /* FlatButton(
                                     color: Color(0xFF2f4050),
                                     child: Text('Practical',
                                         style: TextStyle(color: Colors.white)),
@@ -125,7 +138,7 @@ class _VivaState extends State<Viva> {
                                                 mode: 'practical',
                                                 studentCode: student_data[index]
                                                     .studentCode))),
-                                  ),
+                                  ),*/
                                   SizedBox(
                                     width: 5.0,
                                   ),

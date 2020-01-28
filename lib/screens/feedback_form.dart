@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart' as prefix0;
 
+import 'login_page.dart';
+
 
 class FeedbackForm extends StatefulWidget {
   @override
@@ -104,6 +106,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
                               // the form is invalid.
                               if (_formKey.currentState.validate()) {
                                 // If the form is valid, we want to show a Snackbar
+                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    LoginPage()), (Route<dynamic> route) => false);
                                 Scaffold
                                     .of(context)
                                     .showSnackBar(

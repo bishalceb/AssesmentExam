@@ -38,7 +38,19 @@ class _CandidateListState extends State<CandidateList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Candidate List'),
+          title: Text('Candidate Feedback'),
+          actions: <Widget>[
+            PopupMenuButton<int>(itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: Text('Go To Document Round'),
+                  value: 1,
+                ),
+              ];
+            }, onSelected: (index) {
+              Navigator.of(context).pop(true);
+            })
+          ],
         ),
         body: students.length <= 0
             ? Center(

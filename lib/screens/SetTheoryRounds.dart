@@ -9,13 +9,15 @@ import 'package:assesment/model/scopedModel.dart';
 
 class SetTheoryRound extends StatefulWidget {
   final Directory batchFolder;
-  SetTheoryRound(this.batchFolder);
+  String round;
+  SetTheoryRound(this.batchFolder,this.round);
   @override
-  _SetTheoryRoundState createState() => _SetTheoryRoundState();
+  _SetTheoryRoundState createState() => _SetTheoryRoundState(round);
 }
 
 class _SetTheoryRoundState extends State<SetTheoryRound> {
   UserDetailApi userDetailApi;
+  String round;
   List<BatchData> batchData = UserDetailApi.response[0].batchData;
   String _value;
   int _selected_postion = 0;
@@ -32,6 +34,8 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
     'Round 10'
   ];
   final MainScopedModel model = MainScopedModel();
+
+  _SetTheoryRoundState(this.round);
 
   @override
   void initState() {
@@ -132,7 +136,7 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  Theory(widget.batchFolder)));
+                                  Theory(widget.batchFolder,round)));
                     }),
               )),
             )

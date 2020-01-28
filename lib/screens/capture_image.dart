@@ -483,7 +483,7 @@ class _CaptureImageState extends State<CaptureImage> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text('Capture Image'),
+        title: Text(mode+' Image'),
       ),
       body: widget.index != 2 ? _buildMultiPic() : _buildSingleImage(),
     );

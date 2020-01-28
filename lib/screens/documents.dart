@@ -74,6 +74,18 @@ class _DocumentsState extends State<Documents> {
       child: Scaffold(
           appBar: AppBar(
             title: Text('Documents'),
+            actions: <Widget>[
+              PopupMenuButton<int>(itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: Text('Go To Dashboard'),
+                    value: 1,
+                  ),
+                ];
+              }, onSelected: (index) {
+                Navigator.of(context).pop(true);
+              })
+            ],
           ),
           body: Container(
               color: Colors.black26, child: _buildDocumentsGridView())),

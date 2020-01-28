@@ -60,7 +60,7 @@ class _StudentListState extends State<StudentList> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 42.0),
                         child: Text(
-                          "NEXT",
+                          "FINISH",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25.0,
@@ -88,7 +88,7 @@ class _StudentListState extends State<StudentList> {
     return Container(
       height: actual_height,
       child: ListView.builder(
-        itemCount: 10,
+        itemCount: student_data.length,
         itemBuilder: _studentPageDesign,
         padding: EdgeInsets.all(0.0),
       ),
