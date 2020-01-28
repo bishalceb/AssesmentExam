@@ -363,7 +363,7 @@ class _LoginPageState extends State<LoginPage>
                           ),
                           onPressed: () {
                             setState(() {
-                              _isLoading = true;
+
                               print("userid: ${loginEmailController.text} and password: ${loginPasswordController.text}");
                               siginNavigat(loginEmailController.text, loginPasswordController.text);
                             });
@@ -609,26 +609,29 @@ class _LoginPageState extends State<LoginPage>
     //userDetailController.callAPI("sumit", "India@0987");
     if(userid==""){
       print("Please Enter Username");
-      /*Fluttertoast.showToast(
+      Fluttertoast.showToast(
           msg: 'Please Enter Username',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white
-      );*/
+      );
 
     } else if(password==""){
       print("Please Enter Password");
-      /*Fluttertoast.showToast(
+      Fluttertoast.showToast(
           msg: 'Please Enter Password',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white
-      );*/
+      );
     } else {
+      setState(() {
+        _isLoading = true;
+      });
       userDetailController.callAPI(userid, password);
     }
 
@@ -652,6 +655,18 @@ class _LoginPageState extends State<LoginPage>
       });
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => SinglePic()));
+    }else{
+      setState(() {
+        _isLoading = false;
+      });
+      Fluttertoast.showToast(
+          msg: "User name or Password is Wrong.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white
+      );
     }
   }
 }
