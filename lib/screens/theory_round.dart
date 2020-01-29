@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assesment/screens/AccessAllSectionRound.dart';
 import 'package:assesment/screens/capture_video.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
@@ -10,7 +11,7 @@ import 'package:video_player/video_player.dart';
 class Theory extends StatefulWidget {
   final Directory batchFolder;
   String pageTitle;
-  Theory(this.batchFolder,this.pageTitle);
+  Theory(this.batchFolder, this.pageTitle);
   @override
   _TheoryState createState() => _TheoryState(pageTitle);
 }
@@ -60,11 +61,14 @@ class _TheoryState extends State<Theory> {
                   ),
                 ];
               }, onSelected: (index) {
-                Navigator.of(context).pop(true);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AccessAllSectionRound(widget.batchFolder)));
               })
             ],
             bottom: TabBar(
-              
               onTap: (index) {
                 print("index ==" + index.toString());
                 int selectedtab = index + 1;
@@ -135,74 +139,73 @@ class _TheoryState extends State<Theory> {
         student_data[index].addedInRound.toString() +
         "  ");
 
-    if(student_data[index].is_present){
+    if (student_data[index].is_present) {
       return !student_data[index].isAdded ||
-          student_data[index].addedInRound == visibleRound ||
-          student_data[index].addedInRound == 0
+              student_data[index].addedInRound == visibleRound ||
+              student_data[index].addedInRound == 0
           ? Card(
-        shape: RoundedRectangleBorder(),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Container(
-              width: 150,
-              child: Text(
-                student_data[index].name,
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2),
-              child: ToggleButtons(
-                borderColor: Colors.black26,
-                fillColor: Colors.pink,
-                borderWidth: 2,
-                selectedBorderColor: Colors.black26,
-                selectedColor: Colors.white,
-                borderRadius: BorderRadius.circular(0),
+              shape: RoundedRectangleBorder(),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  Container(
+                    width: 150,
                     child: Text(
-                      'Remove',
-                      style: TextStyle(fontSize: 16),
+                      student_data[index].name,
+                      style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Add',
-                      style: TextStyle(fontSize: 16),
+                    padding: EdgeInsets.all(2),
+                    child: ToggleButtons(
+                      borderColor: Colors.black26,
+                      fillColor: Colors.pink,
+                      borderWidth: 2,
+                      selectedBorderColor: Colors.black26,
+                      selectedColor: Colors.white,
+                      borderRadius: BorderRadius.circular(0),
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Remove',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Add',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                      onPressed: (int toggle_index) {
+                        setState(() {
+                          for (int i = 0; i < 2; i++) {
+                            if (i == toggle_index) {
+                              student_data[index].isRemoved = false;
+                              student_data[index].isAdded = true;
+                              student_data[index].addedInRound = visibleRound;
+                            } else {
+                              student_data[index].isRemoved = true;
+                              student_data[index].isAdded = false;
+                              student_data[index].addedInRound = visibleRound;
+                            }
+                          }
+                        });
+                      },
+                      isSelected: [
+                        student_data[index].isRemoved,
+                        student_data[index].isAdded
+                      ],
                     ),
-                  ),
-                ],
-                onPressed: (int toggle_index) {
-                  setState(() {
-                    for (int i = 0; i < 2; i++) {
-                      if (i == toggle_index) {
-                        student_data[index].isRemoved = false;
-                        student_data[index].isAdded = true;
-                        student_data[index].addedInRound = visibleRound;
-                      } else {
-                        student_data[index].isRemoved = true;
-                        student_data[index].isAdded = false;
-                        student_data[index].addedInRound = visibleRound;
-                      }
-                    }
-                  });
-                },
-                isSelected: [
-                  student_data[index].isRemoved,
-                  student_data[index].isAdded
+                  )
                 ],
               ),
             )
-          ],
-        ),
-      )
           : Container();
     }
-
   }
 }

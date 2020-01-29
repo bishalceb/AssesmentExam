@@ -41,14 +41,13 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int verion) {
     Future result = db.execute(
-        'CREATE TABLE $tableName ($fileName TEXT,$batchId TEXT,$priority INTEGER,$syncstatus INTEGER,$type TEXT,$studentCode TEXT)');
+        'CREATE TABLE $tableName ($fileName TEXT PRIMARY KEY,$batchId TEXT,$priority INTEGER,$syncstatus INTEGER,$type TEXT,$studentCode TEXT)');
     return result;
   }
 
   Future<int> insertData(AssessmentDb assmntdb) async {
     Database db = await this.database;
-    Future<int> result = db.insert('$tableName', assmntdb.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    Future<int> result = db.insert('$tableName', assmntdb.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
     return result;
   }
 

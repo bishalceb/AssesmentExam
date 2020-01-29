@@ -15,7 +15,7 @@ class CaptureImage extends StatefulWidget {
   final Directory batchFolder;
   CaptureImage({this.index, this.mode, this.student, this.batchFolder});
   @override
-  _CaptureImageState createState() => _CaptureImageState(mode);
+  _CaptureImageState createState() => _CaptureImageState(mode, student);
 }
 
 class _CaptureImageState extends State<CaptureImage> {
@@ -28,11 +28,13 @@ class _CaptureImageState extends State<CaptureImage> {
   String _dbImage;
 
   final String mode;
-  _CaptureImageState(this.mode);
+  final StudentData student;
+  _CaptureImageState(this.mode, this.student);
 
   @override
   initState() {
     super.initState();
+    print('capture image initstate called');
     loadImage(mode);
   }
 
@@ -85,14 +87,15 @@ class _CaptureImageState extends State<CaptureImage> {
     for (int i = 0; i < _images.length; i++) {
       File copiedImagePath = await _images[i]
           .copy('${widget.batchFolder.path}/exam_attendance_pic_${i + 1}.png');
-      print('exam pic: ${Path.basenameWithoutExtension(copiedImagePath.path)}');
+      print(
+          'save exam pic: ${Path.basenameWithoutExtension(copiedImagePath.path)}');
       AssessmentDb a = AssessmentDb(
         fileName: copiedImagePath.path,
         batchId: Path.basename(widget.batchFolder.path),
         priority: 1,
         syncstatus: 0,
         type: 'exam_attendance_pic_',
-        studentCode: '',
+        studentCode: null,
       );
       await _databaseHelper.insertData(a);
     }
@@ -109,26 +112,28 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'assessor_feedback_pic_',
-        studentCode: '',
+        studentCode: null,
       );
       await _databaseHelper.insertData(a);
     }
   }
 
   saveCandidateImage() async {
-    if (widget.mode == 'Candidate Feedback') {
-      File copiedImagePath = await _image.copy(
-          '${widget.batchFolder.path}/candidate_${widget.student.studentCode}.png');
-      AssessmentDb a = AssessmentDb(
-        fileName: copiedImagePath.path,
-        batchId: Path.basename(widget.batchFolder.path),
-        priority: 1,
-        syncstatus: 0,
-        type: 'candidate',
-        studentCode: widget.student.studentCode,
-      );
-      await _databaseHelper.insertData(a);
-    }
+    // print('student code: ${widget.student.studentCode}');
+    File copiedImagePath = await _image.copy('${widget.batchFolder.path}/' +
+        'candidate_' +
+        '${student.studentRollNo}.png');
+    print(
+        'savecandidateimage called with student id: ${student.studentRollNo}');
+    AssessmentDb a = AssessmentDb(
+      fileName: copiedImagePath.path,
+      batchId: Path.basename(widget.batchFolder.path),
+      priority: 1,
+      syncstatus: 0,
+      type: 'candidate_feedback',
+      studentCode: student.studentRollNo,
+    );
+    await _databaseHelper.insertData(a);
   }
 
   saveTrainingImage() async {
@@ -142,7 +147,7 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'training_attendance_pic_',
-        studentCode: '',
+        studentCode: null,
       );
       await _databaseHelper.insertData(a);
     }
@@ -159,7 +164,7 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'vtp_feedback_pic_',
-        studentCode: '',
+        studentCode: null,
       );
       await _databaseHelper.insertData(a);
     }
@@ -175,7 +180,7 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'code_of_conduct_pic_',
-        studentCode: '',
+        studentCode: null,
       );
       await _databaseHelper.insertData(a);
     }
@@ -192,7 +197,7 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'placement_doc_pic_',
-        studentCode: '',
+        studentCode: null,
       );
       await _databaseHelper.insertData(a);
     }
@@ -200,8 +205,8 @@ class _CaptureImageState extends State<CaptureImage> {
 
   saveGroupImage() async {
     for (int i = 0; i < _images.length; i++) {
-      File copiedImagePath = await _images[i]
-          .copy('${widget.batchFolder.path}/group_photo_.png');
+      File copiedImagePath =
+          await _images[i].copy('${widget.batchFolder.path}/group_photo_.png');
 
       AssessmentDb a = AssessmentDb(
         fileName: copiedImagePath.path,
@@ -209,7 +214,7 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'group_photo_',
-        studentCode: '',
+        studentCode: null,
       );
       _databaseHelper.insertData(a);
     }
@@ -218,17 +223,20 @@ class _CaptureImageState extends State<CaptureImage> {
   fetchCandidateImage() async {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
-
+    print('fetchcandidateimage called');
     for (int i = 0; i < assessmentdb.length; i++) {
+      print('candidate image: ${assessmentdb[i].fileName}');
       if (assessmentdb[i]
               .fileName
-              .contains('candidate_${widget.student.studentCode}') &&
+              .contains('candidate_${student.studentRollNo}') &&
+          assessmentdb[i].studentCode == student.studentRollNo &&
           widget.mode == 'Candidate Feedback' &&
-          assessmentdb[i].type == 'candidate' &&
+          assessmentdb[i].type == 'candidate_feedback' &&
           Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
-        setState(() {
-          _dbImage = assessmentdb[i].fileName;
-        });
+        print('candidate image: ${assessmentdb[i].fileName}');
+      setState(() {
+        _dbImage = assessmentdb[i].fileName;
+      });
     }
   }
 
@@ -299,15 +307,17 @@ class _CaptureImageState extends State<CaptureImage> {
   fetchCocImage() async {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
+    print('fetchcocimage called');
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].fileName.contains('code_of_conduct_pic_') &&
           mode == 'Code of Conduct' &&
           assessmentdb[i].type == 'code_of_conduct_pic_' &&
-          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
         print('coc name: ${Path.basename(assessmentdb[i].fileName)}');
-      setState(() {
-        _dbImages.add(assessmentdb[i].fileName);
-      });
+        setState(() {
+          _dbImages.add(assessmentdb[i].fileName);
+        });
+      }
     }
   }
 
@@ -348,7 +358,7 @@ class _CaptureImageState extends State<CaptureImage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
-          child: _image == null || _dbImage.length == 0
+          child: _image == null || _dbImage == null
               ? Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.asset(
@@ -356,7 +366,7 @@ class _CaptureImageState extends State<CaptureImage> {
                     fit: BoxFit.scaleDown,
                   ),
                 )
-              : _dbImage.length != 0 && _image == null
+              : _dbImage != null && _image == null
                   ? Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Image.file(File(_dbImage)))
@@ -483,9 +493,11 @@ class _CaptureImageState extends State<CaptureImage> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text(mode+' Image'),
+        title: Text(mode + ' Image'),
       ),
-      body: widget.index != 2 ? _buildMultiPic() : _buildSingleImage(),
+      body: widget.mode != 'Candidate Feedback'
+          ? _buildMultiPic()
+          : _buildSingleImage(),
     );
   }
 }

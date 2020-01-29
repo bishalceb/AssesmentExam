@@ -7,11 +7,9 @@ import 'package:chewie/chewie.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 import 'package:sqflite/sqflite.dart';
 import 'package:video_player/video_player.dart';
-
-import '../database/assessmentdb.dart';
 import '../database/assessmentdb.dart';
 
 class CaptureVideo extends StatefulWidget {
@@ -65,7 +63,7 @@ class _CaptureVideoState extends State<CaptureVideo> {
           await video.copy('${widget.batchFolder.path}/${getMode()}.mp4');
       databaseHelper.insertData(AssessmentDb(
           fileName: copiedVideo.path,
-          batchId: basename(widget.batchFolder.path),
+          batchId: Path.basename(widget.batchFolder.path),
           priority: 3,
           syncstatus: 0,
           type: getMode(),
@@ -90,21 +88,26 @@ class _CaptureVideoState extends State<CaptureVideo> {
 
     for (int i = 0; i < assessmentdb.length; i++) {
       if (widget.mode == 'viva' &&
-          assessmentdb[i].fileName.contains('viva_${widget.studentCode}'))
+          assessmentdb[i].fileName.contains('viva_${widget.studentCode}') &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _videoPlayerController =
               VideoPlayerController.file(File(assessmentdb[i].fileName));
         });
 
       if (widget.mode == 'practical' &&
-          assessmentdb[i].fileName.contains('practical_${widget.studentCode}'))
+          assessmentdb[i]
+              .fileName
+              .contains('practical_${widget.studentCode}') &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _videoPlayerController =
               VideoPlayerController.file(File(assessmentdb[i].fileName));
         });
 
       if (widget.mode == 'center infrastructure' &&
-          assessmentdb[i].fileName.contains('center_infra'))
+          assessmentdb[i].fileName.contains('center_infra') &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _videoPlayerController =
               VideoPlayerController.file(File(assessmentdb[i].fileName));
@@ -113,7 +116,8 @@ class _CaptureVideoState extends State<CaptureVideo> {
       if (widget.mode == 'theory round' &&
           assessmentdb[i]
               .fileName
-              .contains('theory_round_video_${widget.visibleTheoryRound}'))
+              .contains('theory_round_video_${widget.visibleTheoryRound}') &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _videoPlayerController =
               VideoPlayerController.file(File(assessmentdb[i].fileName));
