@@ -84,6 +84,13 @@ class _CaptureImageState extends State<CaptureImage> {
   }
 
   saveExamAttendanceImage() async {
+    /* int count;
+    fetchExamAttendanceImage();
+    if (_dbImages != null)
+      count = _dbImages.length;
+    else
+      count = 0;
+    for (int i = count; i < _images.length + count; i++) { */
     for (int i = 0; i < _images.length; i++) {
       File copiedImagePath = await _images[i]
           .copy('${widget.batchFolder.path}/exam_attendance_pic_${i + 1}.png');
@@ -229,14 +236,14 @@ class _CaptureImageState extends State<CaptureImage> {
       if (assessmentdb[i]
               .fileName
               .contains('candidate_${student.studentRollNo}') &&
-          assessmentdb[i].studentCode == student.studentRollNo &&
           widget.mode == 'Candidate Feedback' &&
           assessmentdb[i].type == 'candidate_feedback' &&
-          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
-        print('candidate image: ${assessmentdb[i].fileName}');
-      setState(() {
-        _dbImage = assessmentdb[i].fileName;
-      });
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId &&
+          student.studentRollNo == assessmentdb[i].studentCode)
+        //print('candidate image: ${assessmentdb[i].fileName}');
+        setState(() {
+          _dbImage = assessmentdb[i].fileName;
+        });
     }
   }
 
@@ -358,7 +365,7 @@ class _CaptureImageState extends State<CaptureImage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
-          child: _image == null || _dbImage == null
+          child: _image == null && _dbImage == null
               ? Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.asset(
@@ -402,7 +409,10 @@ class _CaptureImageState extends State<CaptureImage> {
                     'Finish',
                     style: TextStyle(fontSize: 20.0),
                   ),
-                  onPressed: () => Navigator.of(context).pop()),
+                  onPressed: () {
+                    if (_image != null) saveImage();
+                    Navigator.of(context).pop();
+                  }),
             )
           ],
         )
@@ -453,32 +463,7 @@ class _CaptureImageState extends State<CaptureImage> {
             FlatButton(
               child: Text('Finish'),
               onPressed: () {
-                switch (widget.mode) {
-                  case 'Assessor Feedback':
-                    saveAssessorImage();
-                    break;
-                  case 'Exam Attendance':
-                    saveExamAttendanceImage();
-                    break;
-                  case 'Candidate Feedback':
-                    saveCandidateImage();
-                    break;
-                  case 'Training Attendance':
-                    saveTrainingImage();
-                    break;
-                  case 'VTP Feedback':
-                    saveVtpImage();
-                    break;
-                  case 'Code of Conduct':
-                    saveCocImage();
-                    break;
-                  case 'Placements Documents':
-                    savePlacementImage();
-                    break;
-                  case 'Group Photo':
-                    saveGroupImage();
-                    break;
-                }
+                if (_images.length != 0) saveImage();
                 Navigator.of(context).pop();
               },
             )
@@ -486,6 +471,35 @@ class _CaptureImageState extends State<CaptureImage> {
         )
       ],
     );
+  }
+
+  saveImage() {
+    switch (widget.mode) {
+      case 'Assessor Feedback':
+        saveAssessorImage();
+        break;
+      case 'Exam Attendance':
+        saveExamAttendanceImage();
+        break;
+      case 'Candidate Feedback':
+        saveCandidateImage();
+        break;
+      case 'Training Attendance':
+        saveTrainingImage();
+        break;
+      case 'VTP Feedback':
+        saveVtpImage();
+        break;
+      case 'Code of Conduct':
+        saveCocImage();
+        break;
+      case 'Placements Documents':
+        savePlacementImage();
+        break;
+      case 'Group Photo':
+        saveGroupImage();
+        break;
+    }
   }
 
   @override

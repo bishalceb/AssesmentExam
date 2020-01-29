@@ -47,7 +47,8 @@ class DatabaseHelper {
 
   Future<int> insertData(AssessmentDb assmntdb) async {
     Database db = await this.database;
-    Future<int> result = db.insert('$tableName', assmntdb.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
+    Future<int> result = db.insert('$tableName', assmntdb.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
     return result;
   }
 
