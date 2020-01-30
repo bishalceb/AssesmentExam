@@ -33,7 +33,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     'Center Infrastructure Round',
     'Documentation Round',
     'End of Assesment',
-
   ];
   static final card_color = Color(0xFF2f4050);
   static final card_text_color = Colors.white;
@@ -42,6 +41,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   List<AssessmentDb> assessmentdb = List<AssessmentDb>();
   DatabaseHelper databaseHelper = DatabaseHelper();
   StorageUploadTask uploadTask;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
@@ -91,21 +91,20 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            SetTheoryRound(widget.batchFolder,"Theory Round")));
+                        builder: (context) => SetTheoryRound(
+                            widget.batchFolder, "Theory Round")));
               } else if (index == 2) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Viva(widget.batchFolder)));
-              } else if (index == 3){
+              } else if (index == 3) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            SetTheoryRound(widget.batchFolder,"Practical Round")));
-              }
-              else if (index == 4) {
+                        builder: (context) => SetTheoryRound(
+                            widget.batchFolder, "Practical Round")));
+              } else if (index == 4) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -166,7 +165,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               batchId: assessmentdb[i].batchId,
               priority: assessmentdb[i].priority,
               syncstatus: 1,
-              type: 'candidate',
+              type: 'candidate_feedback',
               studentCode: assessmentdb[i].studentCode));
       }
     }
@@ -405,37 +404,48 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   }
 
   _uploadProgressIndicator(BuildContext context) {
+    double progressPercentage;
     showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: AlertDialog(
-              title: StreamBuilder<StorageTaskEvent>(
-                stream: uploadTask.events,
-                builder: (context, snapshot) {
-                  var event = snapshot?.data?.snapshot;
-                  double progressPercentage = event != null
-                      ? event.bytesTransferred / event.totalByteCount
-                      : 0;
-                  return Column(
-                    children: <Widget>[
-                      LinearProgressIndicator(
-                        value: progressPercentage,
-                      ),
-                      Text('${(progressPercentage * 100).toStringAsFixed(2)}'),
-                    ],
-                  );
-                },
-              ),
+      context: context,
+      builder: (context) {
+        return Center(
+          child: AlertDialog(
+            title: StreamBuilder<StorageTaskEvent>(
+              stream: uploadTask.events,
+              builder: (context, snapshot) {
+                var event = snapshot?.data?.snapshot;
+                progressPercentage = event != null
+                    ? event.bytesTransferred / event.totalByteCount
+                    : 0;
+                return Column(
+                  children: <Widget>[
+                    LinearProgressIndicator(
+                      value: progressPercentage,
+                    ),
+                    Text('${(progressPercentage * 100).toStringAsFixed(2)}'),
+                  ],
+                );
+              },
             ),
-          );
-        });
+            actions: <Widget>[
+              progressPercentage == 100.0
+                  ? FlatButton(
+                      child: Text('Okay'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    )
+                  : Container()
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             title: Text('Dashboard'),
             actions: <Widget>[
@@ -451,8 +461,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                   )
                 ];
               }, onSelected: (index) {
-                print("pop up index=="+index.toString());
-                if(index==1){
+                print("pop up index==" + index.toString());
+                if (index == 1) {
                   uploadProctorProfile();
                   uploadAssessorFeddbbackPic();
                   uploadCandidatePic();
@@ -467,11 +477,14 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                   uploadTrainingFeedbackPic();
                   uploadVtpFeedbackPic();
                   _uploadProgressIndicator(context);
-                }else{
-                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                      LoginPage()), (Route<dynamic> route) => false);
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                    content: Text('All files uploaded successfully'),
+                  ));
+                } else {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      (Route<dynamic> route) => false);
                 }
-
               })
             ],
           ),
