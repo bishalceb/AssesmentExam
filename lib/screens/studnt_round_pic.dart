@@ -105,22 +105,25 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                   child: Row(
                     children: <Widget>[
-                      _profilePic == null && _profileDbImage == null
-                          ? Image.asset(
-                        'assets/img/placeholder.png',
-                        height: 200.0,
-                        width: 200.0,
-                      )
-                          : _profilePic != null && _profileDbImage == null
-                          ? Image.file(
-                        _profilePic,
-                        height: 200.0,
-                        width: 200.0,
-                      )
-                          : Image.file(
-                        File(_profileDbImage),
-                        height: 200.0,
-                        width: 200.0,
+                      InkWell(
+                          onTap: () => getCamImage('profile'),
+                        child: _profilePic == null && _profileDbImage == null
+                            ? Image.asset(
+                          'assets/img/placeholder.png',
+                          height: 200.0,
+                          width: 200.0,
+                        )
+                            : _profilePic != null && _profileDbImage == null
+                            ? Image.file(
+                          _profilePic,
+                          height: 200.0,
+                          width: 200.0,
+                        )
+                            : Image.file(
+                          File(_profileDbImage),
+                          height: 200.0,
+                          width: 200.0,
+                        )
                       ),
                       Expanded(
                         child: FlatButton.icon(
@@ -137,7 +140,9 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                 ),
                 Row(
                   children: <Widget>[
-                    _adharPic == null && _aadharDbImage == null
+                    InkWell(
+                      onTap: () => getCamImage('adhar'),
+                      child: _adharPic == null && _aadharDbImage == null
                         ? Image.asset(
                       'assets/img/placeholder.png',
                       height: 200.0,
@@ -153,6 +158,7 @@ class _StudentRoundPicState extends State<StudentRoundPic> {
                       _adharPic,
                       height: 200.0,
                       width: 200.0,
+                    ),
                     ),
                     Expanded(
                       child: FlatButton.icon(

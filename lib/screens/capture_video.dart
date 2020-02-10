@@ -132,37 +132,49 @@ class _CaptureVideoState extends State<CaptureVideo> {
         top: true,
         child: Column(
           children: <Widget>[
-            Expanded(
-              child: _videoPlayerController == null
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset('assets/img/video_player.png'),
-                    )
-                  : Chewie(
-                      controller: ChewieController(
-                          aspectRatio: _videoPlayerController.value.aspectRatio,
-                          autoPlay: true,
-                          allowFullScreen: true,
-                          allowMuting: true,
-                          videoPlayerController: _videoPlayerController),
-                    ),
+            InkWell(
+              onTap:()=> getCamVideo('camera'),
+              //child: Expanded(
+                child: _videoPlayerController == null
+                    ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset('assets/img/video_player.png'),
+                )
+                    : Chewie(
+                  controller: ChewieController(
+                      aspectRatio: _videoPlayerController.value.aspectRatio,
+                      autoPlay: true,
+                      allowFullScreen: true,
+                      allowMuting: true,
+                      videoPlayerController: _videoPlayerController),
+                ),
+              //),
+            ),
+            Spacer(
+              flex: 1,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                FlatButton.icon(
-                  icon: Icon(Icons.videocam),
-                  label: Text('Capture Video'),
-                  onPressed: () => getCamVideo('camera'),
+                   Expanded(
+                    child: FlatButton.icon(
+                      icon: Icon(Icons.videocam),
+                      label: Text('Capture Video',maxLines: 4,),
+                      onPressed: () => getCamVideo('camera'),
+                    ),
+                  ),
+                Expanded(
+                    child:FlatButton.icon(
+                      icon: Icon(Icons.video_library),
+                      label: Text('Browse Video',maxLines: 2),
+                      onPressed: () => getCamVideo('gallery'),
+                    ),
                 ),
-                FlatButton.icon(
-                  icon: Icon(Icons.video_library),
-                  label: Text('Capture Video'),
-                  onPressed: () => getCamVideo('gallery'),
-                ),
-                FlatButton(
-                  child: Text('NEXT'),
-                  onPressed: () => Navigator.pop(context),
+                Expanded(
+                  child: FlatButton(
+                    child: Text('NEXT'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
                 )
               ],
             )

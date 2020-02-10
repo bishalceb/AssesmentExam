@@ -143,6 +143,7 @@ class _SinglePicState extends State<SinglePic> {
         top: true,
         bottom: true,
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Expanded(
                 child: Padding(
@@ -155,31 +156,58 @@ class _SinglePicState extends State<SinglePic> {
                           ? Image.file(File(dbProctorProfile))
                           : Image.file(proctor_profile),
                   Positioned(
-                    bottom: 50.0,
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'current Time: $_currentTime',
-                            style: TextStyle(
-                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                      bottom: 10.0,
+                      child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                        width: 500,
+                                        height: 30,
+                                        color:Colors.blue,
+                                          child: Text(
+                                            '  Current Time: $_currentTime',
+                                            style: TextStyle(
+                                                fontSize: 20.0, fontWeight: FontWeight.bold,color: Colors.white),
+                                          ),
+                                    ),
+                                  ],
+                                )
+                              ),
+                                Padding(
+                                padding: const EdgeInsets.all(10.0),
+                              child:Container(
+                                width: 500,
+                                height: 30,
+                                color:Colors.blue,
+                                child: Text(
+                                  '  Latitude: $latitude',
+                                  style: TextStyle(
+                                      fontSize: 20.0, fontWeight: FontWeight.bold,color: Colors.white),
+                                ),
+                              )
+                                ),
+                              Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Container(
+                                  width: 500,
+                                  color:Colors.blue,
+                                  child: Text(
+                                    '  Longitude: $longitude',
+                                    style: TextStyle(
+                                        fontSize: 20.0, fontWeight: FontWeight.bold,color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          Text(
-                            'latitude: $latitude',
-                            style: TextStyle(
-                                fontSize: 20.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'longitude: $longitude',
-                            style: TextStyle(
-                                fontSize: 20.0, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                        )
                       ),
-                    ),
-                  )
                 ],
               ),
             )),

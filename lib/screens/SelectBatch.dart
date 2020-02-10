@@ -19,6 +19,7 @@ class _SelectBatchState extends State<SelectBatch> {
   UserDetailApi userDetailApi;
   List<BatchData> batchData = UserDetailApi.response[0].batchData;
   String _value;
+  String selected_batch_id;
   int _selected_postion = 0;
   List<String> spinnerItems = [];
 
@@ -85,6 +86,7 @@ class _SelectBatchState extends State<SelectBatch> {
                     if (batchData[j].batchNo == value) {
                       position = j;
                       UserDetailApi.response[0].selected_batch = position;
+                      selected_batch_id=UserDetailApi.response[0].batchData[position].id;
                     }
                   }
                   setState(() {
@@ -132,7 +134,7 @@ class _SelectBatchState extends State<SelectBatch> {
                   ),
                   onPressed: () async {
                     Directory batchFolder = await Directory(
-                            '${widget.createPath. path}/batch_${UserDetailApi.response[0].id}_$_value')
+                            '${widget.createPath. path}/batch_${UserDetailApi.response[0].id}_$selected_batch_id')
                         .create(recursive: true);
                     Navigator.push(
                         context,
