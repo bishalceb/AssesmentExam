@@ -129,6 +129,19 @@ class _CaptureVideoState extends State<CaptureVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Container(
+        padding: EdgeInsets.only(bottom: 30.0),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: FloatingActionButton.extended(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.navigate_next),
+            label: Text("NEXT"),
+          ),
+        ),
+      ),
       body: SafeArea(
         top: true,
         child: Column(
@@ -171,14 +184,14 @@ class _CaptureVideoState extends State<CaptureVideo> {
                       onPressed: () => getCamVideo('gallery'),
                     ),
                 ),
-                Expanded(
-                  child: FlatButton(
+                //Expanded(
+                   /*FlatButton(
                     child: Text('NEXT'),
                     onPressed: () {
                       Navigator.pop(context);
                        }
-                  ),
-                )
+                  ),*/
+                //)
               ],
             )
           ],

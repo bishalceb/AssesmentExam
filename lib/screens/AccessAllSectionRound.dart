@@ -36,15 +36,17 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     'Documentation Round',
     'End of Assesment',
     'Billing Round',
-    'Others'
   ];
+  List<Color> card_border_color = [Colors.black26, Colors.black26, Colors.black26,Colors.black26, Colors.black26, Colors.black26,Colors.black26, Colors.black26,Colors.black26];
   static final card_color = Color(0xFF2f4050);
   static final card_text_color = Colors.white;
-  static final card_border_color = Colors.black26;
+  //static final card_border_color = Colors.black26;
+  static final test_completed_card_border_color = Colors.green;
   final MainScopedModel model = MainScopedModel();
   List<AssessmentDb> assessmentdb = List<AssessmentDb>();
   DatabaseHelper databaseHelper = DatabaseHelper();
   StorageUploadTask uploadTask;
+  List<StudentData> student_data;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   FirebaseStorage _storage =
@@ -59,8 +61,22 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   void initState() {
     super.initState();
     fetchData();
-    print("selected batch==" +
-        UserDetailApi.response[0].selected_batch.toString());
+        int selected_batch=UserDetailApi.response[0].selected_batch;
+    student_data =
+        UserDetailApi.response[0].batchData[selected_batch].studentData;
+    setState(() {
+      if(student_data[0].is_present){
+        card_border_color[0]=Colors.green;
+      }
+      if(student_data[0].isAdded){
+        card_border_color[1]=Colors.green;
+        card_border_color[3]=Colors.green;
+      }
+      if(student_data[0].is_take_viva){
+        card_border_color[2]=Colors.green;
+      }
+    });
+
   }
 
   _buildAllSectionGridView() {
@@ -75,7 +91,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                side: new BorderSide(color: card_border_color, width: 2.0),
+                side: new BorderSide(color:card_border_color[index]
+                    , width: 2.0),
               ),
               color: card_color,
               elevation: 10,
@@ -134,15 +151,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                           batchFolder: widget.batchFolder,
                         )));
               }
-              else if (index == 8) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CaptureImage(
-                          mode: _gridItems[index],
-                          batchFolder: widget.batchFolder,
-                        )));
-              }
+
             });
       },
     );

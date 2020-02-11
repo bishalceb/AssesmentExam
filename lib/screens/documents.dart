@@ -21,7 +21,8 @@ class _DocumentsState extends State<Documents> {
     'VTP Feedback',
     'Code of Conduct',
     'Placements Documents',
-    'Group Photo'
+    'Group Photo',
+    'Others'
   ];
   static final card_color = Color(0xFF2f4050);
   static final card_text_color = Colors.white;
