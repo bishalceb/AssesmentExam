@@ -8,15 +8,15 @@ import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:video_player/video_player.dart';
 
-class Theory extends StatefulWidget {
+class Practical extends StatefulWidget {
   final Directory batchFolder;
   String pageTitle;
-  Theory(this.batchFolder, this.pageTitle);
+  Practical(this.batchFolder, this.pageTitle);
   @override
-  _TheoryState createState() => _TheoryState(pageTitle);
+  _PracticalState createState() => _PracticalState(pageTitle);
 }
 
-class _TheoryState extends State<Theory> {
+class _PracticalState extends State<Practical> {
   String pageTitle;
   double height;
   double actual_height;
@@ -27,7 +27,7 @@ class _TheoryState extends State<Theory> {
 
   TabController _tabController;
 
-  _TheoryState(this.pageTitle);
+  _PracticalState(this.pageTitle);
   @override
   void initState() {
     // TODO: implement initState
@@ -107,7 +107,7 @@ class _TheoryState extends State<Theory> {
                 MaterialPageRoute(
                     builder: (context) => CaptureVideo(
                           batchFolder: widget.batchFolder,
-                          mode: 'theory round',
+                          mode: pageTitle,
                           visibleTheoryRound: visibleRound,
                         ))),
             child: Icon(Icons.videocam),

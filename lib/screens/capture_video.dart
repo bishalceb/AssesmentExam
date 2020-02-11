@@ -49,11 +49,11 @@ class _CaptureVideoState extends State<CaptureVideo> {
     String getMode() {
       if (widget.mode == 'viva')
         return 'viva_${widget.studentCode}';
-      else if (widget.mode == 'practical')
-        return 'practical_${widget.studentCode}';
+      else if (widget.mode == 'Practical Round')
+        return 'practical_${widget.visibleTheoryRound}';
       else if (widget.mode == 'center infrastructure')
         return 'center_infra';
-      else if (widget.mode == 'theory round')
+      else if (widget.mode == 'Theory Round')
         return 'theory_round_video_${widget.visibleTheoryRound}';
       else
         return '';
@@ -96,10 +96,10 @@ class _CaptureVideoState extends State<CaptureVideo> {
               VideoPlayerController.file(File(assessmentdb[i].fileName));
         });
 
-      if (widget.mode == 'practical' &&
+      if (widget.mode == 'Practical Round' &&
           assessmentdb[i]
               .fileName
-              .contains('practical_${widget.studentCode}') &&
+              .contains('practical_${widget.visibleTheoryRound}') &&
           Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId)
         setState(() {
           _videoPlayerController =
@@ -114,7 +114,7 @@ class _CaptureVideoState extends State<CaptureVideo> {
               VideoPlayerController.file(File(assessmentdb[i].fileName));
         });
 
-      if (widget.mode == 'theory round' &&
+      if (widget.mode == 'Theory Round' &&
           assessmentdb[i]
               .fileName
               .contains('theory_round_video_${widget.visibleTheoryRound}') &&

@@ -9,6 +9,7 @@ import 'package:assesment/screens/StudentList.dart';
 import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/SetTheoryRounds.dart';
+import 'package:assesment/screens/SetPracticalRounds.dart';
 import 'package:assesment/screens/viva_round.dart';
 import 'package:assesment/screens/feedback_form.dart';
 import 'package:assesment/screens/documents.dart';

@@ -5,17 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/theory_round.dart';
+import 'package:assesment/screens/Practicall_round.dart';
 import 'package:assesment/model/scopedModel.dart';
 
-class SetTheoryRound extends StatefulWidget {
+class SetPracticalRound extends StatefulWidget {
   final Directory batchFolder;
   String round;
-  SetTheoryRound(this.batchFolder,this.round);
+  SetPracticalRound(this.batchFolder,this.round);
   @override
-  _SetTheoryRoundState createState() => _SetTheoryRoundState(round);
+  _SetPracticalRoundState createState() => _SetPracticalRoundState(round);
 }
 
-class _SetTheoryRoundState extends State<SetTheoryRound> {
+class _SetPracticalRoundState extends State<SetPracticalRound> {
   UserDetailApi userDetailApi;
   String round;
   List<BatchData> batchData = UserDetailApi.response[0].batchData;
@@ -35,7 +36,7 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
   ];
   final MainScopedModel model = MainScopedModel();
 
-  _SetTheoryRoundState(this.round);
+  _SetPracticalRoundState(this.round);
 
   @override
   void initState() {
@@ -136,7 +137,7 @@ class _SetTheoryRoundState extends State<SetTheoryRound> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  Theory(widget.batchFolder,round)));
+                                  Practical(widget.batchFolder,round)));
                     }),
               )),
             )

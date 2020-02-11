@@ -107,7 +107,7 @@ class _TheoryState extends State<Theory> {
                 MaterialPageRoute(
                     builder: (context) => CaptureVideo(
                           batchFolder: widget.batchFolder,
-                          mode: 'theory round',
+                          mode: pageTitle,
                           visibleTheoryRound: visibleRound,
                         ))),
             child: Icon(Icons.videocam),
