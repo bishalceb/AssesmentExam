@@ -9,7 +9,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 void backgroundFetchHeadlessTask() async {
   print('[BackgroundFetch] Headless event received.');
-  BackgroundFetch.finish();
+  BackgroundFetch.finish("");
 }
 
 void main() {
