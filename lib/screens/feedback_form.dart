@@ -106,8 +106,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                               // the form is invalid.
                               if (_formKey.currentState.validate()) {
                                 // If the form is valid, we want to show a Snackbar
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                    LoginPage()), (Route<dynamic> route) => false);
+                               /* Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    LoginPage()), (Route<dynamic> route) => false);*/
+                                  Navigator.pop(context);
                                 Scaffold
                                     .of(context)
                                     .showSnackBar(

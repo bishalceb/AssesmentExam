@@ -82,15 +82,24 @@ class _CandidateListState extends State<CandidateList> {
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.camera_alt),
-                                  onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => CaptureImage(
-                                                index: widget.index,
-                                                mode: widget.mode,
-                                                batchFolder: widget.batchFolder,
-                                                student: students[index],
-                                              ))),
+                                   color: students[index].is_take_candidate_pic?Colors.green:Colors.grey,
+                                  onPressed: () {
+                                    setState(() {
+                                      students[index].is_take_candidate_pic=true;
+                                    });
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CaptureImage(
+                                                  index: widget.index,
+                                                  mode: widget.mode,
+                                                  batchFolder: widget
+                                                      .batchFolder,
+                                                  student: students[index],
+                                                )));
+                                  },
                                 )
                               ],
                             ),

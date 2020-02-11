@@ -152,6 +152,8 @@ class StudentData {
   bool is_present;
   bool absent;
   bool present;
+  bool is_take_viva;
+  bool is_take_candidate_pic;
   bool isAdded;
   bool isRemoved;
   int addedInRound;
@@ -168,6 +170,8 @@ class StudentData {
       this.dob,
       this.gender,
       this.is_present,
+      this.is_take_viva,
+      this.is_take_candidate_pic,
       this.absent,
       this.present,
       this.isAdded,
@@ -188,6 +192,8 @@ class StudentData {
     is_present = false;
     absent = true;
     present = false;
+    is_take_viva=false;
+    is_take_candidate_pic=false;
     isAdded = false;
     isRemoved=true;
     addedInRound=0;
@@ -208,6 +214,8 @@ class StudentData {
     data['is_present'] = this.is_present;
     data['absent'] = this.is_present;
     data['present'] = this.is_present;
+    data['is_take_viva'] = this.is_take_viva;
+    data['is_take_candidate_pic'] = this.is_take_candidate_pic;
     data['isAdded'] = this.isAdded;
     data['isRemoved'] = this.isRemoved;
     data['addedInRound'] = this.addedInRound;

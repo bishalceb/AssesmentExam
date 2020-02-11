@@ -443,56 +443,88 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text('Dashboard'),
-            actions: <Widget>[
-              PopupMenuButton<int>(itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    child: Text('Sync'),
-                    value: 1,
+    return MaterialApp(
+       home: WillPopScope(
+          child: Scaffold(
+              key: _scaffoldKey,
+              appBar: AppBar(
+                title: Text('Dashboard'),
+                actions: <Widget>[
+                  PopupMenuButton<int>(itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        child: Text('Sync'),
+                        value: 1,
+                      ),
+                      PopupMenuItem(
+                        child: Text('LogOut'),
+                        value: 2,
+                      )
+                    ];
+                  }, onSelected: (index) {
+                    print("pop up index==" + index.toString());
+                    if (index == 1) {
+                      uploadProctorProfile();
+                      uploadAssessorFeddbbackPic();
+                      uploadCandidatePic();
+                      uploadCenterInfraPic();
+                      uploadCodeOfConductPic();
+                      uploadExamAttendancePic();
+                      uploadGroupPhoto();
+                      uploadPlacementDocPic();
+                      uploadPracticalRoundPic();
+                      uploadStudentRoundPic();
+                      uploadTheoryRoundPic();
+                      uploadTrainingFeedbackPic();
+                      uploadVtpFeedbackPic();
+                      _uploadProgressIndicator(context);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(
+                        content: Text('All files uploaded successfully'),
+                      ));
+                    } else {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                              (Route<dynamic> route) => false);
+                    }
+                  })
+                ],
+              ),
+              floatingActionButton: Container(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton.extended(
+                    onPressed: (){
+                      uploadProctorProfile();
+                      uploadAssessorFeddbbackPic();
+                      uploadCandidatePic();
+                      uploadCenterInfraPic();
+                      uploadCodeOfConductPic();
+                      uploadExamAttendancePic();
+                      uploadGroupPhoto();
+                      uploadPlacementDocPic();
+                      uploadPracticalRoundPic();
+                      uploadStudentRoundPic();
+                      uploadTheoryRoundPic();
+                      uploadTrainingFeedbackPic();
+                      uploadVtpFeedbackPic();
+                      _uploadProgressIndicator(context);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(
+                        content: Text('All files uploaded successfully'),
+                      ));
+                    },
+                    icon: Icon(Icons.phone_android),
+                    label: Text("Sync Your Data"),
                   ),
-                  PopupMenuItem(
-                    child: Text('LogOut'),
-                    value: 2,
-                  )
-                ];
-              }, onSelected: (index) {
-                print("pop up index==" + index.toString());
-                if (index == 1) {
-                  uploadProctorProfile();
-                  uploadAssessorFeddbbackPic();
-                  uploadCandidatePic();
-                  uploadCenterInfraPic();
-                  uploadCodeOfConductPic();
-                  uploadExamAttendancePic();
-                  uploadGroupPhoto();
-                  uploadPlacementDocPic();
-                  uploadPracticalRoundPic();
-                  uploadStudentRoundPic();
-                  uploadTheoryRoundPic();
-                  uploadTrainingFeedbackPic();
-                  uploadVtpFeedbackPic();
-                  _uploadProgressIndicator(context);
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(
-                    content: Text('All files uploaded successfully'),
-                  ));
-                } else {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                      (Route<dynamic> route) => false);
-                }
-              })
-            ],
-          ),
-          body: _buildAllSectionGridView()),
-      onWillPop: () {
-        Navigator.of(context).pop(true);
-        return Future.value(false);
-      },
+                ),
+              ),
+              body: _buildAllSectionGridView()),
+          onWillPop: () {
+            Navigator.of(context).pop(true);
+            return Future.value(false);
+          },
+        )
     );
+
   }
 }

@@ -16,10 +16,11 @@ class Viva extends StatefulWidget {
 class _VivaState extends State<Viva> {
   List<StudentData> students = [];
   List<StudentData> student_data;
+  int selected_batch;
 
   @override
   void initState() {
-    int selected_batch = UserDetailApi.response[0].selected_batch;
+    selected_batch = UserDetailApi.response[0].selected_batch;
     student_data =
         UserDetailApi.response[0].batchData[selected_batch].studentData;
     student_data.forEach((student) {
@@ -143,21 +144,27 @@ class _VivaState extends State<Viva> {
                                     width: 5.0,
                                   ),
                                   FlatButton(
-                                    color: Color(0xFF2f4050),
+                                    color: student_data[index].is_take_viva?Color(0xFF004100):Color(0xFF2f4050),
                                     /*shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0)),*/
                                     child: Text(
-                                      'Viva',
+                                      student_data[index].is_take_viva?'Done':"Viva",
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    onPressed: () => Navigator.push(
+                                    onPressed: () {
+                                      setState(() {
+                                        student_data[index].is_take_viva=true;
+                                      });
+
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => CaptureVideo(
-                                                batchFolder: widget.batchFolder,
-                                                mode: 'viva',
-                                                studentCode: student_data[index]
-                                                    .studentCode))),
+                                              batchFolder: widget.batchFolder,
+                                              mode: 'viva',
+                                              studentCode: student_data[index]
+                                                  .studentCode,
+                                            )));} ,
                                   ),
                                 ],
                               ),

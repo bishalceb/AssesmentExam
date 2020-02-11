@@ -129,16 +129,16 @@ class _CaptureImageState extends State<CaptureImage> {
     // print('student code: ${widget.student.studentCode}');
     File copiedImagePath = await _image.copy('${widget.batchFolder.path}/' +
         'candidate_' +
-        '${student.studentRollNo}.png');
+        '${student.studentCode}.png');
     print(
-        'savecandidateimage called with student id: ${student.studentRollNo}');
+        'savecandidateimage called with student id: ${student.studentCode}');
     AssessmentDb a = AssessmentDb(
       fileName: copiedImagePath.path,
       batchId: Path.basename(widget.batchFolder.path),
       priority: 1,
       syncstatus: 0,
       type: 'candidate_feedback',
-      studentCode: student.studentRollNo,
+      studentCode: student.studentCode,
     );
     await _databaseHelper.insertData(a);
   }
