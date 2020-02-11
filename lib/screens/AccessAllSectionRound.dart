@@ -6,6 +6,7 @@ import 'package:assesment/screens/capture_video.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/screens/StudentList.dart';
+import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/SetTheoryRounds.dart';
 import 'package:assesment/screens/viva_round.dart';
@@ -33,6 +34,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     'Center Infrastructure Round',
     'Documentation Round',
     'End of Assesment',
+    'Billing Round',
+    'Others'
   ];
   static final card_color = Color(0xFF2f4050);
   static final card_text_color = Colors.white;
@@ -117,9 +120,27 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Documents(widget.batchFolder)));
-              } else if (index == 6) {
+              }else if (index == 6) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FeedbackForm()));
+              }
+              else if (index == 7) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CaptureImage(
+                          mode: _gridItems[index],
+                          batchFolder: widget.batchFolder,
+                        )));
+              }
+              else if (index == 8) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CaptureImage(
+                          mode: _gridItems[index],
+                          batchFolder: widget.batchFolder,
+                        )));
               }
             });
       },

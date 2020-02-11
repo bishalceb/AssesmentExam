@@ -64,6 +64,12 @@ class _CaptureImageState extends State<CaptureImage> {
       case 'Group Photo':
         await fetchGroupImage();
         break;
+      case 'Billing Round':
+        await fetchBillingImage();
+        break;
+      case 'Others':
+        await fetchOtherImage();
+        break;
     }
   }
 
@@ -171,6 +177,40 @@ class _CaptureImageState extends State<CaptureImage> {
         priority: 1,
         syncstatus: 0,
         type: 'vtp_feedback_pic_',
+        studentCode: null,
+      );
+      await _databaseHelper.insertData(a);
+    }
+  }
+
+  saveBillingImage() async {
+    for (int i = 0; i < _images.length; i++) {
+      File copiedImagePath = await _images[i]
+          .copy('${widget.batchFolder.path}/billing_pic_${i + 1}.png');
+
+      AssessmentDb a = AssessmentDb(
+        fileName: copiedImagePath.path,
+        batchId: Path.basename(widget.batchFolder.path),
+        priority: 1,
+        syncstatus: 0,
+        type: 'billing_pic_',
+        studentCode: null,
+      );
+      await _databaseHelper.insertData(a);
+    }
+  }
+
+  saveOtherImage() async {
+    for (int i = 0; i < _images.length; i++) {
+      File copiedImagePath = await _images[i]
+          .copy('${widget.batchFolder.path}/other_pic_${i + 1}.png');
+
+      AssessmentDb a = AssessmentDb(
+        fileName: copiedImagePath.path,
+        batchId: Path.basename(widget.batchFolder.path),
+        priority: 1,
+        syncstatus: 0,
+        type: 'other_pic_',
         studentCode: null,
       );
       await _databaseHelper.insertData(a);
@@ -358,6 +398,34 @@ class _CaptureImageState extends State<CaptureImage> {
       }
     }
   }
+  fetchBillingImage() async {
+    db = await _databaseHelper.initDatabase();
+    if (db != null) assessmentdb = await _databaseHelper.fetchData();
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].fileName.contains('billing_pic_') &&
+          mode == 'Billing Round' &&
+          assessmentdb[i].type == 'billing_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
+        setState(() {
+          _dbImages.add(assessmentdb[i].fileName);
+        });
+      }
+    }
+}
+  fetchOtherImage() async {
+    db = await _databaseHelper.initDatabase();
+    if (db != null) assessmentdb = await _databaseHelper.fetchData();
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].fileName.contains('other_pic_') &&
+          mode == 'Others' &&
+          assessmentdb[i].type == 'other_pic_' &&
+          Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId) {
+        setState(() {
+          _dbImages.add(assessmentdb[i].fileName);
+        });
+      }
+    }
+  }
 
   Widget _buildSingleImage() {
     return Column(
@@ -498,6 +566,12 @@ class _CaptureImageState extends State<CaptureImage> {
         break;
       case 'Group Photo':
         saveGroupImage();
+        break;
+      case 'Billing Round':
+        saveBillingImage();
+        break;
+      case 'Others':
+        saveOtherImage();
         break;
     }
   }
