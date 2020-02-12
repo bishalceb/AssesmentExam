@@ -77,10 +77,10 @@ class _CaptureImageState extends State<CaptureImage> {
     File image;
     if (camMode == 'camera')
       image = await ImagePicker.pickImage(
-          source: ImageSource.camera, imageQuality: 50);
+          source: ImageSource.camera, imageQuality: 10);
     else
       image = await ImagePicker.pickImage(
-          source: ImageSource.gallery, imageQuality: 50);
+          source: ImageSource.gallery, imageQuality: 10);
 
     if (image == null) return;
     setState(() {

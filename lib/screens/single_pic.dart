@@ -50,7 +50,7 @@ class _SinglePicState extends State<SinglePic> {
     print(createPath.path.toString());
 
     var image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50);
+        source: ImageSource.camera, imageQuality: 10);
     File copiedImage;
     if (image != null)
       copiedImage = await image.copy('${createPath.path}/proctor_profile.png');

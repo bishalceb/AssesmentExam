@@ -412,6 +412,47 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
       }
     }
   }
+  void uploadBillingPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type.contains('billing_pic_') &&
+          assessmentdb[i].syncstatus == 0) {
+        uploadTask = _storage
+            .ref()
+            .child(
+            'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
+
+  void uploadOtherPic() {
+    for (int i = 0; i < assessmentdb.length; i++) {
+      if (assessmentdb[i].type.contains('other_pic_') &&
+          assessmentdb[i].syncstatus == 0) {
+        uploadTask = _storage
+            .ref()
+            .child(
+            'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
+            .putFile(File(assessmentdb[i].fileName));
+        if (uploadTask.isComplete)
+          databaseHelper.updateData(AssessmentDb(
+              fileName: assessmentdb[i].fileName,
+              batchId: assessmentdb[i].batchId,
+              priority: assessmentdb[i].priority,
+              syncstatus: 1,
+              type: assessmentdb[i].type,
+              studentCode: assessmentdb[i].studentCode));
+      }
+    }
+  }
 
   void uploadCenterInfraPic() {
     for (int i = 0; i < assessmentdb.length; i++) {
@@ -508,6 +549,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       uploadTheoryRoundPic();
                       uploadTrainingFeedbackPic();
                       uploadVtpFeedbackPic();
+                      uploadBillingPic();
+                      uploadOtherPic();
                       _uploadProgressIndicator(context);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content: Text('All files uploaded successfully'),
@@ -539,6 +582,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       uploadTheoryRoundPic();
                       uploadTrainingFeedbackPic();
                       uploadVtpFeedbackPic();
+                      uploadBillingPic();
+                      uploadOtherPic();
                       _uploadProgressIndicator(context);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content: Text('All files uploaded successfully'),
