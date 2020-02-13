@@ -270,16 +270,16 @@ class _CaptureImageState extends State<CaptureImage> {
   fetchCandidateImage() async {
     db = await _databaseHelper.initDatabase();
     if (db != null) assessmentdb = await _databaseHelper.fetchData();
-    print('fetchcandidateimage called');
+    print('fetchcandidateimage called'+assessmentdb.length.toString());
     for (int i = 0; i < assessmentdb.length; i++) {
       print('candidate image: ${assessmentdb[i].fileName}');
       if (assessmentdb[i]
               .fileName
-              .contains('candidate_${student.studentRollNo}') &&
+              .contains('candidate_${student.studentCode}') &&
           widget.mode == 'Candidate Feedback' &&
           assessmentdb[i].type == 'candidate_feedback' &&
           Path.basename(widget.batchFolder.path) == assessmentdb[i].batchId &&
-          student.studentRollNo == assessmentdb[i].studentCode)
+          student.studentCode == assessmentdb[i].studentCode)
         //print('candidate image: ${assessmentdb[i].fileName}');
         setState(() {
           _dbImage = assessmentdb[i].fileName;

@@ -94,7 +94,7 @@ class _CandidateListState extends State<CandidateList> {
                                             builder: (context) =>
                                                 CaptureImage(
                                                   index: widget.index,
-                                                  mode: widget.mode,
+                                                  mode: "Candidate Feedback",
                                                   batchFolder: widget
                                                       .batchFolder,
                                                   student: students[index],
