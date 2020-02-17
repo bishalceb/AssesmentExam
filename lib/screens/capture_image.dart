@@ -77,10 +77,10 @@ class _CaptureImageState extends State<CaptureImage> {
     File image;
     if (camMode == 'camera')
       image = await ImagePicker.pickImage(
-          source: ImageSource.camera, imageQuality: 10);
+          source: ImageSource.camera, imageQuality: 1);
     else
       image = await ImagePicker.pickImage(
-          source: ImageSource.gallery, imageQuality: 10);
+          source: ImageSource.gallery, imageQuality: 1);
 
     if (image == null) return;
     setState(() {
@@ -253,7 +253,7 @@ class _CaptureImageState extends State<CaptureImage> {
   saveGroupImage() async {
     for (int i = 0; i < _images.length; i++) {
       File copiedImagePath =
-          await _images[i].copy('${widget.batchFolder.path}/group_photo_.png');
+          await _images[i].copy('${widget.batchFolder.path}/group_photo_${i + 1}.png');
 
       AssessmentDb a = AssessmentDb(
         fileName: copiedImagePath.path,

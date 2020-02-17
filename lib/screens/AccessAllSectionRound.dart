@@ -11,11 +11,13 @@ import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/SetTheoryRounds.dart';
 import 'package:assesment/screens/SetPracticalRounds.dart';
 import 'package:assesment/screens/viva_round.dart';
+import 'package:assesment/screens/sync_summary.dart';
 import 'package:assesment/screens/feedback_form.dart';
 import 'package:assesment/screens/documents.dart';
 import 'package:assesment/model/scopedModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import 'login_page.dart';
 
@@ -27,6 +29,8 @@ class AccessAllSectionRound extends StatefulWidget {
 }
 
 class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
+  ProgressDialog pr;
+  double percentage;
   List<String> _gridItems = [
     'Student Round',
     'Theory Round',
@@ -36,6 +40,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     'Documentation Round',
     'End of Assesment',
     'Billing Round',
+    'Syncing summary'
   ];
   List<Color> card_border_color = [Colors.black26, Colors.black26, Colors.black26,Colors.black26, Colors.black26, Colors.black26,Colors.black26, Colors.black26,Colors.black26];
   static final card_color = Color(0xFF2f4050);
@@ -60,6 +65,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   @override
   void initState() {
     super.initState();
+    percentage = 0.0;
     fetchData();
         int selected_batch=UserDetailApi.response[0].selected_batch;
     student_data =
@@ -151,13 +157,20 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                           batchFolder: widget.batchFolder,
                         )));
               }
+              else if (index == 8) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SyncSummasy(widget.batchFolder)));
+              }
 
             });
       },
     );
   }
 
-  void uploadProctorProfile() async {
+    uploadProctorProfile() async {
+    print("come to proctor");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'proctor profile' &&
           assessmentdb[i].syncstatus == 0) {
@@ -177,11 +190,13 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: ''));
       }
     }
+    return percentage=percentage+10.0;
   }
 
-  void uploadCandidatePic() {
+   uploadCandidatePic() async{
+    print("uploadCandidatePic");
     for (int i = 0; i < assessmentdb.length; i++) {
-      if (assessmentdb[i].type == 'candidate' &&
+      if (assessmentdb[i].type == 'candidate_feedback' &&
           assessmentdb[i].syncstatus == 0) {
         //print(assessmentdb[i].fileName);
 
@@ -191,6 +206,10 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/candidate_${assessmentdb[i].studentCode}.png')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+10.0;
+
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -200,9 +219,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+10.0;
   }
 
-  void uploadVtpFeedbackPic() {
+   uploadVtpFeedbackPic() async{
+    print("uploadVtpFeedbackPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'vtp_feedback_pic_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -212,6 +233,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+         /* setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -221,9 +245,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadExamAttendancePic() {
+   uploadExamAttendancePic() async{
+    print("uploadExamAttendancePic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'exam_attendance_pic_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -233,6 +259,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -242,9 +271,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadAssessorFeddbbackPic() {
+   uploadAssessorFeddbbackPic() async{
+    print("uploadAssessorFeddbbackPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'assessor_feedback_pic_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -254,6 +285,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+        /*  setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -263,9 +297,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadTrainingFeedbackPic() {
+   uploadTrainingFeedbackPic() async{
+    print("uploadTrainingFeedbackPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'training_attendance_pic_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -275,6 +311,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -284,9 +323,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadCodeOfConductPic() {
+   uploadCodeOfConductPic() async{
+    print("uploadCodeOfConductPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'code_of_conduct_pic_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -296,6 +337,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -305,9 +349,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadPlacementDocPic() {
+   uploadPlacementDocPic() async{
+    print("uploadPlacementDocPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'placement_doc_pic_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -317,6 +363,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+         /* setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -326,9 +375,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadGroupPhoto() {
+   uploadGroupPhoto() async{
+    print("uploadGroupPhoto");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'group_photo_' &&
           assessmentdb[i].syncstatus == 0) {
@@ -338,6 +389,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+         /* setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -347,9 +401,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadStudentRoundPic() {
+   uploadStudentRoundPic() async{
+    print("uploadStudentRoundPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type == 'student round' &&
           assessmentdb[i].syncstatus == 0) {
@@ -359,6 +415,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+5.0;
+            print("percentage=="+percentage.toString());
+          });*/
+         print("percentage in complete=="+percentage.toString());
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -367,10 +428,15 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               type: assessmentdb[i].type,
               studentCode: assessmentdb[i].studentCode));
       }
+
     }
+    return percentage=percentage+5.0;
+    print("percentagey869=="+percentage.toString());
+    pr.hide();
   }
 
-  void uploadPracticalRoundPic() {
+   uploadPracticalRoundPic() async{
+    print("uploadPracticalRoundPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('viva') ||
           assessmentdb[i].type.contains('practical') &&
@@ -381,6 +447,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${assessmentdb[i].type}.mp4')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+         /* setState(() {
+            percentage=percentage+10.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -390,9 +459,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadTheoryRoundPic() {
+   uploadTheoryRoundPic() async{
+    print("uploadTheoryRoundPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('theory_round_video_') &&
           assessmentdb[i].syncstatus == 0) {
@@ -402,6 +473,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -411,8 +485,10 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
-  void uploadBillingPic() {
+   uploadBillingPic() async{
+    print("uploadBillingPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('billing_pic_') &&
           assessmentdb[i].syncstatus == 0) {
@@ -422,6 +498,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
             'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+        /*  setState(() {
+            percentage=percentage+10.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -431,9 +510,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadOtherPic() {
+   uploadOtherPic() async{
+    print("uploadOtherPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('other_pic_') &&
           assessmentdb[i].syncstatus == 0) {
@@ -443,6 +524,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
             'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+5.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -452,9 +536,11 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
-  void uploadCenterInfraPic() {
+   uploadCenterInfraPic() async{
+    print("uploadCenterInfraPic");
     for (int i = 0; i < assessmentdb.length; i++) {
       if (assessmentdb[i].type.contains('center_infra') &&
           assessmentdb[i].syncstatus == 0) {
@@ -464,6 +550,9 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 'Assessment/${basename(widget.batchFolder.path)}/${basename(assessmentdb[i].fileName)}')
             .putFile(File(assessmentdb[i].fileName));
         if (uploadTask.isComplete)
+          /*setState(() {
+            percentage=percentage+10.0;
+          });*/
           databaseHelper.updateData(AssessmentDb(
               fileName: assessmentdb[i].fileName,
               batchId: assessmentdb[i].batchId,
@@ -473,6 +562,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
+    return percentage=percentage+5.0;
   }
 
   _uploadProgressIndicator(BuildContext context) {
@@ -515,6 +605,23 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
 
   @override
   Widget build(BuildContext context) {
+    pr = new ProgressDialog(context, type: ProgressDialogType.Download);
+    pr.style(message: 'Sync Your file...');
+
+    pr.style(
+      message: 'Sync Your file...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: CircularProgressIndicator(),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      progress: 0.0,
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
     return MaterialApp(
        home: WillPopScope(
           child: Scaffold(
@@ -531,34 +638,44 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       PopupMenuItem(
                         child: Text('LogOut'),
                         value: 2,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Clear database'),
+                        value: 3,
                       )
                     ];
-                  }, onSelected: (index) {
+                  }, onSelected: (index) async {
                     print("pop up index==" + index.toString());
                     if (index == 1) {
-                      uploadProctorProfile();
-                      uploadAssessorFeddbbackPic();
-                      uploadCandidatePic();
-                      uploadCenterInfraPic();
-                      uploadCodeOfConductPic();
-                      uploadExamAttendancePic();
-                      uploadGroupPhoto();
-                      uploadPlacementDocPic();
-                      uploadPracticalRoundPic();
-                      uploadStudentRoundPic();
-                      uploadTheoryRoundPic();
-                      uploadTrainingFeedbackPic();
-                      uploadVtpFeedbackPic();
-                      uploadBillingPic();
-                      uploadOtherPic();
-                      _uploadProgressIndicator(context);
+                      await uploadProctorProfile();
+                      await uploadStudentRoundPic();
+                      await uploadTheoryRoundPic();
+                      await uploadPracticalRoundPic();
+                      await uploadCenterInfraPic();
+                      await uploadExamAttendancePic();
+                      await uploadAssessorFeddbbackPic();
+                      await uploadCandidatePic();
+                      await uploadTrainingFeedbackPic();
+                      await uploadVtpFeedbackPic();
+                      await uploadCodeOfConductPic();
+                      await uploadPlacementDocPic();
+                      await uploadGroupPhoto();
+                      await uploadOtherPic();
+                      await uploadBillingPic();
+                      if(percentage>=80.0){
+                        pr.hide();
+                        percentage=0.0;
+                      }
+                      //_uploadProgressIndicator(context);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content: Text('All files uploaded successfully'),
                       ));
-                    } else {
+                    } else if(index==2){
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => LoginPage()),
                               (Route<dynamic> route) => false);
+                    }else if(index==3){
+                      databaseHelper=null;
                     }
                   })
                 ],
@@ -568,26 +685,262 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: FloatingActionButton.extended(
-                    onPressed: (){
-                      uploadProctorProfile();
-                      uploadAssessorFeddbbackPic();
-                      uploadCandidatePic();
-                      uploadCenterInfraPic();
-                      uploadCodeOfConductPic();
-                      uploadExamAttendancePic();
-                      uploadGroupPhoto();
-                      uploadPlacementDocPic();
-                      uploadPracticalRoundPic();
-                      uploadStudentRoundPic();
-                      uploadTheoryRoundPic();
-                      uploadTrainingFeedbackPic();
-                      uploadVtpFeedbackPic();
-                      uploadBillingPic();
-                      uploadOtherPic();
-                      _uploadProgressIndicator(context);
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(
-                        content: Text('All files uploaded successfully'),
-                      ));
+                    onPressed: () async {
+                      pr.show();
+                      await uploadProctorProfile().then((val) => setState(() {
+                        print("comes here");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "Upload proctor pic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadStudentRoundPic().then((val) => setState(() {
+                        print("comes to student pic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "Upload Student pic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadTheoryRoundPic().then((val) => setState(() {
+                        print("comes to uploadTheoryRoundPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "Upload TheoryROund pic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadPracticalRoundPic().then((val) => setState(() {
+                        print("comes to uploadPracticalRoundPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "Upload PracticalRound pic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadCenterInfraPic().then((val) => setState(() {
+                        print("comes to uploadCenterInfraPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "Upload CenterInfra pic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadExamAttendancePic().then((val) => setState(() {
+                        print("comes to uploadExamAttendancePic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadExamAttendancePic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadAssessorFeddbbackPic().then((val) => setState(() {
+                        print("comes to uploadAssessorFeddbbackPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadAssessorFeddbbackPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadCandidatePic().then((val) => setState(() {
+                        print("comes to uploadCandidatePic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadCandidatePic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadTrainingFeedbackPic().then((val) => setState(() {
+                        print("comes to uploadTrainingFeedbackPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadTrainingFeedbackPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadVtpFeedbackPic().then((val) => setState(() {
+                        print("comes to uploadVtpFeedbackPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadVtpFeedbackPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadCodeOfConductPic().then((val) => setState(() {
+                        print("comes to uploadCodeOfConductPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadCodeOfConductPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadPlacementDocPic().then((val) => setState(() {
+                        print("comes to uploadPlacementDocPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadPlacementDocPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadGroupPhoto().then((val) => setState(() {
+                        print("comes to uploadGroupPhoto");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadGroupPhoto..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadOtherPic().then((val) => setState(() {
+                        print("comes to uploadOtherPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadOtherPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+                      await uploadBillingPic().then((val) => setState(() {
+                        print("comes to uploadBillingPic");
+                        percentage = val;
+                        pr.update(
+                          progress: percentage,
+                          message: "uploadBillingPic..",
+                          progressWidget: Container(
+                              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                          maxProgress: 100.0,
+                          progressTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                          messageTextStyle: TextStyle(
+                              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                        );
+                      }));
+
+                      //if(percentage>=80.0){
+                    /* setState(() {
+                       percentage = percentage + 30.0;
+                       print(percentage);
+                     });
+                      });
+                      pr.update(
+                        progress: percentage,
+                        message: "Please wait...",
+                        progressWidget: Container(
+                            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                        maxProgress: 100.0,
+                        progressTextStyle: TextStyle(
+                            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+                        messageTextStyle: TextStyle(
+                            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+                      );*/
+                      /*if(percentage>=90){
+                        pr.hide();
+                        percentage=0.0;
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content: Text('All files uploaded successfully'),
+                        ));
+                      }*/
+
+                      //}
+                      //_uploadProgressIndicator(context);
+
                     },
                     icon: Icon(Icons.phone_android),
                     label: Text("Sync Your Data"),

@@ -29,6 +29,7 @@ dependencies:
   fluttertoast:
   background_fetch:
   android_alarm_manager:
+  progress_dialog:
 
 
 

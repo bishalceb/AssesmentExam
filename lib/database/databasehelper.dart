@@ -81,7 +81,7 @@ class DatabaseHelper {
       for (int i = 0; i < count; i++)
         assessmentList.add(AssessmentDb.fromMap(result[i]));
     }
-
+    print("assessmentList=="+assessmentList.toString());
     return assessmentList;
   }
 }
