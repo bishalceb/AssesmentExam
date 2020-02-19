@@ -306,7 +306,6 @@ class _CaptureImageState extends State<CaptureImage> {
           _images.add(File(assessmentdb[i].fileName));
           print("_dbImages="+_dbImages.length.toString()+"_images length=="+_images.length.toString());
         });
-
       }
     }
   }

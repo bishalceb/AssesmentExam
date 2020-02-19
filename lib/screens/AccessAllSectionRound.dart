@@ -30,7 +30,7 @@ class AccessAllSectionRound extends StatefulWidget {
 
 class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   ProgressDialog pr;
-  double percentage;
+  double percentage=0.0;
   List<String> _gridItems = [
     'Student Round',
     'Theory Round',
@@ -192,7 +192,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: ''));
       }
     }
-    return percentage=percentage+10.0;
+
   }
 
    uploadCandidatePic() async{
@@ -221,7 +221,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+10.0;
   }
 
    uploadVtpFeedbackPic() async{
@@ -247,7 +246,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadExamAttendancePic() async{
@@ -273,7 +271,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadAssessorFeddbbackPic() async{
@@ -299,7 +296,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadTrainingFeedbackPic() async{
@@ -325,7 +321,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadCodeOfConductPic() async{
@@ -351,7 +346,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadPlacementDocPic() async{
@@ -377,7 +371,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
+
   }
 
    uploadGroupPhoto() async{
@@ -403,7 +397,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
+
   }
 
    uploadStudentRoundPic() async{
@@ -434,9 +428,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
       }
 
     }
-    return percentage=percentage+5.0;
-    print("percentagey869=="+percentage.toString());
-    pr.hide();
   }
 
    uploadPracticalRoundPic() async{
@@ -463,7 +454,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
   uploadVivaPic() async{
@@ -490,7 +480,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadTheoryRoundPic() async{
@@ -516,7 +505,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
    uploadBillingPic() async{
     print("uploadBillingPic");
@@ -541,7 +529,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadOtherPic() async{
@@ -567,7 +554,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
    uploadCenterInfraPic() async{
@@ -593,7 +579,6 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
               studentCode: assessmentdb[i].studentCode));
       }
     }
-    return percentage=percentage+5.0;
   }
 
   _uploadProgressIndicator(BuildContext context) {
@@ -754,7 +739,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                   child: FloatingActionButton.extended(
                     onPressed: () async {
                       await uploadProctorProfile();
-                      /*await uploadStudentRoundPic();
+                      await uploadStudentRoundPic();
                       await uploadTheoryRoundPic();
                       await uploadPracticalRoundPic();
                       await uploadVivaPic();
@@ -768,7 +753,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       await uploadPlacementDocPic();
                       await uploadGroupPhoto();
                       await uploadOtherPic();
-                      await uploadBillingPic();*/
+                      await uploadBillingPic();
                       pr.show();
                       pr.update(
                         progress: percentage,
