@@ -182,7 +182,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
       if (assessmentdb[i].type == 'proctor profile' &&
           assessmentdb[i].syncstatus == 0) {
         //print(assessmentdb[i].fileName);
-        String firebaseStoragePath = 'Assessment/proctor_profile.png';
+        String firebaseStoragePath = 'Assessment/proctor_profile_${UserDetailApi.response[0].id}_${UserDetailApi.response[0].deviceId}.png';
         StorageUploadTask uploadTask = _storage
             .ref()
             .child(firebaseStoragePath)
