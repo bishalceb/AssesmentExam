@@ -705,6 +705,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       await uploadGroupPhoto();
                       await uploadOtherPic();
                       await uploadBillingPic();
+                      await uploadFeedbackjson();
                       percentage = 0.0;
                       pr.show();
                       pr.update(
@@ -781,6 +782,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       await uploadGroupPhoto();
                       await uploadOtherPic();
                       await uploadBillingPic();
+                      await uploadFeedbackjson();
                       pr.show();
                       pr.update(
                         progress: percentage,
