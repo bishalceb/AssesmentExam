@@ -134,15 +134,15 @@ class _PracticalState extends State<Practical> {
   Widget _studentPageDesign(BuildContext context, int index) {
     print("visible round==" + visibleRound.toString());
     print("condition check==" +
-        student_data[index].isAdded.toString() +
+        student_data[index].practical_isAdded.toString() +
         "  " +
-        student_data[index].addedInRound.toString() +
+        student_data[index].practical_addedInRound.toString() +
         "  ");
 
     if (student_data[index].is_present) {
-      return !student_data[index].isAdded ||
-              student_data[index].addedInRound == visibleRound ||
-              student_data[index].addedInRound == 0
+      return !student_data[index].practical_isAdded ||
+              student_data[index].practical_addedInRound == visibleRound ||
+              student_data[index].practical_addedInRound == 0
           ? Card(
               shape: RoundedRectangleBorder(),
               child: Row(
@@ -185,20 +185,20 @@ class _PracticalState extends State<Practical> {
                         setState(() {
                           for (int i = 0; i < 2; i++) {
                             if (i == toggle_index) {
-                              student_data[index].isRemoved = false;
-                              student_data[index].isAdded = true;
-                              student_data[index].addedInRound = visibleRound;
+                              student_data[index].practical_isRemoved = false;
+                              student_data[index].practical_isAdded = true;
+                              student_data[index].practical_addedInRound = visibleRound;
                             } else {
-                              student_data[index].isRemoved = true;
-                              student_data[index].isAdded = false;
-                              student_data[index].addedInRound = visibleRound;
+                              student_data[index].practical_isRemoved = true;
+                              student_data[index].practical_isAdded = false;
+                              student_data[index].practical_addedInRound = visibleRound;
                             }
                           }
                         });
                       },
                       isSelected: [
-                        student_data[index].isRemoved,
-                        student_data[index].isAdded
+                        student_data[index].practical_isRemoved,
+                        student_data[index].practical_isAdded
                       ],
                     ),
                   )

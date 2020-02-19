@@ -157,6 +157,9 @@ class StudentData {
   bool isAdded;
   bool isRemoved;
   int addedInRound;
+  bool practical_isAdded;
+  bool practical_isRemoved;
+  int practical_addedInRound;
 
   StudentData(
       {this.id,
@@ -176,7 +179,10 @@ class StudentData {
       this.present,
       this.isAdded,
       this.isRemoved,
-      this.addedInRound});
+      this.addedInRound,
+      this.practical_isAdded,
+      this.practical_isRemoved,
+      this.practical_addedInRound});
 
   StudentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -197,6 +203,9 @@ class StudentData {
     isAdded = false;
     isRemoved=true;
     addedInRound=0;
+    practical_isAdded = false;
+    practical_isRemoved=true;
+    practical_addedInRound=0;
   }
 
   Map<String, dynamic> toJson() {
@@ -219,6 +228,9 @@ class StudentData {
     data['isAdded'] = this.isAdded;
     data['isRemoved'] = this.isRemoved;
     data['addedInRound'] = this.addedInRound;
+    data['practical_isAdded'] = this.practical_isAdded;
+    data['practical_isRemoved'] = this.practical_isRemoved;
+    data['practical_addedInRound'] = this.practical_addedInRound;
     return data;
   }
 }

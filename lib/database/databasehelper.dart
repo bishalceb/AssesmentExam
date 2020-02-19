@@ -77,6 +77,7 @@ class DatabaseHelper {
     List<AssessmentDb> assessmentList = List<AssessmentDb>();
     List<Map<String, dynamic>> result = await getDb();
     int count = await getCount();
+    print("count=="+count.toString()+"result=="+result.length.toString());
     if (result != null) {
       for (int i = 0; i < count; i++)
         assessmentList.add(AssessmentDb.fromMap(result[i]));

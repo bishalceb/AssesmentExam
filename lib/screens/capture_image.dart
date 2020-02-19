@@ -97,7 +97,9 @@ class _CaptureImageState extends State<CaptureImage> {
     else
       count = 0;
     for (int i = count; i < _images.length + count; i++) { */
+    print("Db.length=="+_dbImages.length.toString()+"Images length=="+_images.length.toString());
     for (int i = 0; i < _images.length; i++) {
+      print(" _images[i]=="+ _images[i].toString());
       File copiedImagePath = await _images[i]
           .copy('${widget.batchFolder.path}/exam_attendance_pic_${i + 1}.png');
       print(
@@ -301,7 +303,10 @@ class _CaptureImageState extends State<CaptureImage> {
         print('exam attendance pic:${assessmentdb[i].fileName}');
         setState(() {
           _dbImages.add(assessmentdb[i].fileName);
+          _images.add(File(assessmentdb[i].fileName));
+          print("_dbImages="+_dbImages.length.toString()+"_images length=="+_images.length.toString());
         });
+
       }
     }
   }

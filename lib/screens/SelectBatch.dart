@@ -136,6 +136,7 @@ class _SelectBatchState extends State<SelectBatch> {
                     Directory batchFolder = await Directory(
                             '${widget.createPath. path}/batch_${UserDetailApi.response[0].id}_$selected_batch_id')
                         .create(recursive: true);
+                    print("batchFolder=="+batchFolder.toString());
                     Navigator.push(
                         context,
                         MaterialPageRoute(
