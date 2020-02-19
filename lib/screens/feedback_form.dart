@@ -1,17 +1,53 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:assesment/api/UserDetailApi.dart';
 import 'package:flutter/material.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:flutter/material.dart' as prefix0;
+import 'package:assesment/model/FeedbackFormjson.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:location/location.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'login_page.dart';
 
 
 class FeedbackForm extends StatefulWidget {
+  final Directory batchFolder;
+  const FeedbackForm({Key key, this.batchFolder}) : super(key: key);
+
   @override
-  _FeedbackFormState createState() => _FeedbackFormState();
+  _FeedbackFormState createState() => _FeedbackFormState(this.batchFolder);
 }
 
 class _FeedbackFormState extends State<FeedbackForm> {
+  List<FeedbackformJson> feedback_form_json;
+  List final_json=new List();
+  String first_name="";
+  String last_name="";
+  String phone="";
+  String feedback="";
+  String latitude="";
+  String longitude="";
+  String deviceid="";
+  String intimestamp="";
+  String outtimestamp="";
+  final Directory batchFolder;
   final _formKey = GlobalKey<FormState>();
+  FirebaseStorage _storage =
+  FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
+  _FeedbackFormState(this.batchFolder);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    feedback_form_json=new List();
+    feedback_form_json.add(FeedbackformJson());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +74,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     validator: (value) {
                       if(value.isEmpty) {
                         return 'Please enter some text';
+                      }else{
+                       first_name=value;
                       }
                     },
                   ),
@@ -49,6 +87,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     validator: (value) {
                       if(value.isEmpty) {
                         return 'Please enter some text';
+                      }
+                      else{
+                        last_name=value;
                       }
                     },
                   ),
@@ -65,6 +106,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                       {
                         return 'Please enter a valid Phone number';
                       }
+                      else{
+                        phone=value;
+                      }
                     },
                   ),
                   TextFormField(
@@ -77,6 +121,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     validator: (value) {
                       if(value.isEmpty) {
                         return 'Please enter some text';
+                      }
+                      else{
+                        feedback=value;
                       }
                     },
                   ),
@@ -101,13 +148,40 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                       fontFamily: "WorkSansBold"),
                                 ),
                               ),
-                            onPressed: () {
+                            onPressed: () async {
                               // Validate will return true if the form is valid, or false if
                               // the form is invalid.
                               if (_formKey.currentState.validate()) {
                                 // If the form is valid, we want to show a Snackbar
                                /* Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                                     LoginPage()), (Route<dynamic> route) => false);*/
+                                /*FeedbackformJson(first_name:first_name,
+                                                  last_name: last_name,
+                                                   phone: phone,
+                                                    feedback: feedback,
+                                                    latitude: "",
+                                                    longitude: "",
+                                                    deviceid: "",
+                                                    intimestamp: "",
+                                                     outtimestamp: ""
+                                                    );*/
+                                int selectbatch=UserDetailApi.response[0].selected_batch;
+                               String _OutcurrentTime = DateFormat.jms().format(DateTime.now()).toString();
+                                feedback_form_json[0].first_name=first_name;
+                                feedback_form_json[0].last_name=last_name;
+                                feedback_form_json[0].phone=phone;
+                                feedback_form_json[0].feedback=feedback;
+                                feedback_form_json[0].latitude=UserDetailApi.response[0].batchData[selectbatch].lat.toString();
+                                feedback_form_json[0].longitude=UserDetailApi.response[0].batchData[selectbatch].long.toString();
+                                feedback_form_json[0].deviceid=UserDetailApi.response[0].deviceId;
+                                feedback_form_json[0].intimestamp=UserDetailApi.response[0].batchData[selectbatch].current_timestamp;
+                                feedback_form_json[0].outtimestamp=_OutcurrentTime;
+                                print("feedback json=="+feedback_form_json.toString());
+                                String finaljson = jsonEncode(feedback_form_json);
+                                print("final encode json---" + finaljson);
+                                final file = File('${widget.batchFolder.path}/proctor.txt');
+                                await file.writeAsString(finaljson);
+                                var outputAsUint8List = new Uint8List.fromList(finaljson.codeUnits);
                                   Navigator.pop(context);
                                 Scaffold
                                     .of(context)

@@ -30,6 +30,7 @@ dependencies:
   background_fetch:
   android_alarm_manager:
   progress_dialog:
+  device_info:
 
 
 

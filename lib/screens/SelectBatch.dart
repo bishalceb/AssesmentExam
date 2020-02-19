@@ -10,9 +10,12 @@ import 'package:path_provider/path_provider.dart';
 
 class SelectBatch extends StatefulWidget {
   final Directory createPath;
-  SelectBatch(this.createPath);
+  var longitude;
+  var lattitude;
+  SelectBatch(this.createPath, this.longitude,this.lattitude);
+
   @override
-  _SelectBatchState createState() => _SelectBatchState();
+  _SelectBatchState createState() => _SelectBatchState(longitude,lattitude);
 }
 
 class _SelectBatchState extends State<SelectBatch> {
@@ -22,7 +25,9 @@ class _SelectBatchState extends State<SelectBatch> {
   String selected_batch_id;
   int _selected_postion = 0;
   List<String> spinnerItems = [];
-
+  var longitude;
+  var lattitude;
+  _SelectBatchState(this.longitude,this.lattitude);
   @override
   void initState() {
     // TODO: implement initState
@@ -136,7 +141,10 @@ class _SelectBatchState extends State<SelectBatch> {
                     Directory batchFolder = await Directory(
                             '${widget.createPath. path}/batch_${UserDetailApi.response[0].id}_$selected_batch_id')
                         .create(recursive: true);
-                    print("batchFolder=="+batchFolder.toString());
+
+                    UserDetailApi.response[0].batchData[UserDetailApi.response[0].selected_batch].lat=lattitude;
+                    UserDetailApi.response[0].batchData[UserDetailApi.response[0].selected_batch].long=longitude;
+                    print("batchFolder=="+longitude.toString());
                     Navigator.push(
                         context,
                         MaterialPageRoute(

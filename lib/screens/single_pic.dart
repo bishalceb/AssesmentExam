@@ -4,6 +4,7 @@ import 'package:assesment/database/assessmentdb.dart';
 import 'package:assesment/database/databasehelper.dart';
 import 'package:assesment/screens/SelectBatch.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +12,9 @@ import 'package:location/location.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission/permission.dart';
+import 'package:assesment/api/UserDetailApi.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:device_info/device_info.dart';
 
 class SinglePic extends StatefulWidget {
   @override
@@ -31,7 +34,9 @@ class _SinglePicState extends State<SinglePic> {
   StorageReference _storageReference;
   List<AssessmentDb> assessmentdb = List<AssessmentDb>();
   Database db;
+  String proctor_id;
   String dbProctorProfile;
+  static String device_name;
 
 /*   void fetchData() async {
     Database initDb = await databaseHelper.initDatabase();
@@ -40,6 +45,9 @@ class _SinglePicState extends State<SinglePic> {
   @override
   initState() {
     super.initState();
+    proctor_id=UserDetailApi.response[0].id;
+    getDeviceDetails();
+    getLocation();
     fetchImage();
   }
 
@@ -53,7 +61,7 @@ class _SinglePicState extends State<SinglePic> {
         source: ImageSource.camera, imageQuality: 1);
     File copiedImage;
     if (image != null)
-      copiedImage = await image.copy('${createPath.path}/proctor_profile.png');
+      copiedImage = await image.copy('${createPath.path}/proctor_profile_${proctor_id}_${device_name}.png');
 
 /*     FirebaseStorage _storage =
         FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
@@ -221,7 +229,7 @@ class _SinglePicState extends State<SinglePic> {
                       Icons.camera_alt,
                     ),
                     onPressed: () {
-                      getLocation();
+                      //getLocation();
                       getCamImage();
                     },
                   ),
@@ -239,7 +247,7 @@ class _SinglePicState extends State<SinglePic> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SelectBatch(createPath)));
+                              builder: (context) => SelectBatch(createPath,longitude,latitude)));
                     },
                   ),
                 ),
@@ -249,5 +257,32 @@ class _SinglePicState extends State<SinglePic> {
         ),
       ),
     );
+  }
+  static Future<List<String>> getDeviceDetails() async {
+    String deviceName;
+    String deviceVersion;
+    String identifier;
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var build = await deviceInfoPlugin.androidInfo;
+        deviceName = build.androidId;
+        deviceVersion = build.version.toString();
+        device_name=deviceName;
+        UserDetailApi.response[0].deviceId=deviceName;
+        print("device name"+deviceName);
+        return [deviceName, deviceVersion, identifier];
+      } else if (Platform.isIOS) {
+        var data = await deviceInfoPlugin.iosInfo;
+        deviceName = data.name;
+        deviceVersion = data.systemVersion;
+        identifier = data.identifierForVendor;//UUID for iOS
+        device_name=deviceName;
+        return [deviceName, deviceVersion, identifier];
+      }
+    } on PlatformException {
+      print('Failed to get platform version');
+    }
+
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:assesment/database/assessmentdb.dart';
 import 'package:assesment/database/databasehelper.dart';
 import 'package:assesment/screens/capture_video.dart';
@@ -15,6 +16,7 @@ import 'package:assesment/screens/sync_summary.dart';
 import 'package:assesment/screens/feedback_form.dart';
 import 'package:assesment/screens/documents.dart';
 import 'package:assesment/model/scopedModel.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -53,6 +55,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
   StorageUploadTask uploadTask;
   List<StudentData> student_data;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _currentTime;
 
   FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://assessment-exam.appspot.com');
@@ -71,6 +74,8 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
         int selected_batch=UserDetailApi.response[0].selected_batch;
     student_data =
         UserDetailApi.response[0].batchData[selected_batch].studentData;
+    _currentTime = DateFormat.jms().format(DateTime.now()).toString();
+    UserDetailApi.response[0].batchData[selected_batch].current_timestamp=_currentTime;
     fetchData();
     setState(() {
       if(student_data[0].is_present){
@@ -148,7 +153,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                         builder: (context) => Documents(widget.batchFolder)));
               }else if (index == 6) {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FeedbackForm()));
+                    MaterialPageRoute(builder: (context) => FeedbackForm(batchFolder: widget.batchFolder,)));
               }
               else if (index == 7) {
                 Navigator.push(
@@ -581,6 +586,27 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     }
   }
 
+  uploadFeedbackjson() async{
+    String feedbackjson= await _readJSON();
+    var outputAsUint8List = new Uint8List.fromList(feedbackjson.codeUnits);
+    StorageUploadTask uploadTask = _storage
+        .ref()
+        .child(
+        'Assessment/${basename(widget.batchFolder.path)}/proctor.json')
+        .putData(outputAsUint8List);
+  }
+  Future<String> _readJSON() async {
+    String text;
+    try {
+      final file = File('${widget.batchFolder.path}/proctor.txt');
+      text = await file.readAsString();
+    } catch (e) {
+      print("Couldn't read file");
+    }
+    text ??= "";
+    return text;
+  }
+
   _uploadProgressIndicator(BuildContext context) {
     double progressPercentage;
     showDialog(
@@ -679,6 +705,7 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
                       await uploadGroupPhoto();
                       await uploadOtherPic();
                       await uploadBillingPic();
+                      percentage = 0.0;
                       pr.show();
                       pr.update(
                         progress: percentage,
@@ -809,4 +836,5 @@ class _AccessAllSectionRoundState extends State<AccessAllSectionRound> {
     );
 
   }
+
 }

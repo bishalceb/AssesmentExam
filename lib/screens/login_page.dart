@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:assesment/style/theme.dart' as Theme;
 import 'package:assesment/utils/bubble_indication_painter.dart';
+import 'package:assesment/api/UserDetailApi.dart';
 import 'package:assesment/screens/capture_image.dart';
 import 'package:assesment/screens/SelectBatch.dart';
 import 'package:assesment/api/UserDetailApi.dart';

@@ -112,13 +112,21 @@ class Response {
 class BatchData {
   String id;
   String batchNo;
+  String current_timestamp;
+  String out_current_timestamp;
+  var lat;
+  var long;
   List<StudentData> studentData;
 
-  BatchData({this.id, this.batchNo, this.studentData});
+  BatchData({this.id, this.batchNo, this.studentData,this.current_timestamp});
 
   BatchData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     batchNo = json['batch_no'];
+    current_timestamp=json['current_timestamp'];
+    long=json['long'];
+    lat=json['lat'];
+    out_current_timestamp=json['out_current_timestamp'];
     if (json['student_data'] != null) {
       studentData = new List<StudentData>();
       json['student_data'].forEach((v) {
@@ -130,7 +138,11 @@ class BatchData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['current_timestamp'] = this.current_timestamp;
     data['batch_no'] = this.batchNo;
+    data['out_current_timestamp'] = this.out_current_timestamp;
+    data['long'] = this.long;
+    data['lat'] = this.lat;
     if (this.studentData != null) {
       data['student_data'] = this.studentData.map((v) => v.toJson()).toList();
     }
@@ -160,6 +172,7 @@ class StudentData {
   bool practical_isAdded;
   bool practical_isRemoved;
   int practical_addedInRound;
+
 
   StudentData(
       {this.id,
